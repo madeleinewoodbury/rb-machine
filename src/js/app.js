@@ -1,11 +1,12 @@
+import Environment from './Environment.js'
+
 // Initialize Ammo.js
 Ammo().then(async (AmmoLib) => {
   Ammo = AmmoLib
-  console.log(Ammo)
 
   // Initialize the environment
-  console.log('environment')
+  const environment = new Environment()
 
   // Start
-  console.log('start')
+  environment.start()
 })
