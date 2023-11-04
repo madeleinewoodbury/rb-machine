@@ -12,6 +12,8 @@ class RenderInfo {
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
     this.target = new THREE.Vector3(0, 0, 0)
+    this.axesHelper = new THREE.AxesHelper(100)
+    this.showAxesHelper = false
 
     this.setupCamera()
     this.setupControls()
@@ -25,7 +27,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera.position.set(0, 10, 20)
+    this.camera.position.set(0, 50, 120)
     this.camera.lookAt(this.target)
 
     this.scene.add(this.camera)
@@ -48,6 +50,15 @@ class RenderInfo {
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
     this.renderer.gammaOutput = true
+  }
+
+  addGuiControls(gui) {
+    this.scene.add(this.axesHelper)
+    if (!this.showAxesHelper) {
+      this.axesHelper.visible = false
+    }
+
+    gui.add(this.axesHelper, 'visible').name('axes helper')
   }
 
   keyDown(code) {
