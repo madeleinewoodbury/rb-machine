@@ -39,6 +39,7 @@ class Environment {
     this.addSphere(10, 2, 0xff0000, "sphere", { x: 0, y: 22, z: 0 });
     this.addSphere(2, 2, 0xff0000, "groundBall", { x: 2, y: 2.5, z: 0 });
     this.addDominos()
+    hammer(this.renderInfo, this.physicsInfo)
   }
 
   addLights() {
@@ -127,29 +128,14 @@ class Environment {
     this.renderInfo.scene.add(boardMesh);
     boardMesh.userData.physicsBody = boardRigidBody;
 
-    // Create hinge constraint
-    const basePivot = new Ammo.btVector3(0, radius, 0);
-    const boardPivot = new Ammo.btVector3(0, 0.25, 0);
-    const baseAxis = new Ammo.btVector3(0, 0, 1);
-    const boardAxis = new Ammo.btVector3(0, 0, 1);
+    // P2P Constraint
+    const pivotA = new Ammo.btVector3(0, 2, 0);
+    const pivotB = new Ammo.btVector3(0, 0.5, 0);
 
-    const hingeConstraint = new Ammo.btHingeConstraint(
-      baseRigidBody,
-      boardRigidBody,
-      basePivot,
-      boardPivot,
-      baseAxis,
-      boardAxis,
-      true
-    );
+    const p2p = new Ammo.btPoint2PointConstraint(baseRigidBody, boardRigidBody, pivotA, pivotB);
+    this.physicsInfo.world.addConstraint(p2p, false);
 
-    // const lowerLimit = -Math.PI / 4;
-    // const upperLimit = Math.PI / 6;
-    // hingeConstraint.setLimit(lowerLimit, upperLimit, 10.0, 1.0, 1.0);
-    hingeConstraint.enableAngularMotor(true, 0, 0.1); // Reduce the maximum torque
 
-    
-    // this.physicsInfo.world.addConstraint(hingeConstraint);
   }
 
   addPillar() {
