@@ -27,7 +27,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera.position.set(0, 50, 120)
+    this.camera.position.set(0, 30, 80)
     this.camera.lookAt(this.target)
 
     this.scene.add(this.camera)
@@ -45,7 +45,7 @@ class RenderInfo {
       antialias: true,
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.setClearColor(0x000000)
+    this.renderer.setClearColor(0x6de1ff)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
@@ -59,14 +59,6 @@ class RenderInfo {
     }
 
     gui.add(this.axesHelper, 'visible').name('axes helper')
-  }
-
-  keyDown(code) {
-    console.log(code)
-  }
-
-  keyUp(code) {
-    console.log(code)
   }
 
   resize() {

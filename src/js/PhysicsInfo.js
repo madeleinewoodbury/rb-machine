@@ -1,9 +1,16 @@
+import * as THREE from 'three'
+
 class PhysicsInfo {
   constructor(gravity = -9.82) {
     this.gravity = gravity
     this.world = undefined
     this.rigidBodies = []
     this.tmpTrans = undefined
+
+    this.collisionGroup = {
+      plane: 1,
+      hammer: 2,
+    }
   }
 
   /**
@@ -34,6 +41,17 @@ class PhysicsInfo {
     }
 
     this.rigidBodies.push(mesh)
+  }
+
+  applyForce(mesh) {
+    if (!mesh.userData.physicsBody) return
+
+    const rigidBody = mesh.userData.physicsBody
+    const force = new Ammo.btVector3(-1000, 0, 0)
+    const relPos = new Ammo.btVector3(-1.75, 1, 0)
+
+    rigidBody.activate(true)
+    rigidBody.applyForce(force, relPos)
   }
 
   update(deltaTime) {
