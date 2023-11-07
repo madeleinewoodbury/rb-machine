@@ -4,14 +4,8 @@ import GUI from 'lil-gui'
 import RenderInfo from './RenderInfo.js'
 import PhysicsInfo from './PhysicsInfo.js'
 import Lighting from './threejs/lights/Lighting.js'
-import Plane from './threejs/shapes/Plane.js'
-import Sphere from './threejs/shapes/Sphere.js'
-import Box from './threejs/shapes/Box.js'
-import RigidSphere from './physics/RigidSphere.js'
-import RigidBox from './physics/RigidBox.js'
 
-import addDominoScene from './dominos.js'
-import hammer from './hammer.js'
+import createElevatorScene from './scenes/elevatorScene.js'
 
 class Environment {
   constructor() {
@@ -41,9 +35,11 @@ class Environment {
     // this.addDominos()
     // hammer(this.renderInfo, this.physicsInfo)
 
-    this.addEleveator()
-    this.addWall()
-    this.addSphere(10, 1.5, 0xff0000, 'ball', { x: 2, y: 0, z: 0 })
+    // this.addEleveator()
+    // this.addSphere(10, 1.5, 0xff0000, 'ball', { x: 2.5, y: 1, z: 0 })
+    // this.addWall()
+
+    createElevatorScene(this.renderInfo, this.physicsInfo)
   }
 
   addLights() {
@@ -69,28 +65,6 @@ class Environment {
     shape.setMargin(0.05)
     const rigidBody = this.physicsInfo.createRigidBody(shape, mesh, mass)
     rigidBody.setFriction(0.8)
-    rigidBody.setRestitution(0.7)
-
-    this.physicsInfo.addRigidBody(rigidBody, mesh)
-    this.renderInfo.scene.add(mesh)
-    mesh.userData.physicsBody = rigidBody
-  }
-
-  addSphere(mass, radius, color, name, pos = { x: 0, y: 0, z: 0 }) {
-    const mesh = new THREE.Mesh(
-      new THREE.SphereGeometry(radius, 32, 32),
-      new THREE.MeshStandardMaterial({ color })
-    )
-    mesh.position.set(pos.x, pos.y, pos.z)
-    mesh.name = name
-    mesh.castShadow = true
-    mesh.receiveShadow = true
-
-    const shape = new Ammo.btSphereShape(radius)
-    shape.setMargin(0.05)
-
-    const rigidBody = this.physicsInfo.createRigidBody(shape, mesh, mass)
-    rigidBody.setFriction(0.5)
     rigidBody.setRestitution(0.7)
 
     this.physicsInfo.addRigidBody(rigidBody, mesh)
@@ -283,131 +257,6 @@ class Environment {
     this.renderInfo.scene.add(domino)
   }
 
-  // Kinematic body
-  addEleveator() {
-    const mass = 0
-    const elevator = new THREE.Group()
-    elevator.name = 'elevator'
-
-    const side1 = new THREE.Mesh(
-      new THREE.BoxGeometry(5, 0.5, 5),
-      new THREE.MeshStandardMaterial({ color: 0x0000ff })
-    )
-    side1.rotation.z = Math.PI / 2
-    side1.position.set(-2.25, 2.5, 0)
-    elevator.add(side1)
-
-    const side2 = side1.clone()
-    side2.position.set(2.25, 2.5, 0)
-    elevator.add(side2)
-
-    const side3 = side1.clone()
-    side3.scale.set(1, 0.2, 1)
-    side3.rotation.z = 0
-    side3.position.set(0, 5.05, 0)
-    elevator.add(side3)
-
-    const side4 = side3.clone()
-    side4.position.set(0, 0.05, 0)
-    side4.receiveShadow = true
-    elevator.add(side4)
-
-    elevator.position.set(2, 0, -5)
-    elevator.castShadow = true
-    elevator.receiveShadow = true
-
-    const elevatorShape = new Ammo.btCompoundShape()
-    const sideShape = new Ammo.btBoxShape(new Ammo.btVector3(2.5, 0.25, 2.5))
-
-    // Side 1
-    let transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(-2.25, 2.5, 0))
-    transform.setRotation(
-      new Ammo.btQuaternion(
-        side1.quaternion.x,
-        side1.quaternion.y,
-        side1.quaternion.z,
-        side1.quaternion.w
-      )
-    )
-    elevatorShape.addChildShape(transform, sideShape)
-
-    // Side 2
-    transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(2.25, 2.5, 0))
-    transform.setRotation(
-      new Ammo.btQuaternion(
-        side2.quaternion.x,
-        side2.quaternion.y,
-        side2.quaternion.z,
-        side2.quaternion.w
-      )
-    )
-    elevatorShape.addChildShape(transform, sideShape)
-
-    // Side 3
-    transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(0, 5.25, 0))
-    transform.setRotation(
-      new Ammo.btQuaternion(
-        side3.quaternion.x,
-        side3.quaternion.y,
-        side3.quaternion.z,
-        side3.quaternion.w
-      )
-    )
-    elevatorShape.addChildShape(transform, sideShape)
-
-    // Side 4
-    transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(0, 0.25, 0))
-    transform.setRotation(
-      new Ammo.btQuaternion(
-        side4.quaternion.x,
-        side4.quaternion.y,
-        side4.quaternion.z,
-        side4.quaternion.w
-      )
-    )
-    elevatorShape.addChildShape(transform, sideShape)
-
-    elevatorShape.setMargin(0.05)
-    const rigidElevator = this.physicsInfo.createRigidBody(
-      elevatorShape,
-      elevator,
-      mass
-    )
-    rigidElevator.setFriction(0.5)
-    rigidElevator.setRestitution(0.7)
-    rigidElevator.setCollisionFlags(2)
-    rigidElevator.setActivationState(4)
-
-    this.physicsInfo.addRigidBody(rigidElevator, elevator)
-    elevator.userData.physicsBody = rigidElevator
-    this.renderInfo.scene.add(elevator)
-  }
-
-  addWall() {
-    const mass = 0
-    const wall = new THREE.Mesh(
-      new THREE.BoxGeometry(10, 10, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0xc2c2c2 })
-    )
-    wall.position.set(2, 5, -7.75)
-
-    const shape = new Ammo.btBoxShape(new Ammo.btVector3(5, 5, 0.25))
-    shape.setMargin(0.05)
-    const rigidWall = this.physicsInfo.createRigidBody(shape, wall, mass)
-
-    this.physicsInfo.addRigidBody(rigidWall, wall)
-    wall.userData.physicsBody = rigidWall
-    this.renderInfo.scene.add(wall)
-  }
-
   addEventListeners() {
     window.addEventListener('resize', () => this.renderInfo.resize())
     window.addEventListener('keydown', (e) => this.keyDown(e.code))
@@ -416,7 +265,7 @@ class Environment {
 
   keyDown(code) {
     const ball = this.renderInfo.scene.getObjectByName('ball')
-    const elevator = this.renderInfo.scene.getObjectByName('elevator')
+    const elevator = this.renderInfo.scene.getObjectByName('Elevator')
 
     switch (code) {
       case 'KeyF':
@@ -431,6 +280,15 @@ class Environment {
       case 'ArrowDown':
         if (elevator.position.y >= 0.05)
           this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
+      case 'Digit1':
+        // Camera 1
+        if(this.renderInfo.activeCamera !== 'Camera 1') 
+          this.renderInfo.switchCamera('Camera 1')
+        break
+      case 'Digit2':
+        // Camera 2
+        if(this.renderInfo.activeCamera !== 'Camera 2') 
+          this.renderInfo.switchCamera('Camera 2')
         break
     }
   }

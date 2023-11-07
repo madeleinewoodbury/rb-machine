@@ -14,6 +14,7 @@ class RenderInfo {
     this.target = new THREE.Vector3(0, 0, 0)
     this.axesHelper = new THREE.AxesHelper(100)
     this.showAxesHelper = false
+    this.activeCamera = 'Camera 1'
 
     this.setupCamera()
     this.setupControls()
@@ -21,16 +22,42 @@ class RenderInfo {
   }
 
   setupCamera() {
-    this.camera = new THREE.PerspectiveCamera(
+    this.setupCameras()
+    this.camera = this.scene.getObjectByName(this.activeCamera)
+    // this.camera = new THREE.PerspectiveCamera(
+    //   45,
+    //   window.innerWidth / window.innerHeight,
+    //   0.1,
+    //   1000
+    // )
+    // this.camera.position.set(0, 10, 50)
+    // this.camera.lookAt(this.target)
+
+    // this.scene.add(this.camera)
+  }
+
+  setupCameras() {
+    this.camera1 = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     )
-    this.camera.position.set(0, 10, 50)
-    this.camera.lookAt(this.target)
+    this.camera1.position.set(0, 10, 50)
+    this.camera1.lookAt(this.target)
+    this.camera1.name = 'Camera 1'
+    this.scene.add(this.camera1)
 
-    this.scene.add(this.camera)
+    this.camera2 = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    )
+    this.camera2.position.set(0, 30, 0)
+    this.camera2.lookAt(this.target)
+    this.camera2.name = 'Camera 2'
+    this.scene.add(this.camera2)
   }
 
   setupControls() {
@@ -50,6 +77,13 @@ class RenderInfo {
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
     this.renderer.gammaOutput = true
+  }
+
+  switchCamera(cameraName) {
+    this.activeCamera = cameraName
+    this.camera = this.scene.getObjectByName(this.activeCamera)
+    this.controls.object = this.camera
+
   }
 
   addGuiControls(gui) {
