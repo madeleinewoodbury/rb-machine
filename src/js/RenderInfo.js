@@ -27,7 +27,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera.position.set(0, 30, 80)
+    this.camera.position.set(0, 10, 50)
     this.camera.lookAt(this.target)
 
     this.scene.add(this.camera)
