@@ -110,6 +110,48 @@ class PhysicsInfo {
         mesh.quaternion.set(q.x(), q.y(), q.z(), q.w())
       }
     }
+
+    // collision detection
+    this.checkCollisions()
+  }
+
+  checkCollisions() {
+    // Find all possible contact points (broadsphase)
+    const numManifolds = this.world.getDispatcher().getNumManifolds()
+    for (let i = 0; i < numManifolds; i++) {
+      const contactManifold = this.world
+        .getDispatcher()
+        .getManifoldByIndexInternal(i)
+      const numContacts = contactManifold.getNumContacts()
+
+      if (numContacts > 0) {
+        // Get the objects involved in the collision and convert them to rigid bodies
+        const rigidBody0 = Ammo.castObject(
+          contactManifold.getBody0(),
+          Ammo.btRigidBody
+        )
+        const rigidBody1 = Ammo.castObject(
+          contactManifold.getBody1(),
+          Ammo.btRigidBody
+        )
+
+        if (rigidBody0.threeMesh && rigidBody1.threeMesh) {
+          for (let j = 0; j < numContacts; j++) {
+            const contactPoint = contactManifold.getContactPoint(j)
+            const distance = contactPoint.getDistance()
+
+            if (distance <= 0) {
+              // We have a collison
+              console.log(
+                rigidBody0.threeMesh.name,
+                'collided with',
+                rigidBody1.threeMesh.name
+              )
+            }
+          }
+        }
+      }
+    }
   }
 }
 

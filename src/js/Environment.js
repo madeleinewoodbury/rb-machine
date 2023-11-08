@@ -6,6 +6,7 @@ import PhysicsInfo from './PhysicsInfo.js'
 import Lighting from './threejs/lights/Lighting.js'
 
 import createElevatorScene from './scenes/elevatorScene.js'
+import Sphere from './sceneObjects/Sphere.js'
 
 class Environment {
   constructor() {
@@ -40,6 +41,41 @@ class Environment {
     // this.addWall()
 
     createElevatorScene(this.renderInfo, this.physicsInfo)
+    // this.addCollisionItems()
+  }
+
+  addCollisionItems() {
+    const ball1 = new Sphere(2, 2, 0xff0000, { x: -5, y: 0, z: 0 })
+    ball1.mesh.name = 'ball1'
+    const ball2 = new Sphere(2, 2, 0xff0000, { x: 5, y: 0, z: 0 })
+    ball2.mesh.name = 'ball2'
+
+    const rigidBody1 = this.physicsInfo.createRigidBody(
+      ball1.shape,
+      ball1.mesh,
+      ball1.mass
+    )
+    ball1.setFriction(rigidBody1)
+    ball1.setRestituition(rigidBody1)
+    ball1.setRollingFriction(rigidBody1)
+
+    const rigidBody2 = this.physicsInfo.createRigidBody(
+      ball2.shape,
+      ball2.mesh,
+      ball2.mass
+    )
+    ball2.setFriction(rigidBody2)
+    ball2.setRestituition(rigidBody2)
+    ball2.setRollingFriction(rigidBody2)
+
+    this.physicsInfo.addRigidBody(rigidBody1, ball1.mesh)
+    this.physicsInfo.addRigidBody(rigidBody2, ball2.mesh)
+    this.renderInfo.scene.add(ball1.mesh)
+    this.renderInfo.scene.add(ball2.mesh)
+    ball1.mesh.userData.physicsBody = rigidBody1
+    ball2.mesh.userData.physicsBody = rigidBody2
+    rigidBody1.threeMesh = ball1.mesh
+    rigidBody2.threeMesh = ball2.mesh
   }
 
   addLights() {
@@ -264,13 +300,13 @@ class Environment {
   }
 
   keyDown(code) {
-    const ball = this.renderInfo.scene.getObjectByName('ball')
+    const ball = this.renderInfo.scene.getObjectByName('ball1')
     const elevator = this.renderInfo.scene.getObjectByName('Elevator')
 
     switch (code) {
       case 'KeyF':
-        const force = new Ammo.btVector3(0, 0, -2000)
-        const relPos = new Ammo.btVector3(0, 0, 2)
+        const force = new Ammo.btVector3(1000, 0, 0)
+        const relPos = new Ammo.btVector3(-2, 0, 0)
         this.physicsInfo.applyForce(ball, force, relPos)
         break
       case 'ArrowUp':
@@ -282,16 +318,18 @@ class Environment {
           this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
       case 'Digit1':
         // Camera 1
-        if(this.renderInfo.activeCamera !== 'Camera 1') 
+        if (this.renderInfo.activeCamera !== 'Camera 1')
           this.renderInfo.switchCamera('Camera 1')
         break
       case 'Digit2':
         // Camera 2
-        if(this.renderInfo.activeCamera !== 'Camera 2') 
+        if (this.renderInfo.activeCamera !== 'Camera 2')
           this.renderInfo.switchCamera('Camera 2')
         break
     }
   }
+
+  keyUp(code) {}
 
   moveRigidBody(mesh, direction) {
     const transform = new Ammo.btTransform()
@@ -307,10 +345,6 @@ class Environment {
       )
     )
     motionState.setWorldTransform(transform)
-  }
-
-  keyUp(code) {
-    console.log(code)
   }
 
   animate(currentTime) {
