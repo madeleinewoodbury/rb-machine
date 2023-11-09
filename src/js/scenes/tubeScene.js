@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import Sphere from '../sceneObjects/Sphere.js'
 import AmmoHelper from '../AmmoHelper.js'
 import Tube from '../sceneObjects/Tube.js'
@@ -6,7 +5,6 @@ import Tube from '../sceneObjects/Tube.js'
 function createTubeScene(renderInfo, physicsInfo) {
   createTube(renderInfo, physicsInfo)
   createBall(renderInfo, physicsInfo)
-
 }
 
 function createBall(renderInfo, physicsInfo) {
