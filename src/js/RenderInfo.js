@@ -11,7 +11,7 @@ class RenderInfo {
     this.canvas = canvas
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
-    this.target = new THREE.Vector3(0, 10, 0)
+    this.target = new THREE.Vector3(0, 30, 0)
     this.axesHelper = new THREE.AxesHelper(100)
     this.showAxesHelper = false
     this.activeCamera = 'Camera 1'
@@ -24,16 +24,6 @@ class RenderInfo {
   setupCamera() {
     this.setupCameras()
     this.camera = this.scene.getObjectByName(this.activeCamera)
-    // this.camera = new THREE.PerspectiveCamera(
-    //   45,
-    //   window.innerWidth / window.innerHeight,
-    //   0.1,
-    //   1000
-    // )
-    // this.camera.position.set(0, 10, 50)
-    // this.camera.lookAt(this.target)
-
-    // this.scene.add(this.camera)
   }
 
   setupCameras() {
@@ -43,7 +33,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera1.position.set(0, 20, 50)
+    this.camera1.position.set(0, 50, 55)
     this.camera1.lookAt(this.target)
     this.camera1.name = 'Camera 1'
     this.scene.add(this.camera1)
