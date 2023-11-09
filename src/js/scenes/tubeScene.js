@@ -6,8 +6,6 @@ import Tube from '../sceneObjects/Tube.js'
 function createTubeScene(renderInfo, physicsInfo) {
   createTube(renderInfo, physicsInfo)
   createPlateau(renderInfo, physicsInfo)  
-  createBall(renderInfo, physicsInfo)
-
 }
 
 function createBall(renderInfo, physicsInfo) {
@@ -22,6 +20,7 @@ function createBall(renderInfo, physicsInfo) {
 }
 
 function createTube(renderInfo, physicsInfo) {
+
   const tube = new Tube(10, 3, 0x00ffff)
   const ammoHelper = new AmmoHelper()
   const compoundShape = tube.getCompoundShape(ammoHelper)
@@ -30,6 +29,7 @@ function createTube(renderInfo, physicsInfo) {
   physicsInfo.addRigidBody(rigidBody, tube.mesh)
   tube.mesh.userData.physicsBody = rigidBody
   renderInfo.scene.add(tube.mesh)
+  // return tube.mesh
 }
 
 function createPlateau(renderInfo, physicsInfo) {
@@ -39,7 +39,7 @@ function createPlateau(renderInfo, physicsInfo) {
     new THREE.MeshStandardMaterial({ color: 0xffffff })
   )
 
-  mesh.position.set(10, 15, 0)
+  mesh.position.set(62, 15, -52.5)
   mesh.castShadow = true
   mesh.receiveShadow = true
 

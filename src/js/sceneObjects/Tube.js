@@ -39,7 +39,7 @@ class Tube {
     this.mesh.add(this.tube1, this.tube2);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
-    this.mesh.position.set(-0.5, -18, 0);
+    this.mesh.position.set(51.4, -18, -52);
   }
 
   getCompoundShape(ammoHelper) {

@@ -58,8 +58,8 @@ class Elevator {
     this.shape.setMargin(0.05)
 
     this.mesh.add(side1, side2, side3, side4)
-    this.mesh.position.set(0, 0, 0)
-    this.mesh.rotateY(Math.PI / 2)
+    this.mesh.position.set(75, 0, -55)
+    // this.mesh.rotateY(Math.PI / 2)
     this.mesh.csastShadow = true
     this.mesh.receiveShadow = true
   }

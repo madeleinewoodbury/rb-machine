@@ -2,11 +2,12 @@ import * as THREE from 'three'
 import Elevator from '../sceneObjects/Elevator.js'
 import ElevatorShaft from '../sceneObjects/ElevatorShaft.js'
 import Sphere from '../sceneObjects/Sphere.js'
+import AmmoHelper from '../AmmoHelper.js'
 
 function createElevatorScene(renderInfo, physicsInfo) {
   addElevator(renderInfo, physicsInfo)
   addElevatorShaft(renderInfo, physicsInfo)
-  addElevatorButton(renderInfo, physicsInfo)
+  // addElevatorButton(renderInfo, physicsInfo)
   addBall(renderInfo, physicsInfo)
 }
 
@@ -28,17 +29,34 @@ function addElevator(renderInfo, physicsInfo) {
   rigidBody.setCollisionFlags(elevator.collisionFlag)
   rigidBody.setActivationState(elevator.activatuonState)
 
+
   physicsInfo.addRigidBody(rigidBody, elevator.mesh)
-  renderInfo.scene.add(elevator.mesh)
   elevator.mesh.userData.physicsBody = rigidBody
   rigidBody.threeMesh = elevator.mesh
+  rigidBody.threeMesh = elevator.mesh
+  renderInfo.scene.add(elevator.mesh)
+
+  // const elevatorShaft = new ElevatorShaft(35, 6, 1, 0xc2c2c2)
+  // const button = new THREE.Mesh(
+  //   new THREE.ConeGeometry(0.25, 0.75, 2),
+  //   new THREE.MeshStandardMaterial({ color: 0xffff00 })
+  // )
+  // button.name = 'button'
+  // button.rotateY(Math.PI / 2)
+  // button.position.set(5.25, 5, 3.01)
+  
+  // elevatorGroup.add(elevator.mesh, elevatorShaft.mesh, button)
+  // elevatorGroup.rotateY(Math.PI / 2)
+  // elevatorGroup.position.set(75, 0, -55)
+
+  // renderInfo.scene.add(elevatorGroup)
 }
 
 function addBall(renderInfo, physicsInfo) {
-  const radius = 1.5
+  const radius = 1.25
   const mass = 10
   const color = 0xff0000
-  const pos = { x: 2.5, y: 1, z: 0 }
+  const pos = { x: 75, y: 2, z: -52.75 }
 
   const ball = new Sphere(radius, mass, color, pos)
   ball.mesh.name = 'ball'
@@ -49,17 +67,22 @@ function addBall(renderInfo, physicsInfo) {
   ball.setRollingFriction(rigidBody)
 
   physicsInfo.addRigidBody(rigidBody, ball.mesh)
-  renderInfo.scene.add(ball.mesh)
   ball.mesh.userData.physicsBody = rigidBody
+  renderInfo.scene.add(ball.mesh)
 }
 
 function addElevatorShaft(renderInfo, physicsInfo) {
-  const height = 16
+  const height = 35
   const width = 6
   const depth = 1
   const elevatorShaft = new ElevatorShaft(height, width, depth, 0xc2c2c2)
-  // elevatorShaft.mesh.position.set(-1, 0, 0)
+  const ammoHelper = new AmmoHelper()
+  const compoundShape = elevatorShaft.getCompoundShape(ammoHelper)
 
+  const rigidBody = physicsInfo.createRigidBody(compoundShape, elevatorShaft.mesh, 0)
+  physicsInfo.addRigidBody(rigidBody, elevatorShaft.mesh)
+  elevatorShaft.mesh.userData.physicsBody = rigidBody
+  rigidBody.threeMesh = elevatorShaft.mesh
   renderInfo.scene.add(elevatorShaft.mesh)
 }
 

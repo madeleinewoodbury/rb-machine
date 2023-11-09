@@ -3,6 +3,7 @@ import GUI from 'lil-gui'
 import RenderInfo from './RenderInfo.js'
 import PhysicsInfo from './PhysicsInfo.js'
 import Lighting from './threejs/lights/Lighting.js'
+import Sphere from './sceneObjects/Sphere.js'
 
 import createElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
@@ -32,7 +33,7 @@ class Environment {
     this.addLights()
     this.addFloor(200, 0.5, 200, 0x158000, 'plane')
 
-    // createElevatorScene(this.renderInfo, this.physicsInfo)
+    createElevatorScene(this.renderInfo, this.physicsInfo)
     createTubeScene(this.renderInfo, this.physicsInfo)
   }
 
@@ -58,6 +59,17 @@ class Environment {
     this.physicsInfo.addRigidBody(rigidBody, mesh)
     this.renderInfo.scene.add(mesh)
     mesh.userData.physicsBody = rigidBody
+  }
+
+  addBall() {
+    const ball = new Sphere(1, 1, 0xff0000)
+    ball.mesh.name = 'ball'
+    ball.mesh.position.set(10, 1, 0)
+  
+    const rigidBody = this.physicsInfo.createRigidBody(ball.shape, ball.mesh, 2)
+    this.physicsInfo.addRigidBody(rigidBody, ball.mesh)
+    ball.mesh.userData.physicsBody = rigidBody
+    this.renderInfo.scene.add(ball.mesh)
   }
 
   addLights() {
@@ -94,17 +106,17 @@ class Environment {
 
     switch (code) {
       case 'KeyF':
-        const force = new Ammo.btVector3(-100, 0, 0)
+        const force = new Ammo.btVector3(-200, 0, 0)
         const relPos = new Ammo.btVector3(1, 0, 0)
         this.physicsInfo.applyForce(ball, force, relPos)
         break
-      case 'ArrowUp':
-        if (elevator.position.y < 10)
-          this.moveRigidBody(elevator, { x: 0, y: 0.1, z: 0 })
-        break
-      case 'ArrowDown':
-        if (elevator.position.y >= 0.05)
-          this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
+      // case 'ArrowUp':
+      //   if (elevator.position.y < 10)
+      //     this.moveRigidBody(elevator, { x: 0, y: 0.1, z: 0 })
+      //   break
+      // case 'ArrowDown':
+      //   if (elevator.position.y >= 0.05)
+      //     this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
       case 'Digit1':
         // Camera 1
         if (this.renderInfo.activeCamera !== 'Camera 1')
@@ -114,6 +126,11 @@ class Environment {
         // Camera 2
         if (this.renderInfo.activeCamera !== 'Camera 2')
           this.renderInfo.switchCamera('Camera 2')
+        break
+      case 'Digit3':
+        // Camera 2
+        if (this.renderInfo.activeCamera !== 'Camera 3')
+          this.renderInfo.switchCamera('Camera 3')
         break
     }
   }
@@ -152,9 +169,17 @@ class Environment {
   handleEvents() {
     // Move elevator
     const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+    const ball = this.renderInfo.scene.getObjectByName('ball')
+
     if (elevator.start) {
-      if (elevator.position.y < 10) {
+      if (elevator.position.y < 30) {
         this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 })
+        if(elevator.position.y > 29){
+          const force = new Ammo.btVector3(-100, 0, 0)
+          const relPos = new Ammo.btVector3(1, 0, 0)
+          this.physicsInfo.applyForce(ball, force, relPos)
+          console.log('Applying force');
+        }
       } else {
         elevator.start = false
       }
@@ -164,8 +189,8 @@ class Environment {
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
 
-    // this.handleIntersects()
-    // this.handleEvents()
+    this.handleIntersects()
+    this.handleEvents()
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update()
 
