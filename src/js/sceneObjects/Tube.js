@@ -9,7 +9,7 @@ class Tube {
 
     this.radialSegments = 32;
     this.tubularSegments = 32;
-    this.arc = Math.PI / 2;
+    this.arc = Math.PI / 1.5;
     this.wireframe = true;
     
     this.generate();
@@ -27,18 +27,19 @@ class Tube {
       })
     );
 
-    this.tube1.position.set(0, 50, 0);
-    this.tube1.rotateZ(Math.PI);
+    this.tube1.position.set(0, 40, 0);
+    this.tube1.rotateZ(1.5);
     this.tube1.castShadow = true;
 
     this.tube2 = this.tube1.clone();
     this.tube2.rotateZ(Math.PI);
-    this.tube2.position.set(0, 30, 0);
+    this.tube2.position.set(-18, 31.25, 0);
     this.tube2.castShadow = true;
 
     this.mesh.add(this.tube1, this.tube2);
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
+    this.mesh.position.set(-0.5, -18, 0);
   }
 
   getCompoundShape(ammoHelper) {

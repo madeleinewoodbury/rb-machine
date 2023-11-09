@@ -49,7 +49,6 @@ class PhysicsInfo {
     if (!mesh.userData.physicsBody) return
 
     const rigidBody = mesh.userData.physicsBody
-
     rigidBody.activate(true)
     rigidBody.applyForce(force, relPos)
   }

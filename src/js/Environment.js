@@ -30,7 +30,7 @@ class Environment {
 
   addSceneObjects() {
     this.addLights()
-    this.addFloor(100, 0.5, 100, 0x158000, 'plane')
+    this.addFloor(200, 0.5, 200, 0x158000, 'plane')
 
     // createElevatorScene(this.renderInfo, this.physicsInfo)
     createTubeScene(this.renderInfo, this.physicsInfo)
@@ -62,8 +62,8 @@ class Environment {
 
   addLights() {
     const lights = new Lighting()
-    lights.addLights(gui)
-    renderInfo.scene.add(lights.group)
+    lights.addLights(this.gui)
+    this.renderInfo.scene.add(lights.group)
   }
 
   addEventListeners() {
@@ -89,13 +89,13 @@ class Environment {
   }
 
   keyDown(code) {
-    const ball = this.renderInfo.scene.getObjectByName('ball1')
+    const ball = this.renderInfo.scene.getObjectByName('ball')
     const elevator = this.renderInfo.scene.getObjectByName('Elevator')
 
     switch (code) {
       case 'KeyF':
-        const force = new Ammo.btVector3(1000, 0, 0)
-        const relPos = new Ammo.btVector3(-2, 0, 0)
+        const force = new Ammo.btVector3(-100, 0, 0)
+        const relPos = new Ammo.btVector3(1, 0, 0)
         this.physicsInfo.applyForce(ball, force, relPos)
         break
       case 'ArrowUp':
