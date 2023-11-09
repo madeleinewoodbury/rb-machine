@@ -1,21 +1,21 @@
-import * as THREE from 'three';
+import * as THREE from 'three'
 
 class Sphere {
-  constructor(radius, mass, color, position={x: 0, y: 0, z: 0}) {
-    this.radius = radius;
-    this.mass = mass;
-    this.color = color;
-    this.position = position;
+  constructor(radius, mass, color, position = { x: 0, y: 0, z: 0 }) {
+    this.radius = radius
+    this.mass = mass
+    this.color = color
+    this.position = position
 
     // Default values
     this.friction = 0.5
     this.restituition = 0.5
     this.rollingFriction = 0.1
 
-    this.generate();
+    this.generate()
   }
 
-  generate() {  
+  generate() {
     this.mesh = new THREE.Mesh(
       new THREE.SphereGeometry(this.radius, 32, 32),
       new THREE.MeshStandardMaterial({ color: this.color })
@@ -28,20 +28,20 @@ class Sphere {
     this.shape.setMargin(0.05)
   }
 
-  setFriction(rigidBody, friction=null) {
-    if (friction) this.friction = friction;
-    rigidBody.setFriction(this.friction);
+  setFriction(rigidBody, friction = null) {
+    if (friction) this.friction = friction
+    rigidBody.setFriction(this.friction)
   }
 
-  setRestituition(rigidBody, restituition=null) {
-    if (restituition) this.restituition = restituition;
-    rigidBody.setRestitution(this.restituition);
+  setRestituition(rigidBody, restituition = null) {
+    if (restituition) this.restituition = restituition
+    rigidBody.setRestitution(this.restituition)
   }
 
-  setRollingFriction(rigidBody, rollingFriction=null) {
-    if (rollingFriction) this.rollingFriction = rollingFriction;
-    rigidBody.setRollingFriction(this.rollingFriction);
+  setRollingFriction(rigidBody, rollingFriction = null) {
+    if (rollingFriction) this.rollingFriction = rollingFriction
+    rigidBody.setRollingFriction(this.rollingFriction)
   }
 }
 
-export default Sphere;
+export default Sphere

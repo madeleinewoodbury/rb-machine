@@ -1,18 +1,18 @@
 import * as THREE from 'three'
 import Elevator from '../sceneObjects/Elevator.js'
+import ElevatorShaft from '../sceneObjects/ElevatorShaft.js'
 import Box from '../sceneObjects/Box.js'
 import Sphere from '../sceneObjects/Sphere.js'
 
 function createElevatorScene(renderInfo, physicsInfo) {
-  addEleveator(renderInfo, physicsInfo)
-  addWall(renderInfo, physicsInfo)
+  addElevator(renderInfo, physicsInfo)
+  addElevatorShaft(renderInfo, physicsInfo)
+  addElevatorButton(renderInfo, physicsInfo)
+  // addWall(renderInfo, physicsInfo)
   addBall(renderInfo, physicsInfo)
-
-  addTop(renderInfo, physicsInfo)
-  addTorus(renderInfo, physicsInfo)
 }
 
-function addEleveator(renderInfo, physicsInfo) {
+function addElevator(renderInfo, physicsInfo) {
   const width = 5
   const height = 5
   const depth = 0.5
@@ -55,14 +55,26 @@ function addBall(renderInfo, physicsInfo) {
   ball.mesh.userData.physicsBody = rigidBody
 }
 
-function addElevatorShaft(elevator) {
-  const elevatorShaft = new THREE.Group()
-  elevatorShaft.name = 'elevatorShaft'
+function addElevatorShaft(renderInfo, physicsInfo) {
+  const height = 16
+  const width = 6
+  const depth = 1
+  const elevatorShaft = new ElevatorShaft(height, width, depth, 0xc2c2c2)
+  // elevatorShaft.mesh.position.set(-1, 0, 0)
 
-  const height = elevator.height + 12
-  const width = elevator.width + 4
-  const depth = elevator.depth * 2
-  const wall = new Box(width, height, depth, 0x0000ff)
+  renderInfo.scene.add(elevatorShaft.mesh)
+}
+
+function addElevatorButton(renderInfo, physicsInfo) {
+  const button = new THREE.Mesh(
+    new THREE.ConeGeometry(0.25, 0.75, 2),
+    new THREE.MeshStandardMaterial({ color: 0xffff00 })
+  )
+  button.name = 'button'
+  button.rotateY(Math.PI / 2)
+  button.position.set(5.25, 5, 3.01)
+
+  renderInfo.scene.add(button)
 }
 
 function addWall(renderInfo, physicsInfo) {
@@ -89,7 +101,7 @@ function addWall(renderInfo, physicsInfo) {
 function addTorus(renderInfo, physicsInfo) {
   const torus = new THREE.Mesh(
     new THREE.TorusGeometry(2, 0.2, 16, 32),
-    new THREE.MeshStandardMaterial({ color: 0xff00ff })
+    new THREE.MeshStandardMaterial({ color: 0x00ff00 })
   )
   torus.name = 'torus'
   torus.position.set(2, 14, 0)

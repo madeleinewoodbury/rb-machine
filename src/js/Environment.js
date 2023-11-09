@@ -6,6 +6,7 @@ import PhysicsInfo from './PhysicsInfo.js'
 import Lighting from './threejs/lights/Lighting.js'
 
 import createElevatorScene from './scenes/elevatorScene.js'
+import createTubeScene from './scenes/tubeScene.js'
 import Sphere from './sceneObjects/Sphere.js'
 
 class Environment {
@@ -13,6 +14,9 @@ class Environment {
     this.canvas = document.getElementById('canvas')
     this.physicsInfo = new PhysicsInfo()
     this.renderInfo = new RenderInfo(this.canvas)
+    this.mouse = new THREE.Vector2()
+    this.raycaster = new THREE.Raycaster()
+    this.currentIntersect = null
     this.gui = new GUI()
 
     this.addEventListeners()
@@ -29,19 +33,9 @@ class Environment {
   addSceneObjects() {
     this.addLights()
     this.addFloor(100, 0.5, 100, 0x158000, 'plane')
-    // this.addPillar()
-    // // this.addBalancingBoard();
-    // this.addSphere(10, 2, 0xff0000, 'sphere', { x: 0, y: 22, z: 0 })
-    // this.addSphere(2, 2, 0xff0000, 'groundBall', { x: 2, y: 2.5, z: 0 })
-    // this.addDominos()
-    // hammer(this.renderInfo, this.physicsInfo)
 
-    // this.addEleveator()
-    // this.addSphere(10, 1.5, 0xff0000, 'ball', { x: 2.5, y: 1, z: 0 })
-    // this.addWall()
-
-    createElevatorScene(this.renderInfo, this.physicsInfo)
-    // this.addCollisionItems()
+    // createElevatorScene(this.renderInfo, this.physicsInfo)
+    createTubeScene(this.renderInfo, this.physicsInfo)
   }
 
   addCollisionItems() {
@@ -297,6 +291,22 @@ class Environment {
     window.addEventListener('resize', () => this.renderInfo.resize())
     window.addEventListener('keydown', (e) => this.keyDown(e.code))
     window.addEventListener('keyup', (e) => this.keyUp(e.code))
+    window.addEventListener('mousemove', (e) => this.mouseMove(e))
+    window.addEventListener('click', (e) => this.mouseClick(e))
+  }
+
+  mouseMove(e) {
+    this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1
+    this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1
+  }
+
+  mouseClick(e) {
+    if (this.currentIntersect) {
+      if (this.currentIntersect.object.name === 'button') {
+        const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+        elevator.start = true
+      }
+    }
   }
 
   keyDown(code) {
@@ -347,9 +357,36 @@ class Environment {
     motionState.setWorldTransform(transform)
   }
 
+  handleIntersects() {
+    this.raycaster.setFromCamera(this.mouse, this.renderInfo.camera)
+    const button = this.renderInfo.scene.getObjectByName('button')
+    const intersectObjects = [button]
+    const intersects = this.raycaster.intersectObjects(intersectObjects)
+
+    if (intersects.length) {
+      this.currentIntersect = intersects[0]
+    } else {
+      this.currentIntersect = null
+    }
+  }
+
+  handleEvents() {
+    // Move elevator
+    const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+    if (elevator.start) {
+      if (elevator.position.y < 10) {
+        this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 })
+      } else {
+        elevator.start = false
+      }
+    }
+  }
+
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
 
+    // this.handleIntersects()
+    // this.handleEvents()
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update()
 
