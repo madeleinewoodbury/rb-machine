@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import GUI from 'lil-gui'
+import Stats from 'stats.js'
 import RenderInfo from './RenderInfo.js'
 import PhysicsInfo from './PhysicsInfo.js'
 import AmmoHelper from './AmmoHelper.js'
@@ -10,12 +11,14 @@ import createElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
 import createBoxScene from './scenes/boxScene.js'
 import createBalancingBoardScene from './scenes/balancingBoardScene.js'
+import createPillarScene from './scenes/pillarScene.js'
 
 class Environment {
   constructor() {
     this.canvas = document.getElementById('canvas')
     this.physicsInfo = new PhysicsInfo()
     this.renderInfo = new RenderInfo(this.canvas)
+    this.stats = new Stats()
     this.ammoHelper = new AmmoHelper()
     this.mouse = new THREE.Vector2()
     this.raycaster = new THREE.Raycaster()
@@ -28,6 +31,9 @@ class Environment {
   start() {
     this.physicsInfo.setup()
     this.renderInfo.addGuiControls(this.gui)
+
+    this.stats.showPanel(0)
+    document.body.appendChild(this.stats.dom)
 
     this.gui.close()
 
@@ -43,6 +49,7 @@ class Environment {
     // createTubeScene(this.renderInfo, this.physicsInfo)
     // createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
     createBalancingBoardScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color, name) {
@@ -197,11 +204,12 @@ class Environment {
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
 
+    this.stats.begin()
     // this.handleIntersects()
     // this.handleEvents()
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update()
-
+    this.stats.end()
     window.requestAnimationFrame((currentTime) => this.animate(currentTime))
   }
 }

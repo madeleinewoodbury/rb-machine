@@ -2,8 +2,8 @@ import * as THREE from 'three';
 
 class Pillar {
   constructor() {
-    this.baseSize = {x: 1, y:20, z: 5}
-    this.plateauSize = {x: 15, y: 1, z: 5}
+    this.baseSize = {x: 1, y:30, z: 7}
+    this.plateauSize = {x: 25, y: 1, z: 7}
 
     this.generate()
   }

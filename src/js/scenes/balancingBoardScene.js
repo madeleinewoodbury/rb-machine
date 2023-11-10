@@ -5,6 +5,7 @@ import Box from "../sceneObjects/Box.js";
 
 function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
   const cylinder = new Cylinder(0.5, 5, 0x0000ff);
+  cylinder.mesh.position.x = 20
   const cylinderBody = ammoHelper.createRigidBody(cylinder.shape, cylinder.mesh, 0);  
   physicsInfo.addRigidBody(cylinderBody, cylinder.mesh);
   cylinder.mesh.userData.physicsBody = cylinderBody;
@@ -21,11 +22,13 @@ function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
   compoundShape.addChildShape(ammoHelper.transform, board.shape);
 
   const boardEdge = new Box(0.5, 1.5, 3, 0x0000ff);
-  boardEdge.mesh.position.set(-10 + boardEdge.width / 2, cylinder.height + board.height + boardEdge.height/2, 0);
+  boardEdge.mesh.position.set(10 - boardEdge.width / 2, cylinder.height + board.height + boardEdge.height/2, 0);
   boardGroup.add(boardEdge.mesh);
 
   ammoHelper.setTransform(boardEdge.mesh);
   compoundShape.addChildShape(ammoHelper.transform, boardEdge.shape);
+
+  boardGroup.position.set(20, 0, 0);
 
   const boardBody = ammoHelper.createRigidBody(compoundShape, boardGroup, 2);
   physicsInfo.addRigidBody(boardBody, boardGroup);
@@ -39,8 +42,8 @@ function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
 
   physicsInfo.addP2PConstraint(cylinderBody, boardBody, pivotA, pivotB);
 
-addBall(renderInfo, physicsInfo, { x: -2.55, y: 5.5, z: 0 }, 1);
-addBall(renderInfo, physicsInfo, { x: 6, y: 100, z: 0 }, 10);
+addBall(renderInfo, physicsInfo, { x: 25, y: 5.5, z: 0 }, 3.5);
+addBall(renderInfo, physicsInfo, { x: 12, y: 100, z: 0 }, 7);
   
 }
 

@@ -1,11 +1,12 @@
 import * as THREE from 'three'
 
 class Sphere {
-  constructor(radius, mass, color, position = { x: 0, y: 0, z: 0 }) {
+  constructor(radius, mass, color, position = { x: 0, y: 0, z: 0 }, material=null) {
     this.radius = radius
     this.mass = mass
     this.color = color
     this.position = position
+    this.material = material??new THREE.MeshStandardMaterial({ color: this.color })
 
     // Default values
     this.friction = 0.5
@@ -18,7 +19,7 @@ class Sphere {
   generate() {
     this.mesh = new THREE.Mesh(
       new THREE.SphereGeometry(this.radius, 32, 32),
-      new THREE.MeshStandardMaterial({ color: this.color })
+      this.material
     )
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true
