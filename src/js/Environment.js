@@ -2,17 +2,20 @@ import * as THREE from 'three'
 import GUI from 'lil-gui'
 import RenderInfo from './RenderInfo.js'
 import PhysicsInfo from './PhysicsInfo.js'
+import AmmoHelper from './AmmoHelper.js'
 import Lighting from './threejs/lights/Lighting.js'
 import Sphere from './sceneObjects/Sphere.js'
 
 import createElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
+import createBoxScene from './scenes/boxScene.js'
 
 class Environment {
   constructor() {
     this.canvas = document.getElementById('canvas')
     this.physicsInfo = new PhysicsInfo()
     this.renderInfo = new RenderInfo(this.canvas)
+    this.ammoHelper = new AmmoHelper()
     this.mouse = new THREE.Vector2()
     this.raycaster = new THREE.Raycaster()
     this.currentIntersect = null
@@ -35,6 +38,7 @@ class Environment {
 
     createElevatorScene(this.renderInfo, this.physicsInfo)
     createTubeScene(this.renderInfo, this.physicsInfo)
+    createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color, name) {
@@ -65,7 +69,7 @@ class Environment {
     const ball = new Sphere(1, 1, 0xff0000)
     ball.mesh.name = 'ball'
     ball.mesh.position.set(10, 1, 0)
-  
+
     const rigidBody = this.physicsInfo.createRigidBody(ball.shape, ball.mesh, 2)
     this.physicsInfo.addRigidBody(rigidBody, ball.mesh)
     ball.mesh.userData.physicsBody = rigidBody
@@ -106,8 +110,8 @@ class Environment {
 
     switch (code) {
       case 'KeyF':
-        const force = new Ammo.btVector3(-200, 0, 0)
-        const relPos = new Ammo.btVector3(1, 0, 0)
+        const force = new Ammo.btVector3(-500, 0, 0)
+        const relPos = new Ammo.btVector3(-1, 0, 0)
         this.physicsInfo.applyForce(ball, force, relPos)
         break
       // case 'ArrowUp':
@@ -174,11 +178,11 @@ class Environment {
     if (elevator.start) {
       if (elevator.position.y < 30) {
         this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 })
-        if(elevator.position.y > 29){
-          const force = new Ammo.btVector3(-100, 0, 0)
+        if (elevator.position.y > 29) {
+          const force = new Ammo.btVector3(-500, 0, 0)
           const relPos = new Ammo.btVector3(1, 0, 0)
           this.physicsInfo.applyForce(ball, force, relPos)
-          console.log('Applying force');
+          console.log('Applying force')
         }
       } else {
         elevator.start = false

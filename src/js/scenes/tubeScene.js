@@ -5,7 +5,7 @@ import Tube from '../sceneObjects/Tube.js'
 
 function createTubeScene(renderInfo, physicsInfo) {
   createTube(renderInfo, physicsInfo)
-  createPlateau(renderInfo, physicsInfo)  
+  createPlateau(renderInfo, physicsInfo)
 }
 
 function createBall(renderInfo, physicsInfo) {
@@ -20,8 +20,7 @@ function createBall(renderInfo, physicsInfo) {
 }
 
 function createTube(renderInfo, physicsInfo) {
-
-  const tube = new Tube(10, 3, 0x00ffff)
+  const tube = new Tube(10, 2, 0x00ffff)
   const ammoHelper = new AmmoHelper()
   const compoundShape = tube.getCompoundShape(ammoHelper)
 
@@ -44,10 +43,11 @@ function createPlateau(renderInfo, physicsInfo) {
   mesh.receiveShadow = true
 
   ammoHelper.setTransform(mesh)
-  const shape =  new Ammo.btBoxShape(new Ammo.btVector3(10, 15, 5))
+  const shape = new Ammo.btBoxShape(new Ammo.btVector3(10, 15, 5))
   shape.setMargin(0.05)
 
   const rigidBody = ammoHelper.createRigidBody(shape, mesh, 0)
+  rigidBody.setFriction(0.8)
   physicsInfo.addRigidBody(rigidBody, mesh)
   mesh.userData.physicsBody = rigidBody
   renderInfo.scene.add(mesh)

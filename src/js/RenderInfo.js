@@ -50,15 +50,14 @@ class RenderInfo {
     this.camera2.name = 'Camera 2'
     this.scene.add(this.camera2)
 
-    
     this.camera3 = new THREE.PerspectiveCamera(
       45,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     )
-    this.camera3.position.set(50, 40, 30)
-    this.camera3.lookAt(new THREE.Vector3(50, 20, -55))
+    this.camera3.position.set(20, 40, 50)
+    this.camera3.lookAt(new THREE.Vector3(40, 20, -55))
     // this.camera2.lookAt(this.target)
     this.camera3.name = 'Camera 3'
     this.scene.add(this.camera3)
@@ -68,7 +67,7 @@ class RenderInfo {
     this.controls = new OrbitControls(this.camera, this.canvas)
     this.controls.enableDamping = true
     // this.controls.target = this.target
-    this.controls.target = new THREE.Vector3(50, 20, -55)
+    this.controls.target = new THREE.Vector3(20, 20, -55)
   }
 
   setupRenderer() {
