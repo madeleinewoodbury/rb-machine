@@ -45,6 +45,11 @@ class PhysicsInfo {
     this.rigidBodies.push(mesh)
   }
 
+  addP2PConstraint(bodyA, bodyB, pivotA, pivotB) {
+    const p2p = new Ammo.btPoint2PointConstraint(bodyA, bodyB, pivotA, pivotB)
+    this.world.addConstraint(p2p, true)
+  }
+
   applyForce(mesh, force, relPos) {
     if (!mesh.userData.physicsBody) return
 

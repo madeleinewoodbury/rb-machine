@@ -96,6 +96,7 @@ class AmmoHelper {
     return modelVertices
   }
 
+
 }
 
 export default AmmoHelper;

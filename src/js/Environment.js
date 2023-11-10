@@ -9,6 +9,7 @@ import Sphere from './sceneObjects/Sphere.js'
 import createElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
 import createBoxScene from './scenes/boxScene.js'
+import createBalancingBoardScene from './scenes/balancingBoardScene.js'
 
 class Environment {
   constructor() {
@@ -28,6 +29,8 @@ class Environment {
     this.physicsInfo.setup()
     this.renderInfo.addGuiControls(this.gui)
 
+    this.gui.close()
+
     this.addSceneObjects()
     this.animate(0)
   }
@@ -36,9 +39,10 @@ class Environment {
     this.addLights()
     this.addFloor(200, 0.5, 200, 0x158000, 'plane')
 
-    createElevatorScene(this.renderInfo, this.physicsInfo)
-    createTubeScene(this.renderInfo, this.physicsInfo)
-    createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createElevatorScene(this.renderInfo, this.physicsInfo)
+    // createTubeScene(this.renderInfo, this.physicsInfo)
+    // createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createBalancingBoardScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color, name) {
@@ -193,8 +197,8 @@ class Environment {
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
 
-    this.handleIntersects()
-    this.handleEvents()
+    // this.handleIntersects()
+    // this.handleEvents()
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update()
 
