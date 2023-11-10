@@ -1,10 +1,12 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 class Cylinder {
-  constructor(radius, height, color) {
+  constructor(radius, height, color, material) {
     this.radius = radius;
     this.height = height;
     this.color = color;
+    this.material =
+      material ?? new THREE.MeshStandardMaterial({ color: this.color });
 
     this.generate();
   }
@@ -12,7 +14,7 @@ class Cylinder {
   generate() {
     this.mesh = new THREE.Mesh(
       new THREE.CylinderGeometry(this.radius, this.radius, this.height, 24),
-      new THREE.MeshStandardMaterial({ color: this.color })
+      this.material
     );
 
     this.mesh.position.set(0, this.height / 2, 0);

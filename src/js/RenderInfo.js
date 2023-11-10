@@ -104,6 +104,7 @@ class RenderInfo {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 
+
   update() {
     this.controls.update()
     this.renderer.render(this.scene, this.camera)
