@@ -50,6 +50,21 @@ class PhysicsInfo {
     this.world.addConstraint(p2p, true)
   }
 
+  addHingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB) {
+    const hingeConstraint = new Ammo.btHingeConstraint(
+      bodyA,
+      bodyB,
+      pivotA,
+      pivotB,
+      axisA,
+      axisB,
+      true
+    )
+
+    hingeConstraint.enableAngularMotor(true, 1, 50)
+    this.world.addConstraint(hingeConstraint, false)
+  }
+
   applyForce(mesh, force, relPos) {
     if (!mesh.userData.physicsBody) return
 

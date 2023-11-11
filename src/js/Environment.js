@@ -13,6 +13,7 @@ import createBoxScene from './scenes/boxScene.js'
 import createBalancingBoardScene from './scenes/balancingBoardScene.js'
 import createPillarScene from './scenes/pillarScene.js'
 import createRecordPlayerScene from './scenes/recordPlayerScene.js'
+import createRotatingArmScene from './scenes/rotatingArmScene.js'
 
 class Environment {
   constructor() {
@@ -49,9 +50,14 @@ class Environment {
     // createElevatorScene(this.renderInfo, this.physicsInfo)
     // createTubeScene(this.renderInfo, this.physicsInfo)
     // createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createBalancingBoardScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createBalancingBoardScene(
+    //   this.renderInfo,
+    //   this.physicsInfo,
+    //   this.ammoHelper
+    // )
     // createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createRecordPlayerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createRecordPlayerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createRotatingArmScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color, name) {
@@ -207,14 +213,14 @@ class Environment {
     const rotationSpeed = (Math.PI / 2) * deltaTime
     const recordPlayer = this.renderInfo.scene.getObjectByName('recordPlayer')
     const rigidRecordPlayerBody = recordPlayer.userData.physicsBody
-    const angularVelocity = new Ammo.btVector3(0, rotationSpeed, 0)    
+    const angularVelocity = new Ammo.btVector3(0, rotationSpeed, 0)
     rigidRecordPlayerBody.setAngularVelocity(angularVelocity)
 
     const record = recordPlayer.children[0]
 
-    record.rotationAngle += rotationSpeed;
-    record.rotationAngle %= Math.PI * 2;
-    record.rotation.y = recordPlayer.rotationAngle;
+    record.rotationAngle += rotationSpeed
+    record.rotationAngle %= Math.PI * 2
+    record.rotation.y = recordPlayer.rotationAngle
   }
 
   animate(currentTime) {
