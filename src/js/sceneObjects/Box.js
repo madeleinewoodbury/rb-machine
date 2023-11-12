@@ -1,20 +1,19 @@
 import * as THREE from 'three'
 
 class Box {
-  constructor(width, height, depth, color) {
+  constructor(width, height, depth, material) {
     this.width = width
     this.height = height
     this.depth = depth
-    this.color = color
+    this.material = material
 
-    this.mass = 0
     this.generate()
   }
 
   generate() {
     this.mesh = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.depth),
-      new THREE.MeshStandardMaterial({ color: this.color })
+      this.material
     )
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true

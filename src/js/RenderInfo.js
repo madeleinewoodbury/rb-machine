@@ -13,7 +13,7 @@ class RenderInfo {
     this.clock = new THREE.Clock()
     this.target = new THREE.Vector3(0, 10, 0)
     this.axesHelper = new THREE.AxesHelper(100)
-    this.showAxesHelper = false
+    this.showAxesHelper = true
     this.activeCamera = 'Camera 1'
 
     this.setupCamera()
@@ -33,7 +33,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera1.position.set(0, 30, 80)
+    this.camera1.position.set(0, 40, 100)
     this.camera1.lookAt(this.target)
     this.camera1.name = 'Camera 1'
     this.scene.add(this.camera1)
@@ -77,6 +77,7 @@ class RenderInfo {
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.setClearColor(0x6de1ff)
+    // this.renderer.setClearColor(0x000000)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
@@ -104,8 +105,20 @@ class RenderInfo {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 
+  animateSceneObjects(deltaTime) {
+    const rotationSpeed = Math.PI / 2
+    const blade1 = this.scene.getObjectByName('blade1')
+    const blade2 = this.scene.getObjectByName('blade2')
 
-  update() {
+    blade1.rotationAngle += rotationSpeed * deltaTime
+    blade2.rotationAngle += rotationSpeed * deltaTime
+
+    blade1.rotation.z = blade1.rotationAngle
+    blade2.rotation.z = blade2.rotationAngle
+  }
+
+  update(deltaTime) {
+    this.animateSceneObjects(deltaTime)
     this.controls.update()
     this.renderer.render(this.scene, this.camera)
   }

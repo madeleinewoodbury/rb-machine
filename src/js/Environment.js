@@ -4,16 +4,17 @@ import Stats from 'stats.js'
 import RenderInfo from './RenderInfo.js'
 import PhysicsInfo from './PhysicsInfo.js'
 import AmmoHelper from './AmmoHelper.js'
-import Lighting from './threejs/lights/Lighting.js'
-import Sphere from './sceneObjects/Sphere.js'
+import Lighting from './lights/Lighting.js'
+import materials from './materials.js'
 
 import createElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
-import createBoxScene from './scenes/boxScene.js'
 import createBalancingBoardScene from './scenes/balancingBoardScene.js'
 import createPillarScene from './scenes/pillarScene.js'
-import createRecordPlayerScene from './scenes/recordPlayerScene.js'
-import createRotatingArmScene from './scenes/rotatingArmScene.js'
+import ropeScene from './scenes/ropeScene.js'
+import createWindScene from './scenes/windScene.js'
+import createHammerScene from './scenes/hammerScene.js'
+import createFish from './scenes/fishScene.js'
 
 class Environment {
   constructor() {
@@ -45,54 +46,47 @@ class Environment {
 
   addSceneObjects() {
     this.addLights()
-    this.addFloor(200, 0.5, 200, 0x158000, 'plane')
+    this.addFloor(200, 0.01, 200)
 
-    // createElevatorScene(this.renderInfo, this.physicsInfo)
-    // createTubeScene(this.renderInfo, this.physicsInfo)
-    // createBoxScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createBalancingBoardScene(
-    //   this.renderInfo,
-    //   this.physicsInfo,
-    //   this.ammoHelper
-    // )
-    // createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createRecordPlayerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createRotatingArmScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createFish(this.renderInfo, this.physicsInfo, this.ammoHelper)
+
+    createWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createBalancingBoardScene(
+      this.renderInfo,
+      this.physicsInfo,
+      this.ammoHelper
+    )
+    ropeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createElevatorScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createTubeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    createHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
-  addFloor(width, height, depth, color, name) {
+  addFloor(width, height, depth, color) {
     const mass = 0
 
-    const mesh = new THREE.Mesh(
+    const plane = new THREE.Mesh(
       new THREE.BoxGeometry(width, height, depth),
-      new THREE.MeshStandardMaterial({ color })
+      materials.plane
     )
-    mesh.receiveShadow = true
-    mesh.position.set(0, -height / 2, 0)
-    mesh.name = name
+    plane.receiveShadow = true
+    plane.position.set(0, -height / 2, 0)
+    plane.name = 'floor'
 
     const shape = new Ammo.btBoxShape(
       new Ammo.btVector3(width * 0.5, height * 0.5, depth * 0.5)
     )
     shape.setMargin(0.05)
-    const rigidBody = this.physicsInfo.createRigidBody(shape, mesh, mass)
+
+    const rigidBody = this.physicsInfo.createRigidBody(shape, plane, mass)
     rigidBody.setFriction(0.8)
     rigidBody.setRestitution(0.7)
 
-    this.physicsInfo.addRigidBody(rigidBody, mesh)
-    this.renderInfo.scene.add(mesh)
-    mesh.userData.physicsBody = rigidBody
-  }
+    this.physicsInfo.addRigidBody(rigidBody, plane)
+    this.renderInfo.scene.add(plane)
 
-  addBall() {
-    const ball = new Sphere(1, 1, 0xff0000)
-    ball.mesh.name = 'ball'
-    ball.mesh.position.set(10, 1, 0)
-
-    const rigidBody = this.physicsInfo.createRigidBody(ball.shape, ball.mesh, 2)
-    this.physicsInfo.addRigidBody(rigidBody, ball.mesh)
-    ball.mesh.userData.physicsBody = rigidBody
-    this.renderInfo.scene.add(ball.mesh)
+    plane.userData.rigidBody = rigidBody
   }
 
   addLights() {
@@ -117,25 +111,41 @@ class Environment {
   mouseClick(e) {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === 'button') {
-        const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+        const elevator = this.renderInfo.scene.getObjectByName('elevator')
         elevator.start = true
       }
     }
   }
 
   keyDown(code) {
-    const ball = this.renderInfo.scene.getObjectByName('ball')
-    const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+    const ball = this.renderInfo.scene.getObjectByName('hangingBall')
+    const elevator = this.renderInfo.scene.getObjectByName('elevator')
 
     switch (code) {
       case 'KeyF':
-        const force = new Ammo.btVector3(-500, 0, 0)
-        const relPos = new Ammo.btVector3(-1, 0, 0)
-        this.physicsInfo.applyForce(ball, force, relPos)
+        const rigidBall = ball.userData.rigidBody
+        const shape = rigidBall.getCollisionShape()
+        const updatedRigidbody = this.ammoHelper.createRigidBody(
+          shape,
+          ball,
+          25
+        )
+
+        this.physicsInfo.world.removeRigidBody(rigidBall)
+        this.physicsInfo.addRigidBody(updatedRigidbody, ball)
+
+        ball.userData.rigidBody = updatedRigidbody
         break
+      // case 'KeyR':
+      //   this.physicsInfo.recordPlayerHingeConstraint.enableAngularMotor(
+      //     true,
+      //     2,
+      //     10
+      //   )
+      // break
       // case 'ArrowUp':
-      //   if (elevator.position.y < 10)
-      //     this.moveRigidBody(elevator, { x: 0, y: 0.1, z: 0 })
+      //   if (elevator.position.y < 10) console.log('eleavator up')
+      //   this.moveRigidBody(elevator, { x: 0, y: 0.1, z: 0 })
       //   break
       // case 'ArrowDown':
       //   if (elevator.position.y >= 0.05)
@@ -162,7 +172,7 @@ class Environment {
 
   moveRigidBody(mesh, direction) {
     const transform = new Ammo.btTransform()
-    const motionState = mesh.userData.physicsBody.getMotionState()
+    const motionState = mesh.userData.rigidBody.getMotionState()
     motionState.getWorldTransform(transform)
 
     const position = transform.getOrigin()
@@ -191,47 +201,68 @@ class Environment {
 
   handleEvents() {
     // Move elevator
-    const elevator = this.renderInfo.scene.getObjectByName('Elevator')
+    const elevator = this.renderInfo.scene.getObjectByName('elevator')
     const ball = this.renderInfo.scene.getObjectByName('ball')
+    const hangingBall = this.renderInfo.scene.getObjectByName('hangingBall')
 
     if (elevator.start) {
-      if (elevator.position.y < 30) {
+      if (elevator.position.y < 34) {
         this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 })
-        if (elevator.position.y > 29) {
+        if (elevator.position.y > 33) {
           const force = new Ammo.btVector3(-500, 0, 0)
           const relPos = new Ammo.btVector3(1, 0, 0)
           this.physicsInfo.applyForce(ball, force, relPos)
-          console.log('Applying force')
         }
       } else {
         elevator.start = false
       }
     }
+
+    if (
+      this.physicsInfo.collisions['hammer'] === 'laserButton' &&
+      hangingBall.mass === 0
+    ) {
+      const rigidBall = hangingBall.userData.rigidBody
+      const shape = rigidBall.getCollisionShape()
+      const updatedRigidbody = this.ammoHelper.createRigidBody(
+        shape,
+        hangingBall,
+        25
+      )
+      this.physicsInfo.world.removeRigidBody(rigidBall)
+      this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall)
+      hangingBall.userData.rigidBody = updatedRigidbody
+      hangingBall.mass = 25
+    }
   }
 
-  updateObjects(deltaTime) {
-    const rotationSpeed = (Math.PI / 2) * deltaTime
-    const recordPlayer = this.renderInfo.scene.getObjectByName('recordPlayer')
-    const rigidRecordPlayerBody = recordPlayer.userData.physicsBody
-    const angularVelocity = new Ammo.btVector3(0, rotationSpeed, 0)
-    rigidRecordPlayerBody.setAngularVelocity(angularVelocity)
+  animateParticles(deltaTime) {
+    const windParticles = this.renderInfo.scene.getObjectByName('windParticles')
+    const speed = 3
 
-    const record = recordPlayer.children[0]
+    windParticles.position.x -= speed * deltaTime
 
-    record.rotationAngle += rotationSpeed
-    record.rotationAngle %= Math.PI * 2
-    record.rotation.y = recordPlayer.rotationAngle
+    if (windParticles.position.x < 65) {
+      windParticles.material.opacity -= 0.02
+
+      if (windParticles.material.opacity < 0) {
+        windParticles.position.x = 75
+        windParticles.material.opacity += 0.1
+      }
+    } else if (windParticles.material.opacity < 1) {
+      windParticles.material.opacity += 0.01
+    }
   }
 
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
 
     this.stats.begin()
-    // this.handleIntersects()
-    // this.handleEvents()
+    this.handleIntersects()
+    this.handleEvents()
+    this.animateParticles(deltaTime)
     this.physicsInfo.update(deltaTime)
-    // this.updateObjects(deltaTime)
-    this.renderInfo.update()
+    this.renderInfo.update(deltaTime)
     this.stats.end()
     window.requestAnimationFrame((currentTime) => this.animate(currentTime))
   }

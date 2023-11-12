@@ -1,12 +1,9 @@
 import * as THREE from 'three'
 
 class Sphere {
-  constructor(radius, mass, color, position = { x: 0, y: 0, z: 0 }, material=null) {
+  constructor(radius, material) {
     this.radius = radius
-    this.mass = mass
-    this.color = color
-    this.position = position
-    this.material = material??new THREE.MeshStandardMaterial({ color: this.color })
+    this.material = material
 
     // Default values
     this.friction = 0.5
@@ -23,7 +20,6 @@ class Sphere {
     )
     this.mesh.castShadow = true
     this.mesh.receiveShadow = true
-    this.mesh.position.set(this.position.x, this.position.y, this.position.z)
 
     this.shape = new Ammo.btSphereShape(this.radius)
     this.shape.setMargin(0.05)

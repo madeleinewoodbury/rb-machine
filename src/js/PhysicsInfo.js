@@ -11,6 +11,8 @@ class PhysicsInfo {
       plane: 1,
       hammer: 2,
     }
+
+    this.collisions = {}
   }
 
   /**
@@ -66,22 +68,22 @@ class PhysicsInfo {
   }
 
   applyForce(mesh, force, relPos) {
-    if (!mesh.userData.physicsBody) return
+    if (!mesh.userData.rigidBody) return
 
-    const rigidBody = mesh.userData.physicsBody
+    const rigidBody = mesh.userData.rigidBody
     rigidBody.activate(true)
     rigidBody.applyForce(force, relPos)
   }
 
-  applyImpluse(rbBody, force, direction) {
-    rbBody.activate(true)
-    const impulseVector = new Ammo.btVector3(
-      force * direction.x,
-      force * direction.y,
-      force * direction.z
-    )
-    rbBody.applyCentralImpulse(impulseVector)
-  }
+  // applyImpluse(rbBody, force, direction) {
+  //   rbBody.activate(true)
+  //   const impulseVector = new Ammo.btVector3(
+  //     force * direction.x,
+  //     force * direction.y,
+  //     force * direction.z
+  //   )
+  //   rbBody.applyCentralImpulse(impulseVector)
+  // }
 
   createRigidBody(shape, mesh, mass) {
     const transform = new Ammo.btTransform()
@@ -118,7 +120,7 @@ class PhysicsInfo {
     // Update rigid bodies
     for (let i = 0; i < this.rigidBodies.length; i++) {
       const mesh = this.rigidBodies[i]
-      const body = mesh.userData.physicsBody
+      const body = mesh.userData.rigidBody
       const motionState = body.getMotionState()
 
       if (motionState) {
@@ -160,12 +162,19 @@ class PhysicsInfo {
             const distance = contactPoint.getDistance()
 
             if (distance <= 0) {
+              if (!(rigidBody0.threeMesh.name in this.collisions))
+                this.collisions[rigidBody0.threeMesh.name] =
+                  rigidBody1.threeMesh.name
               // We have a collison
-              console.log(
-                rigidBody0.threeMesh.name,
-                'collided with',
-                rigidBody1.threeMesh.name
-              )
+              if (rigidBody0.threeMesh.name === 'hammer') {
+                console.log(
+                  rigidBody0.threeMesh.name,
+                  'collided with',
+                  rigidBody1.threeMesh.name
+                )
+              }
+
+              // console.log(this.collisions)
             }
           }
         }

@@ -1,56 +1,55 @@
 import * as THREE from 'three'
-import Sphere from '../sceneObjects/Sphere.js'
-import AmmoHelper from '../AmmoHelper.js'
+import materials from '../materials.js'
 import Tube from '../sceneObjects/Tube.js'
+import Box from '../sceneObjects/Box.js'
 
-function createTubeScene(renderInfo, physicsInfo) {
-  createTube(renderInfo, physicsInfo)
-  createPlateau(renderInfo, physicsInfo)
+function createTubeScene(renderInfo, physicsInfo, ammoHelper) {
+  createTube(renderInfo, physicsInfo, ammoHelper)
+  createPlateau(renderInfo, physicsInfo, ammoHelper)
+  createRamp(renderInfo, physicsInfo, ammoHelper)
 }
 
-function createBall(renderInfo, physicsInfo) {
-  const ball = new Sphere(1, 1, 0xff0000)
-  ball.mesh.name = 'ball'
-  ball.mesh.position.set(10, 35, 0)
+function createTube(renderInfo, physicsInfo, ammoHelper) {
+  const tube = new Tube(10, 1.55)
+  tube.mesh.position.set(11.4, -14.3, -52.5)
 
-  const rigidBody = physicsInfo.createRigidBody(ball.shape, ball.mesh, 2)
-  physicsInfo.addRigidBody(rigidBody, ball.mesh)
-  ball.mesh.userData.physicsBody = rigidBody
-  renderInfo.scene.add(ball.mesh)
-}
-
-function createTube(renderInfo, physicsInfo) {
-  const tube = new Tube(10, 2, 0x00ffff)
-  const ammoHelper = new AmmoHelper()
   const compoundShape = tube.getCompoundShape(ammoHelper)
 
   const rigidBody = physicsInfo.createRigidBody(compoundShape, tube.mesh, 0)
   physicsInfo.addRigidBody(rigidBody, tube.mesh)
-  tube.mesh.userData.physicsBody = rigidBody
   renderInfo.scene.add(tube.mesh)
-  // return tube.mesh
+  tube.mesh.userData.rigidBody = rigidBody
+  rigidBody.threeMesh = tube.mesh
 }
 
-function createPlateau(renderInfo, physicsInfo) {
-  const ammoHelper = new AmmoHelper()
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(20, 30, 10),
-    new THREE.MeshStandardMaterial({ color: 0xffffff })
+function createPlateau(renderInfo, physicsInfo, ammoHelper) {
+  const mass = 0
+  const plateau = new Box(40, 34, 10, materials.plateau)
+  plateau.mesh.position.set(32, 17, -52.5)
+
+  const rigidBody = ammoHelper.createRigidBody(
+    plateau.shape,
+    plateau.mesh,
+    mass
   )
-
-  mesh.position.set(62, 15, -52.5)
-  mesh.castShadow = true
-  mesh.receiveShadow = true
-
-  ammoHelper.setTransform(mesh)
-  const shape = new Ammo.btBoxShape(new Ammo.btVector3(10, 15, 5))
-  shape.setMargin(0.05)
-
-  const rigidBody = ammoHelper.createRigidBody(shape, mesh, 0)
   rigidBody.setFriction(0.8)
-  physicsInfo.addRigidBody(rigidBody, mesh)
-  mesh.userData.physicsBody = rigidBody
-  renderInfo.scene.add(mesh)
+  physicsInfo.addRigidBody(rigidBody, plateau.mesh)
+  renderInfo.scene.add(plateau.mesh)
+  plateau.mesh.userData.rigidBody = rigidBody
+  rigidBody.threeMesh = plateau.mesh
+}
+
+function createRamp(renderInfo, physicsInfo, ammoHelper) {
+  const mass = 0
+  const ramp = new Box(10, 0.5, 5, materials.ramp)
+  ramp.mesh.position.set(-13, 6, -52.5)
+  ramp.mesh.rotateZ(-Math.PI / 10)
+
+  const rigidBody = physicsInfo.createRigidBody(ramp.shape, ramp.mesh, mass)
+  physicsInfo.addRigidBody(rigidBody, ramp.mesh)
+  renderInfo.scene.add(ramp.mesh)
+  ramp.mesh.userData.rigidBody = rigidBody
+  rigidBody.threeMesh = ramp.mesh
 }
 
 export default createTubeScene

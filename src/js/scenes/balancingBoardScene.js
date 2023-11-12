@@ -1,31 +1,35 @@
 import * as THREE from 'three'
+import materials from '../materials.js'
 import Sphere from '../sceneObjects/Sphere.js'
-import Cylinder from '../sceneObjects/Cylinder.js'
 import Box from '../sceneObjects/Box.js'
+import Cylinder from '../sceneObjects/Cylinder.js'
 
 function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
-  const cylinder = new Cylinder(0.5, 5, 0x0000ff)
-  cylinder.mesh.position.x = 20
+  const position = { x: 25, y: 0, z: 25 }
+
+  const cylinder = new Cylinder(0.5, 5, materials.balancingBoard)
+  cylinder.mesh.position.x = position.x
+  cylinder.mesh.position.z = position.z
   const cylinderBody = ammoHelper.createRigidBody(
     cylinder.shape,
     cylinder.mesh,
     0
   )
   physicsInfo.addRigidBody(cylinderBody, cylinder.mesh)
-  cylinder.mesh.userData.physicsBody = cylinderBody
   renderInfo.scene.add(cylinder.mesh)
+  cylinder.mesh.userData.rigidBody = cylinderBody
 
   const boardGroup = new THREE.Group()
   const compoundShape = new Ammo.btCompoundShape()
 
-  const board = new Box(20, 0.5, 3, 0x0000ff)
+  const board = new Box(20, 0.5, 3, materials.balancingBoard)
   board.mesh.position.set(0, cylinder.height + board.height / 2, 0)
   boardGroup.add(board.mesh)
 
   ammoHelper.setTransform(board.mesh)
   compoundShape.addChildShape(ammoHelper.transform, board.shape)
 
-  const boardEdge = new Box(0.5, 1.5, 3, 0x0000ff)
+  const boardEdge = new Box(0.5, 1.5, 3, materials.balancingBoard)
   boardEdge.mesh.position.set(
     10 - boardEdge.width / 2,
     cylinder.height + board.height + boardEdge.height / 2,
@@ -36,11 +40,11 @@ function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
   ammoHelper.setTransform(boardEdge.mesh)
   compoundShape.addChildShape(ammoHelper.transform, boardEdge.shape)
 
-  boardGroup.position.set(20, 0, 0)
+  boardGroup.position.set(position.x, position.y, position.z)
 
   const boardBody = ammoHelper.createRigidBody(compoundShape, boardGroup, 2)
   physicsInfo.addRigidBody(boardBody, boardGroup)
-  boardGroup.userData.physicsBody = boardBody
+  boardGroup.userData.rigidBody = boardBody
   renderInfo.scene.add(boardGroup)
 
   // Add constraints
@@ -49,16 +53,16 @@ function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
 
   physicsInfo.addP2PConstraint(cylinderBody, boardBody, pivotA, pivotB)
 
-  addBall(renderInfo, physicsInfo, { x: 25, y: 5.5, z: 0 }, 3.5)
-  // addBall(renderInfo, physicsInfo, { x: 12, y: 100, z: 0 }, 7);
+  const ballPosition = { x: position.x + 5, y: 5.5, z: position.z }
+  addBall(renderInfo, physicsInfo, ballPosition)
 }
 
-function addBall(renderInfo, physicsInfo, pos, mass) {
+function addBall(renderInfo, physicsInfo, position) {
+  const mass = 3.2
   const radius = 1.5
-  const color = 0xff0000
 
-  const ball = new Sphere(radius, mass, color, pos)
-  ball.mesh.name = 'ball'
+  const ball = new Sphere(radius, materials.ball)
+  ball.mesh.position.set(position.x, position.y, position.z)
 
   const rigidBody = physicsInfo.createRigidBody(ball.shape, ball.mesh, mass)
   ball.setFriction(rigidBody)
@@ -66,8 +70,9 @@ function addBall(renderInfo, physicsInfo, pos, mass) {
   ball.setRollingFriction(rigidBody)
 
   physicsInfo.addRigidBody(rigidBody, ball.mesh)
-  ball.mesh.userData.physicsBody = rigidBody
   renderInfo.scene.add(ball.mesh)
+  ball.mesh.userData.rigidBody = rigidBody
+  rigidBody.threeMesh = ball.mesh
 }
 
 export default balancingBoardScene

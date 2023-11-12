@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import materials from '../materials.js'
 
 class Elevator {
   constructor(width, height, depth, color) {
@@ -18,62 +19,58 @@ class Elevator {
 
   generate() {
     this.mesh = new THREE.Group()
-    this.mesh.name = 'Elevator'
+    this.mesh.name = 'elevator'
 
-    const side1 = new THREE.Mesh(
+    this.side1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.depth),
-      new THREE.MeshStandardMaterial({ color: 0x0000ff })
+      materials.elevator
     )
-    side1.position.set(0, this.height / 2, 0)
-    side1.receiveShadow = true
-    side1.castShadow = true
+    this.side1.position.set(0, this.height / 2, 0)
+    this.side1.receiveShadow = true
+    this.side1.castShadow = true
 
-    const side2 = side1.clone()
-    side2.position.z = this.width - this.depth
-    side2.receiveShadow = true
-    side2.castShadow = true
+    this.side2 = this.side1.clone()
+    this.side2.position.z = this.width - this.depth
+    this.side2.receiveShadow = true
+    this.side2.castShadow = true
 
-    const side3 = side1.clone()
-    side3.position.y = 5
-    side3.position.z = this.width / 2 - this.depth / 2
-    side3.rotation.x = Math.PI / 2
-    side3.receiveShadow = true
-    side3.castShadow = true
+    this.side3 = this.side1.clone()
+    this.side3.position.y = 5
+    this.side3.position.z = this.width / 2 - this.depth / 2
+    this.side3.rotation.x = Math.PI / 2
+    this.side3.receiveShadow = true
+    this.side3.castShadow = true
 
-    const side4 = side3.clone()
-    side4.scale.set(1, 1, 0.2)
-    side4.position.y = this.depth * 0.1
-    side4.receiveShadow = true
-    side4.castShadow = true
+    this.side4 = this.side3.clone()
+    this.side4.scale.set(1, 1, 0.2)
+    this.side4.position.y = this.depth * 0.1
+    this.side4.receiveShadow = true
+    this.side4.castShadow = true
 
-    const sideShape = new Ammo.btBoxShape(
-      new Ammo.btVector3(this.width / 2, this.height / 2, this.depth / 2)
-    )
-
-    this.shape = new Ammo.btCompoundShape()
-    this.shape.addChildShape(this.getTransform(side1), sideShape)
-    this.shape.addChildShape(this.getTransform(side2), sideShape)
-    this.shape.addChildShape(this.getTransform(side3), sideShape)
-    this.shape.addChildShape(this.getTransform(side4), sideShape)
-    this.shape.setMargin(0.05)
-
-    this.mesh.add(side1, side2, side3, side4)
-    this.mesh.position.set(75, 0, -55)
-    // this.mesh.rotateY(Math.PI / 2)
-    this.mesh.csastShadow = true
+    this.mesh.add(this.side1, this.side2, this.side3, this.side4)
+    this.mesh.castShadow = true
     this.mesh.receiveShadow = true
   }
 
-  getTransform(sideMesh) {
-    const pos = sideMesh.position
-    const quat = sideMesh.quaternion
+  getCompoundShape(ammoHelper) {
+    const sideShape = new Ammo.btBoxShape(
+      new Ammo.btVector3(this.width / 2, this.height / 2, this.depth / 2)
+    )
+    const compoundShape = new Ammo.btCompoundShape()
+    ammoHelper.setTransform(this.side1)
+    compoundShape.addChildShape(ammoHelper.transform, sideShape)
 
-    const transform = new Ammo.btTransform()
-    transform.setIdentity()
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z))
-    transform.setRotation(new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w))
+    ammoHelper.setTransform(this.side2)
+    compoundShape.addChildShape(ammoHelper.transform, sideShape)
 
-    return transform
+    ammoHelper.setTransform(this.side3)
+    compoundShape.addChildShape(ammoHelper.transform, sideShape)
+
+    ammoHelper.setTransform(this.side4)
+    compoundShape.addChildShape(ammoHelper.transform, sideShape)
+    compoundShape.setMargin(0.05)
+
+    return compoundShape
   }
 }
 
