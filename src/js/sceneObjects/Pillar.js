@@ -17,7 +17,7 @@ class Pillar {
 
     this.base = new THREE.Mesh(
       new THREE.BoxGeometry(this.baseSize.x, this.baseSize.y, this.baseSize.z),
-      materials.pillar
+      materials.white
     )
     this.base.position.set(this.baseX, this.baseSize.y / 2, this.baseZ) // z: 8
     this.base.castShadow = true
@@ -29,7 +29,7 @@ class Pillar {
         this.plateauSize.y,
         this.plateauSize.z
       ),
-      materials.pillar
+      materials.white
     )
     this.plateau.position.set(
       -this.plateauSize.x / 2 + this.baseSize.x / 2,

@@ -37,7 +37,7 @@ function laser(renderInfo) {
 }
 
 function laserStand(renderInfo, physicsInfo, ammoHelper) {
-  const stand = new Box(15, 41, 15, materials.pillar)
+  const stand = new Box(15, 41, 15, materials.white)
   stand.mesh.position.set(-66, 20.5, -52.5)
   stand.mesh.name = 'stand'
 

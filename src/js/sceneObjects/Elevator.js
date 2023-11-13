@@ -2,12 +2,11 @@ import * as THREE from 'three'
 import materials from '../materials.js'
 
 class Elevator {
-  constructor(width, height, depth, color) {
+  constructor(width, height, depth) {
     this.mass = 0
     this.width = width
     this.height = height
     this.depth = depth
-    this.color = color
 
     this.friction = 0.3
     this.restituition = 0.0
@@ -23,7 +22,7 @@ class Elevator {
 
     this.side1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.depth),
-      materials.elevator
+      materials.blue
     )
     this.side1.position.set(0, this.height / 2, 0)
     this.side1.receiveShadow = true

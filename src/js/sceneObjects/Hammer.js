@@ -29,7 +29,7 @@ class Hammer {
     this.mallet = new Cylinder(
       this.malletRadius,
       this.malletWidth,
-      materials.hammerMallet
+      materials.black
     )
     this.mallet.mesh.position.set(0, this.height, 0)
     this.mallet.mesh.rotation.set(0, 0, Math.PI / 2)

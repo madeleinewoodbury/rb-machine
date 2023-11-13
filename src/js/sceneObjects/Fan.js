@@ -1,63 +1,82 @@
-import * as THREE from 'three'
-import materials from '../materials.js'
-import Cylinder from './Cylinder.js'
-import Box from './Box.js'
+import * as THREE from "three";
+import materials from "../materials.js";
 
 class Fan {
-  constructor(baseRadius, baseHeight) {
-    this.baseRadius = baseRadius
-    this.baseHeight = baseHeight
+  constructor(
+    baseRadius,
+    baseHeight,
+    topRadius,
+    topLength,
+    bladeWidth,
+    bladeHeight,
+    bladeDepth
+  ) {
+    this.baseRadius = baseRadius;
+    this.baseHeight = baseHeight;
+    this.topRadius = topRadius;
+    this.topLength = topLength;
+    this.bladeWidth = bladeWidth;
+    this.bladeHeight = bladeHeight;
+    this.bladeDepth = bladeDepth;
 
-    this.group = new THREE.Group()
-    this.group.name = 'Fan'
+    this.group = new THREE.Group();
+    this.group.name = "Fan";
 
-    this.addBase()
-    this.addTop()
-    this.addBlade()
+    this.addBase();
+    this.addTop();
+    this.addBlades();
   }
 
   addBase() {
-    this.base = new Cylinder(this.baseRadius, this.baseHeight, materials.fan)
-    this.group.add(this.base.mesh)
+    const base = new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        this.baseRadius,
+        this.baseRadius,
+        this.baseHeight,
+        24,
+        1
+      ),
+      materials.white
+    );
+    base.position.set(0, this.baseHeight / 2, 0);
+    this.group.add(base);
   }
 
   addTop() {
-    this.top = new Cylinder(
-      (this.baseRadius = 0.75),
-      this.baseRadius * 3,
-      materials.fan
-    )
-    this.top.mesh.position.set(
-      0,
-      this.baseHeight - this.baseRadius * 2,
-      this.baseRadius
-    )
-    this.top.mesh.rotateX(Math.PI / 2)
-    this.group.add(this.top.mesh)
+    const capsule = new THREE.Mesh(
+      new THREE.CapsuleGeometry(
+        this.topRadius,
+        this.topRadius,
+        this.topLength,
+        12
+      ),
+      materials.white
+    );
+    capsule.rotateX(Math.PI / 2);
+    capsule.position.set(0, this.baseHeight + this.topRadius / 2, 1);
+    this.group.add(capsule);
   }
 
-  addBlade() {
-    this.blade = new Box(10, 0.5, 0.1, materials.fan)
-    this.blade.mesh.position.set(
+  addBlades() {
+    const blade1 = new THREE.Mesh(
+      new THREE.BoxGeometry(this.bladeWidth, this.bladeHeight, this.bladeDepth),
+      materials.white
+    );
+    blade1.name = "blade1";
+    blade1.rotationAngle = 0;
+    blade1.position.set(
       0,
-      this.top.mesh.position.y,
-      this.top.mesh.position.z + this.top.mesh.geometry.parameters.height / 2
-    )
+      this.baseHeight + this.topRadius / 2,
+      this.topLength / 2
+    );
 
-    this.group.add(this.blade.mesh)
+    const blade2 = blade1.clone();
+    blade2.rotationAngle = Math.PI / 2;
+    blade2.name = "blade2";
+    blade2.rotateZ(blade2.rotationAngle);
+
+    this.group.add(blade1, blade2);
   }
-
-  //   getCompoundShape(ammoHelper) {
-  //     const compoundShape = new Ammo.btCompoundShape()
-  //     ammoHelper.setTransform(this.handle.mesh)
-  //     compoundShape.addChildShape(ammoHelper.transform, this.handle.shape)
-
-  //     ammoHelper.setTransform(this.mallet.mesh)
-  //     compoundShape.addChildShape(ammoHelper.transform, this.mallet.shape)
-
-  //     compoundShape.setMargin(0.05)
-  //     return compoundShape
-  //   }
 }
 
-export default Fan
+export default Fan;

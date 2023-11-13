@@ -1,48 +1,63 @@
-import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import materials from '../materials.js'
-import Box from '../sceneObjects/Box.js'
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import materials from "../materials.js";
+import Aquarium from "../sceneObjects/Aquarium.js";
 
-function createFish(renderInfo, physicsInfo, ammoHelper) {
+function addFishScene(renderInfo, physicsInfo, ammoHelper) {
+  const aquariumSize = { width: 30, height: 10, depth: 20, edgeWith: 0.1 };
+  const position = { x: -30, y: 0, z: 25 };
+
+  addAquarium(renderInfo, physicsInfo, ammoHelper, aquariumSize, position);
+  addWater(renderInfo, aquariumSize, position);
+  addFish(renderInfo, position);
+}
+
+function addFish(renderInfo, position) {
   const loader = new GLTFLoader()
   loader.load('./models/Goldfish.glb', (gltf) => {
     const fish = gltf.scene.children[0]
-    fish.position.set(-30, 4, 25)
+    fish.position.set(position.x, 7, position.z)
     fish.rotateY(Math.PI / 2)
-    fish.scale.set(0.15, 0.15, 0.15)
+    fish.scale.set(0.175, 0.175, 0.175)
+    console.log(fish);
     fish.name = 'fish'
     renderInfo.scene.add(fish)
   })
-
-  createAquarium(renderInfo)
 }
 
-function createAquarium(renderInfo) {
-  const aquarium = new Box(30, 10, 20, materials.aquarium)
-  aquarium.mesh.position.set(-30, 5, 25)
+function addAquarium(
+  renderInfo,
+  physicsInfo,
+  ammoHelper,
+  size,
+  position
+) {
+  const mass = 0;
 
-  renderInfo.scene.add(aquarium.mesh)
+  const aquarium = new Aquarium(size.width, size.height, size.depth, size.edgeWith);
+  aquarium.mesh.position.set(position.x, position.y, position.z);
 
-  const side = new Box(30, 10, 0.1, materials.aquariumSide)
-  side.mesh.position.set(-30, 5, 15.01)
+  const compoundShape = aquarium.getCompoundShape(ammoHelper);
+  const rigidBody = ammoHelper.createRigidBody(
+    compoundShape,
+    aquarium.mesh,
+    mass
+  );
 
-  const side2 = side.mesh.clone()
-  side2.position.set(-30, 5, 34.99)
-
-  const side3 = new Box(0.1, 10, 20, materials.aquariumSide)
-  side3.mesh.position.set(-45, 5, 25)
-
-  const side4 = side3.mesh.clone()
-  side4.position.set(-15, 5, 25)
-
-  const bottom = new THREE.Mesh(
-    new THREE.PlaneGeometry(30, 20),
-    materials.aquariumBottom
-  )
-  bottom.rotateX(-Math.PI / 2)
-  bottom.position.set(-30, 0.05, 25)
-
-  renderInfo.scene.add(side.mesh, side2, side3.mesh, side4, bottom)
+  physicsInfo.addRigidBody(rigidBody, aquarium.mesh);
+  renderInfo.scene.add(aquarium.mesh);
+  aquarium.mesh.userData.rigidBody = rigidBody;
 }
 
-export default createFish
+function addWater(renderInfo, size, position) {
+  const height = size.height * 0.9
+  const water = new THREE.Mesh(
+    new THREE.BoxGeometry(size.width, height, size.depth),
+    materials.water
+  );
+
+  water.position.set(position.x, height/2, position.z);
+  renderInfo.scene.add(water);
+}
+
+export default addFishScene

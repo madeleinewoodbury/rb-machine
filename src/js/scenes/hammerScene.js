@@ -1,4 +1,3 @@
-import * as THREE from 'three'
 import Hammer from '../sceneObjects/Hammer.js'
 import Box from '../sceneObjects/Box.js'
 import materials from '../materials.js'
@@ -23,7 +22,7 @@ function addHammer(renderInfo, physicsInfo, ammoHelper) {
 
 function addButton(renderInfo, physicsInfo, ammoHelper) {
   const mass = 10
-  const button = new Box(10, 2, 20, materials.laserButton)
+  const button = new Box(10, 2, 20, materials.red)
   button.mesh.name = 'laserButton'
   button.mesh.position.set(-55, 1.5, -52.5)
 

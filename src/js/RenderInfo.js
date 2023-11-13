@@ -12,7 +12,7 @@ class RenderInfo {
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
     this.target = new THREE.Vector3(0, 10, 0)
-    // this.target = new THREE.Vector3(10, 40, -52.5)
+    // this.target = new THREE.Vector3(80, 40, -52.5)
     this.axesHelper = new THREE.AxesHelper(100)
     this.showAxesHelper = false
     this.activeCamera = 'Camera 1'
@@ -111,6 +111,8 @@ class RenderInfo {
     const blade1 = this.scene.getObjectByName('blade1')
     const blade2 = this.scene.getObjectByName('blade2')
 
+    console.log(blade2);
+
     blade1.rotationAngle += rotationSpeed * deltaTime
     blade2.rotationAngle += rotationSpeed * deltaTime
 
@@ -119,7 +121,7 @@ class RenderInfo {
   }
 
   update(deltaTime) {
-    this.animateSceneObjects(deltaTime)
+    // this.animateSceneObjects(deltaTime)
     this.controls.update()
     this.renderer.render(this.scene, this.camera)
   }

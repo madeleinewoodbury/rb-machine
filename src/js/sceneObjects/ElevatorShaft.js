@@ -16,7 +16,7 @@ class ElevatorShaft {
 
     this.side1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.depth),
-      materials.elevatorShaft
+      materials.grey
     )
 
     this.side1.position.set(-this.depth / 2 - 0.26, this.height / 2, 0)
@@ -27,7 +27,7 @@ class ElevatorShaft {
 
     this.top = new THREE.Mesh(
       new THREE.BoxGeometry(7.01, 0.5, 6),
-      materials.elevatorShaft
+      materials.grey
     )
     this.top.name = 'top'
     this.top.position.set(2.25, this.height + 0.25, 0)
@@ -37,7 +37,7 @@ class ElevatorShaft {
 
     this.button = new THREE.Mesh(
       new THREE.ConeGeometry(0.25, 0.75, 2),
-      materials.elevatorButton
+      materials.yellow
     )
     this.button.name = 'button'
     this.button.rotateY(Math.PI / 2)

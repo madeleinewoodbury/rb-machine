@@ -7,14 +7,13 @@ import AmmoHelper from './AmmoHelper.js'
 import Lighting from './lights/Lighting.js'
 import materials from './materials.js'
 
-import createElevatorScene from './scenes/elevatorScene.js'
+import addElevatorScene from './scenes/elevatorScene.js'
 import createTubeScene from './scenes/tubeScene.js'
-import createBalancingBoardScene from './scenes/balancingBoardScene.js'
-import createPillarScene from './scenes/pillarScene.js'
-import ropeScene from './scenes/ropeScene.js'
+import addBalancingBoardScene from './scenes/balancingBoardScene.js'
+import addPillarScene from './scenes/pillarScene.js'
 import createWindScene from './scenes/windScene.js'
 import createHammerScene from './scenes/hammerScene.js'
-import createFish from './scenes/fishScene.js'
+import addFishScene from './scenes/fishScene.js'
 import createLaserGun from './scenes/laserGunScene.js'
 
 class Environment {
@@ -49,21 +48,21 @@ class Environment {
     this.addLights()
     this.addFloor(200, 0.01, 200)
 
-    createLaserGun(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createLaserGun(this.renderInfo, this.physicsInfo, this.ammoHelper)
 
-    createFish(this.renderInfo, this.physicsInfo, this.ammoHelper)
-
-    createWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createBalancingBoardScene(
+    addFishScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addBalancingBoardScene(
       this.renderInfo,
       this.physicsInfo,
       this.ammoHelper
     )
-    ropeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createElevatorScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createTubeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    createHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addElevatorScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+
+    // createWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createTubeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    // createHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color) {
@@ -263,9 +262,9 @@ class Environment {
     const deltaTime = this.renderInfo.clock.getDelta()
 
     this.stats.begin()
-    this.handleIntersects()
-    this.handleEvents()
-    this.animateParticles(deltaTime)
+    // this.handleIntersects()
+    // this.handleEvents()
+    // this.animateParticles(deltaTime)
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update(deltaTime)
     this.stats.end()
