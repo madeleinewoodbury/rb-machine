@@ -12,8 +12,9 @@ class RenderInfo {
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
     this.target = new THREE.Vector3(0, 10, 0)
+    // this.target = new THREE.Vector3(10, 40, -52.5)
     this.axesHelper = new THREE.AxesHelper(100)
-    this.showAxesHelper = true
+    this.showAxesHelper = false
     this.activeCamera = 'Camera 1'
 
     this.setupCamera()
@@ -33,7 +34,7 @@ class RenderInfo {
       0.1,
       1000
     )
-    this.camera1.position.set(0, 40, 100)
+    this.camera1.position.set(0, 50, 120)
     this.camera1.lookAt(this.target)
     this.camera1.name = 'Camera 1'
     this.scene.add(this.camera1)

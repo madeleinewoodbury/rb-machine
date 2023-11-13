@@ -58,7 +58,7 @@ function balancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
 }
 
 function addBall(renderInfo, physicsInfo, position) {
-  const mass = 3.2
+  const mass = 2
   const radius = 1.5
 
   const ball = new Sphere(radius, materials.ball)

@@ -9,9 +9,9 @@ function createHammerScene(renderInfo, physicsInfo, ammoHelper) {
 }
 
 function addHammer(renderInfo, physicsInfo, ammoHelper) {
-  const mass = 10
-  const hammer = new Hammer(1.25, 25, 3, 8)
-  hammer.group.position.set(-25, 0, -52.75)
+  const mass = 1
+  const hammer = new Hammer(1, 25, 3, 10)
+  hammer.group.position.set(-26, 0, -52.75)
   const hammerShape = hammer.getCompoundShape(ammoHelper)
 
   const rigidBody = ammoHelper.createRigidBody(hammerShape, hammer.group, mass)
@@ -22,8 +22,8 @@ function addHammer(renderInfo, physicsInfo, ammoHelper) {
 }
 
 function addButton(renderInfo, physicsInfo, ammoHelper) {
-  const mass = 2
-  const button = new Box(6, 2, 12, materials.laserButton)
+  const mass = 10
+  const button = new Box(10, 2, 20, materials.laserButton)
   button.mesh.name = 'laserButton'
   button.mesh.position.set(-55, 1.5, -52.5)
 

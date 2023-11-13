@@ -15,6 +15,7 @@ import ropeScene from './scenes/ropeScene.js'
 import createWindScene from './scenes/windScene.js'
 import createHammerScene from './scenes/hammerScene.js'
 import createFish from './scenes/fishScene.js'
+import createLaserGun from './scenes/laserGunScene.js'
 
 class Environment {
   constructor() {
@@ -47,6 +48,8 @@ class Environment {
   addSceneObjects() {
     this.addLights()
     this.addFloor(200, 0.01, 200)
+
+    createLaserGun(this.renderInfo, this.physicsInfo, this.ammoHelper)
 
     createFish(this.renderInfo, this.physicsInfo, this.ammoHelper)
 
@@ -204,11 +207,12 @@ class Environment {
     const elevator = this.renderInfo.scene.getObjectByName('elevator')
     const ball = this.renderInfo.scene.getObjectByName('ball')
     const hangingBall = this.renderInfo.scene.getObjectByName('hangingBall')
+    const laser = this.renderInfo.scene.getObjectByName('laser')
 
     if (elevator.start) {
-      if (elevator.position.y < 34) {
+      if (elevator.position.y < 53) {
         this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 })
-        if (elevator.position.y > 33) {
+        if (elevator.position.y > 52.5) {
           const force = new Ammo.btVector3(-500, 0, 0)
           const relPos = new Ammo.btVector3(1, 0, 0)
           this.physicsInfo.applyForce(ball, force, relPos)
@@ -222,17 +226,18 @@ class Environment {
       this.physicsInfo.collisions['hammer'] === 'laserButton' &&
       hangingBall.mass === 0
     ) {
+      laser.material.opacity = 1
       const rigidBall = hangingBall.userData.rigidBody
       const shape = rigidBall.getCollisionShape()
       const updatedRigidbody = this.ammoHelper.createRigidBody(
         shape,
         hangingBall,
-        25
+        23
       )
       this.physicsInfo.world.removeRigidBody(rigidBall)
       this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall)
       hangingBall.userData.rigidBody = updatedRigidbody
-      hangingBall.mass = 25
+      hangingBall.mass = 23
     }
   }
 

@@ -50,7 +50,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, pillar) {
 
 function addDominos(renderInfo, physicsInfo, ammoHelper, pillar) {
   const position = {
-    x: pillar.baseX,
+    x: pillar.baseX + 0.22,
     y: pillar.baseSize.y,
     z: pillar.baseZ,
   }
@@ -63,7 +63,7 @@ function addDominos(renderInfo, physicsInfo, ammoHelper, pillar) {
 
 function addDomino(renderInfo, physicsInfo, ammoHelper, position) {
   const scale = { x: 0.5, y: 6, z: 2 }
-  const mass = 2
+  const mass = 8
 
   const domino = new THREE.Mesh(
     new THREE.BoxGeometry(scale.x, scale.y, scale.z),

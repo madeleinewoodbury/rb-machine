@@ -17,6 +17,7 @@ function ropeScene(renderInfo, physicsInfo, ammoHelper) {
     y: baseHeight - ropeLength,
     z: position.z + armLength - 2,
   }
+  console.log(ballPosition)
   addBall(renderInfo, physicsInfo, ballPosition)
 }
 

@@ -28,7 +28,7 @@ function createWindParticles(renderInfo) {
   )
 
   const particles = new THREE.Points(particleGeometry, materials.wind)
-  particles.position.set(70, 36, -52.5)
+  particles.position.set(70, 55, -52.5)
   particles.name = 'windParticles'
 
   renderInfo.scene.add(particles)
@@ -38,7 +38,7 @@ function createFan(renderInfo, physicsInfo, ammoHelper) {
   const fan = new THREE.Group()
   fan.name = 'fan'
 
-  const base = new Cylinder(1, 35, materials.fan)
+  const base = new Cylinder(1, 54, materials.fan)
   fan.add(base.mesh)
 
   const capsule = new THREE.Mesh(
@@ -46,12 +46,12 @@ function createFan(renderInfo, physicsInfo, ammoHelper) {
     materials.fan
   )
   capsule.rotateX(Math.PI / 2)
-  capsule.position.set(0, 35.75, 1)
+  capsule.position.set(0, 54.75, 1)
   fan.add(capsule)
 
   const blade1 = new Box(15, 1, 0.1, materials.fan)
   blade1.mesh.name = 'blade1'
-  blade1.mesh.position.set(0, 35.75, 2.75)
+  blade1.mesh.position.set(0, 54.75, 2.75)
   blade1.mesh.rotationAngle = 0
   fan.add(blade1.mesh)
 

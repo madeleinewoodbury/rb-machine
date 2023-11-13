@@ -38,7 +38,7 @@ function addElevator(renderInfo, physicsInfo, ammoHelper) {
 
 function addElevatorShaft(renderInfo, physicsInfo, ammoHelper) {
   const mass = 0
-  const height = 39
+  const height = 58
   const width = 6
   const depth = 1
   const elevatorShaft = new ElevatorShaft(height, width, depth)
