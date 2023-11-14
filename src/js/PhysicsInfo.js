@@ -1,4 +1,3 @@
-import * as THREE from "three";
 
 class PhysicsInfo {
   constructor(gravity = -9.82) {
@@ -107,6 +106,7 @@ class PhysicsInfo {
     return body;
   }
 
+  // FRA KODEEKSEMPEL: modul7/ammoCollisions
   update(deltaTime) {
     // Step world
     this.world.stepSimulation(deltaTime, 10);
@@ -130,6 +130,7 @@ class PhysicsInfo {
     this.checkCollisions();
   }
 
+  // BASER PÅ KODEEKSEMPEL: modul7/ammoCollisions
   checkCollisions() {
     // Find all possible contact points (broadsphase)
     const numManifolds = this.world.getDispatcher().getNumManifolds();
@@ -155,6 +156,7 @@ class PhysicsInfo {
             const contactPoint = contactManifold.getContactPoint(j);
             const distance = contactPoint.getDistance();
 
+            // Collision
             if (distance <= 0) {
               if (rigidBody0.threeMesh.name in this.collisions) {
                 if (
@@ -167,12 +169,6 @@ class PhysicsInfo {
                 this.collisions[rigidBody0.threeMesh.name] =
                   rigidBody1.threeMesh.name;
               }
-
-              // if (!(rigidBody0.threeMesh.name in this.collisions))
-              //   this.collisions[rigidBody0.threeMesh.name] =
-              //     rigidBody1.threeMesh.name;
-              // We have a collison
-              // console.log(this.collisions);
             } else {
               if (rigidBody0.threeMesh.name in this.collisions) {
                 delete this.collisions[rigidBody0.threeMesh.name];

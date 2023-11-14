@@ -40,9 +40,8 @@ class AmmoHelper {
     return rigidBody;
   }
 
-  isHorizontal(mesh) {
+  getEuler(rigidBody) {
     const transform = new Ammo.btTransform();
-    const rigidBody = mesh.userData.rigidBody;
     const motionState = rigidBody.getMotionState();
     motionState.getWorldTransform(transform);
 
@@ -50,8 +49,7 @@ class AmmoHelper {
     const quaternion = new THREE.Quaternion(rotation.x(), rotation.y(), rotation.z(), rotation.w());
 
     const euler = new THREE.Euler().setFromQuaternion(quaternion);
-
-    return Math.abs(euler.z) > 0.7;
+    return euler;
   }
 
   generateTriangleShape(mesh, useConvexShape=false) {
@@ -114,5 +112,7 @@ class AmmoHelper {
 
 
 }
+
+
 
 export default AmmoHelper;

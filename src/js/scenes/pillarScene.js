@@ -88,6 +88,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
 
   foodContainer.mesh.userData.rigidBody = rigidBody
   rigidBody.threeMesh = foodContainer.mesh
+
 }
 
 function addFishFood(renderInfo, physicsInfo, ammoHelper) {

@@ -115,7 +115,6 @@ class Environment {
 
   keyDown(code) {
     const ball = this.renderInfo.scene.getObjectByName('hangingBall')
-    const elevator = this.renderInfo.scene.getObjectByName('elevator')
 
     switch (code) {
       case 'KeyF':
@@ -132,20 +131,6 @@ class Environment {
 
         ball.userData.rigidBody = updatedRigidbody
         break
-      // case 'KeyR':
-      //   this.physicsInfo.recordPlayerHingeConstraint.enableAngularMotor(
-      //     true,
-      //     2,
-      //     10
-      //   )
-      // break
-      // case 'ArrowUp':
-      //   if (elevator.position.y < 10) console.log('eleavator up')
-      //   this.moveRigidBody(elevator, { x: 0, y: 0.1, z: 0 })
-      //   break
-      // case 'ArrowDown':
-      //   if (elevator.position.y >= 0.05)
-      //     this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
       case 'Digit1':
         // Camera 1
           this.renderInfo.switchCamera(0)
@@ -232,9 +217,10 @@ class Environment {
     }
 
     if(this.physicsInfo.collisions['foodContainer'] === 'domino') {
-      if(this.ammoHelper.isHorizontal(foodContainer)) {
+      // The cylinder will rotate around the z-axis
+      const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody)
+      if(Math.abs(euler.z) > 0.7) {
         this.physicsInfo.collisions['foodContainer'] = null
-        // this.animateFishFood()
         this.feedFish = true
       }
     }
@@ -281,7 +267,8 @@ class Environment {
 
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
-
+    const planeMesh = this.renderInfo.scene.getObjectByName("water");
+    planeMesh.material.uniforms.time.value = currentTime;
     this.stats.begin()
     this.handleIntersects()
     this.handleEvents()

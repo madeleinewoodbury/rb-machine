@@ -49,10 +49,15 @@ function addAquarium(renderInfo, physicsInfo, ammoHelper, size, position) {
 
 function addWater(renderInfo, size, position) {
   const height = size.height * 0.9
-  const water = new THREE.Mesh(
-    new THREE.BoxGeometry(size.width - 0.01, height, size.depth - 0.01),
-    materials.water
-  )
+  // const water = new THREE.Mesh(
+  //   new THREE.BoxGeometry(size.width - 0.01, height, size.depth - 0.01),
+  //   materials.water
+  // )
+
+  const water = new THREE.Mesh(new THREE.PlaneGeometry(size.width - 0.01, size.depth - 0.01), materials.waterCloud)
+  water.rotateX(-Math.PI / 2)
+
+  water.name = 'water'
 
   water.position.set(position.x - 0.01, height / 2, position.z - 0.01)
   renderInfo.scene.add(water)
