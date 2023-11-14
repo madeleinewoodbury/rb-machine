@@ -147,18 +147,15 @@ class Environment {
       //     this.moveRigidBody(elevator, { x: 0, y: -0.1, z: 0 })
       case 'Digit1':
         // Camera 1
-        if (this.renderInfo.activeCamera !== 'Camera 1')
-          this.renderInfo.switchCamera('Camera 1')
+          this.renderInfo.switchCamera(0)
         break
       case 'Digit2':
         // Camera 2
-        if (this.renderInfo.activeCamera !== 'Camera 2')
-          this.renderInfo.switchCamera('Camera 2')
+          this.renderInfo.switchCamera(1)
         break
       case 'Digit3':
-        // Camera 2
-        if (this.renderInfo.activeCamera !== 'Camera 3')
-          this.renderInfo.switchCamera('Camera 3')
+        // Camera 3
+        this.renderInfo.switchCamera(2)
         break
     }
   }
@@ -182,7 +179,7 @@ class Environment {
   }
 
   handleIntersects() {
-    this.raycaster.setFromCamera(this.mouse, this.renderInfo.camera)
+    this.raycaster.setFromCamera(this.mouse, this.renderInfo.activeCamera)
     const button = this.renderInfo.scene.getObjectByName('button')
     const intersectObjects = [button]
     const intersects = this.raycaster.intersectObjects(intersectObjects)
@@ -232,13 +229,6 @@ class Environment {
       hangingBall.mass = 35
     }
   }
-
-  // animateButtonPress() {
-  //   const laserButton = this.renderInfo.scene.getObjectByName('laserButton')
-  //   const initialScale = laserButton.scale.clone()
-  //   const targetScale = new THREE.Vector3(1, 0.5, 1)
-
-  // }
 
   animateParticles(deltaTime) {
     const windParticles = this.renderInfo.scene.getObjectByName('windParticles')

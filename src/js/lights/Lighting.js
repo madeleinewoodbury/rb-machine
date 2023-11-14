@@ -1,6 +1,7 @@
 import * as THREE from 'three'
-import AmbientLight from './AmbientLight'
-import DirectionalLight from './DirectionalLight'
+import AmbientLight from './AmbientLight.js'
+import DirectionalLight from './DirectionalLight.js'
+import HemisphereLight from './HemisphereLight.js'
 
 /**
  * Lighting class that creates a group of lights to be added to the scene
@@ -23,6 +24,12 @@ class Lighting {
       color: 0xffffff,
       intensity: 5,
       position: { x: 0, y: 40, z: 0 },
+    }
+    this.hemisphereLight = {
+      name: 'Hemisphere Light',
+      skyColor: 0x0000ff,
+      groundColor: 0xff0000,
+      intensity: 0.5,
     }
   }
 
@@ -53,6 +60,25 @@ class Lighting {
     ambientLight.addGUIFolder(folder)
 
     this.group.add(ambientLight.light)
+  }
+
+  
+  /**
+   * Adds an hemisphere light to the lighting group.
+   * @method addHemisphereLight
+   * @param {dat.GUI} gui - The GUI to add the light controls to.
+   * @param {object} light - The light to add.
+   * @return {void}
+   */
+  addHemisphereLight(gui, light) {
+    const { name, skyColor, groundColor, intensity } = light
+
+    const folder = gui.addFolder(name)
+    const hemisphereLight = new HemisphereLight(skyColor, groundColor, intensity)
+    hemisphereLight.light.name = name
+    hemisphereLight.addGUIFolder(folder)
+
+    this.group.add(hemisphereLight.light)
   }
 
   /**

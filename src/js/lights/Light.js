@@ -26,8 +26,8 @@ class Light {
    * @param {THREE.Light} light - The light to change the color of.
    * @return {void}
    */
-  addColorGUI(folder, light) {
-    folder.addColor(this, 'color').onChange(() => light.color.set(this.color))
+  addColorGUI(folder, light, name='color') {
+    folder.addColor(this, 'color').onChange(() => light.color.set(this.color)).name(name)
   }
 
   /**

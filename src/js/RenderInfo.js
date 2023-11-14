@@ -1,5 +1,6 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import Camera from './Camera.js'
 
 /**
  * Class representing the render information. This class is responsible for
@@ -11,20 +12,18 @@ class RenderInfo {
     this.canvas = canvas
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
-    this.target = new THREE.Vector3(0, 20, 0)
-    // this.target = new THREE.Vector3(80, 40, -52.5)
     this.axesHelper = new THREE.AxesHelper(100)
     this.showAxesHelper = false
-    this.activeCamera = 'Camera 1'
+    this.cameras = []
+    this.activeCamera = null
 
-    this.setupCamera()
+    this.setupCameras()
     this.setupControls()
     this.setupRenderer()
-
-    this.adddSkyBox()
+    this.addSkyBox()
   }
 
-  adddSkyBox() {
+  addSkyBox() {
     let imagePrefix = '/textures/SkyCubeMap/'
     let directions = ['px', 'nx', 'py', 'ny', 'pz', 'nz']
     let imageSuffix = '.png'
@@ -50,54 +49,42 @@ class RenderInfo {
 
     this.scene.add(boxMesh)
   }
-
-  setupCamera() {
-    this.setupCameras()
-    this.camera = this.scene.getObjectByName(this.activeCamera)
-  }
-
+  
   setupCameras() {
-    this.camera1 = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    )
-    this.camera1.position.set(0, 50, 120)
-    this.camera1.lookAt(this.target)
-    this.camera1.name = 'Camera 1'
-    this.scene.add(this.camera1)
+    const aspectRatio = window.innerWidth / window.innerHeight
 
-    this.camera2 = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    )
-    this.camera2.position.set(120, 10, -55)
-    this.camera2.lookAt(new THREE.Vector3(75, 5, -55))
-    // this.camera2.lookAt(this.target)
-    this.camera2.name = 'Camera 2'
-    this.scene.add(this.camera2)
+    const camera1 = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 1000)
+    camera1.position.set(0, 50, 120)
+    camera1.target = new THREE.Vector3(0, 20, 0)
+    camera1.lookAt(camera1.target)
 
-    this.camera3 = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    )
-    this.camera3.position.set(20, 40, 50)
-    this.camera3.lookAt(new THREE.Vector3(40, 20, -55))
-    // this.camera2.lookAt(this.target)
-    this.camera3.name = 'Camera 3'
-    this.scene.add(this.camera3)
+    this.cameras.push(camera1)
+    this.scene.add(camera1)
+
+    const camera2 = new THREE.PerspectiveCamera(55, aspectRatio, 0.1, 1000)
+    camera2.position.set(82, 5, -55)
+    camera2.target = new THREE.Vector3(80, 5, -55)
+    camera2.lookAt(camera2.target)
+    
+    this.cameras.push(camera2)
+    this.scene.add(camera2)
+
+    const camera3 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
+    camera3.position.set(0, 80, -100)
+    camera3.target = new THREE.Vector3(10, 50, -55)
+    camera3.lookAt(camera3.target)
+    
+    this.cameras.push(camera3)
+    this.scene.add(camera3)
+
+    this.activeCamera = this.cameras[0]
   }
+
 
   setupControls() {
-    this.controls = new OrbitControls(this.camera, this.canvas)
+    this.controls = new OrbitControls(this.activeCamera, this.canvas)
     this.controls.enableDamping = true
-    this.controls.target = this.target
-    // this.controls.target = new THREE.Vector3(20, 20, -55)
+    this.controls.target = this.activeCamera.target
   }
 
   setupRenderer() {
@@ -106,18 +93,20 @@ class RenderInfo {
       antialias: true,
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    // this.renderer.setClearColor(0x6de1ff)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    console.log(this.renderer.getPixelRatio())
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
     this.renderer.gammaOutput = true
   }
 
-  switchCamera(cameraName) {
-    this.activeCamera = cameraName
-    this.camera = this.scene.getObjectByName(this.activeCamera)
-    this.controls.object = this.camera
+  switchCamera(cameraIndex) {
+    if(this.activeCamera === this.cameras[cameraIndex]) {
+      return
+    }
+
+    this.activeCamera = this.cameras[cameraIndex]
+    this.controls.object = this.activeCamera
+    this.controls.target = this.activeCamera.target
   }
 
   addGuiControls(gui) {
@@ -130,8 +119,13 @@ class RenderInfo {
   }
 
   resize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight
-    this.camera.updateProjectionMatrix()
+    // Update cameras
+    const aspectRatio = window.innerWidth / window.innerHeight
+    this.cameras.forEach((camera) => {
+      camera.aspect = aspectRatio
+      camera.updateProjectionMatrix()
+    })
+
     this.renderer.setSize(window.innerWidth, window.innerHeight)
   }
 
@@ -150,7 +144,7 @@ class RenderInfo {
   update(deltaTime) {
     this.animateSceneObjects(deltaTime)
     this.controls.update()
-    this.renderer.render(this.scene, this.camera)
+    this.renderer.render(this.scene, this.activeCamera)
   }
 }
 
