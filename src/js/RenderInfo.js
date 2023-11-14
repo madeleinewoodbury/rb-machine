@@ -11,7 +11,7 @@ class RenderInfo {
     this.canvas = canvas
     this.scene = new THREE.Scene()
     this.clock = new THREE.Clock()
-    this.target = new THREE.Vector3(0, 10, 0)
+    this.target = new THREE.Vector3(0, 20, 0)
     // this.target = new THREE.Vector3(80, 40, -52.5)
     this.axesHelper = new THREE.AxesHelper(100)
     this.showAxesHelper = false
@@ -20,6 +20,35 @@ class RenderInfo {
     this.setupCamera()
     this.setupControls()
     this.setupRenderer()
+
+    this.adddSkyBox()
+  }
+
+  adddSkyBox() {
+    let imagePrefix = '/textures/SkyCubeMap/'
+    let directions = ['px', 'nx', 'py', 'ny', 'pz', 'nz']
+    let imageSuffix = '.png'
+    let materialArray = []
+
+    for (let i = 0; i < 6; i++)
+      materialArray.push(
+        new THREE.MeshBasicMaterial({
+          map: new THREE.TextureLoader().load(
+            imagePrefix + directions[i] + imageSuffix
+          ),
+          side: THREE.BackSide,
+        })
+      )
+
+    let cubeSize = 200
+    let boxGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize)
+    const boxMesh = new THREE.Mesh(boxGeometry, materialArray)
+    boxMesh.name = 'skyBoxMesh'
+    boxMesh.position.x = 0
+    boxMesh.position.y = 0
+    boxMesh.position.z = 0
+
+    this.scene.add(boxMesh)
   }
 
   setupCamera() {
@@ -77,7 +106,7 @@ class RenderInfo {
       antialias: true,
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
-    this.renderer.setClearColor(0x6de1ff)
+    // this.renderer.setClearColor(0x6de1ff)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     console.log(this.renderer.getPixelRatio())
     this.renderer.shadowMap.enabled = true
