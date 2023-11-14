@@ -22,7 +22,6 @@ const materials = {
     transparent: true,
     opacity: 0.4,
   }),
-
 }
 
 export default materials

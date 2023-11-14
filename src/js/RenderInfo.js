@@ -78,8 +78,8 @@ class RenderInfo {
     })
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.setClearColor(0x6de1ff)
-    // this.renderer.setClearColor(0x000000)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    console.log(this.renderer.getPixelRatio())
     this.renderer.shadowMap.enabled = true
     this.renderer.gammaInput = true
     this.renderer.gammaOutput = true
@@ -111,8 +111,6 @@ class RenderInfo {
     const blade1 = this.scene.getObjectByName('blade1')
     const blade2 = this.scene.getObjectByName('blade2')
 
-    console.log(blade2);
-
     blade1.rotationAngle += rotationSpeed * deltaTime
     blade2.rotationAngle += rotationSpeed * deltaTime
 
@@ -121,7 +119,7 @@ class RenderInfo {
   }
 
   update(deltaTime) {
-    // this.animateSceneObjects(deltaTime)
+    this.animateSceneObjects(deltaTime)
     this.controls.update()
     this.renderer.render(this.scene, this.camera)
   }

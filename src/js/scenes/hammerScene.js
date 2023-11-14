@@ -2,7 +2,7 @@ import Hammer from '../sceneObjects/Hammer.js'
 import Box from '../sceneObjects/Box.js'
 import materials from '../materials.js'
 
-function createHammerScene(renderInfo, physicsInfo, ammoHelper) {
+function addHammerScene(renderInfo, physicsInfo, ammoHelper) {
   addHammer(renderInfo, physicsInfo, ammoHelper)
   addButton(renderInfo, physicsInfo, ammoHelper)
 }
@@ -33,4 +33,4 @@ function addButton(renderInfo, physicsInfo, ammoHelper) {
   rigidBody.threeMesh = button.mesh
 }
 
-export default createHammerScene
+export default addHammerScene

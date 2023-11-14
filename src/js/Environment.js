@@ -8,13 +8,13 @@ import Lighting from './lights/Lighting.js'
 import materials from './materials.js'
 
 import addElevatorScene from './scenes/elevatorScene.js'
-import createTubeScene from './scenes/tubeScene.js'
+import addTubeScene from './scenes/tubeScene.js'
 import addBalancingBoardScene from './scenes/balancingBoardScene.js'
 import addPillarScene from './scenes/pillarScene.js'
-import createWindScene from './scenes/windScene.js'
-import createHammerScene from './scenes/hammerScene.js'
+import addWindScene from './scenes/windScene.js'
+import addHammerScene from './scenes/hammerScene.js'
 import addFishScene from './scenes/fishScene.js'
-import createLaserGun from './scenes/laserGunScene.js'
+import addLaserGunScene from './scenes/laserGunScene.js'
 
 class Environment {
   constructor() {
@@ -48,21 +48,14 @@ class Environment {
     this.addLights()
     this.addFloor(200, 0.01, 200)
 
-    // createLaserGun(this.renderInfo, this.physicsInfo, this.ammoHelper)
-
     addFishScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
     addPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    addBalancingBoardScene(
-      this.renderInfo,
-      this.physicsInfo,
-      this.ammoHelper
-    )
+    addBalancingBoardScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
     addElevatorScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-
-    // createWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createTubeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
-    // createHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addTubeScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
+    addLaserGunScene(this.renderInfo, this.physicsInfo, this.ammoHelper)
   }
 
   addFloor(width, height, depth, color) {
@@ -231,14 +224,21 @@ class Environment {
       const updatedRigidbody = this.ammoHelper.createRigidBody(
         shape,
         hangingBall,
-        23
+        35
       )
       this.physicsInfo.world.removeRigidBody(rigidBall)
       this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall)
       hangingBall.userData.rigidBody = updatedRigidbody
-      hangingBall.mass = 23
+      hangingBall.mass = 35
     }
   }
+
+  // animateButtonPress() {
+  //   const laserButton = this.renderInfo.scene.getObjectByName('laserButton')
+  //   const initialScale = laserButton.scale.clone()
+  //   const targetScale = new THREE.Vector3(1, 0.5, 1)
+
+  // }
 
   animateParticles(deltaTime) {
     const windParticles = this.renderInfo.scene.getObjectByName('windParticles')
@@ -262,9 +262,9 @@ class Environment {
     const deltaTime = this.renderInfo.clock.getDelta()
 
     this.stats.begin()
-    // this.handleIntersects()
-    // this.handleEvents()
-    // this.animateParticles(deltaTime)
+    this.handleIntersects()
+    this.handleEvents()
+    this.animateParticles(deltaTime)
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update(deltaTime)
     this.stats.end()
