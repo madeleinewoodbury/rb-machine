@@ -1,3 +1,4 @@
+import * as THREE from 'three'
 import materials from '../materials'
 import Pillar from '../sceneObjects/Pillar.js'
 import Cylinder from '../sceneObjects/Cylinder.js'
@@ -36,6 +37,7 @@ function addPillarScene(renderInfo, physicsInfo, ammoHelper) {
     foodContainerPosition
   )
   addDominos(renderInfo, physicsInfo, ammoHelper, dominoSize, dominoPosition)
+  addFishFood(renderInfo, physicsInfo, ammoHelper)
 }
 
 function addPillar(
@@ -61,7 +63,6 @@ function addPillar(
   renderInfo.scene.add(pillar.mesh)
 
   pillar.mesh.userData.rigidBody = rigidBody
-  rigidBody.threeMesh = pillar.mesh
 }
 
 function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
@@ -69,6 +70,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
 
   const foodContainer = new Cylinder(size.radius, size.height, materials.blue)
   foodContainer.mesh.position.set(position.x, position.y, position.z)
+  foodContainer.mesh.name = 'foodContainer'
 
   const rigidBody = ammoHelper.createRigidBody(
     foodContainer.shape,
@@ -77,12 +79,40 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   )
   rigidBody.setFriction(0.8)
   rigidBody.setRestitution(0.7)
+  rigidBody.setCollisionGroup = physicsInfo.collisionGroup.foodContainer
+  rigidBody.setCollisionMask = physicsInfo.collisionGroup.domino
+
 
   physicsInfo.addRigidBody(rigidBody, foodContainer.mesh)
   renderInfo.scene.add(foodContainer.mesh)
 
   foodContainer.mesh.userData.rigidBody = rigidBody
   rigidBody.threeMesh = foodContainer.mesh
+}
+
+function addFishFood(renderInfo, physicsInfo, ammoHelper) {
+  const particleGeometry = new THREE.BufferGeometry()
+  const particleCount = 200
+
+  const positions = new Float32Array(particleCount * 3)
+
+  for (let i = 0; i < positions.length; i += 3) {
+    positions[i] = (Math.random() - 0.5) * 5
+    positions[i + 1] = (Math.random() - 0.5) * 10
+    positions[i + 2] = (Math.random() - 0.5) * 10
+  }
+
+  particleGeometry.setAttribute(
+    'position',
+    new THREE.BufferAttribute(positions, 3)
+  )
+
+  const particles = new THREE.Points(particleGeometry, materials.fishFood)
+  particles.position.set(-30, 30, 25)
+  particles.name = 'fishFood'
+
+
+  renderInfo.scene.add(particles)
 }
 
 function addDominos(renderInfo, physicsInfo, ammoHelper, size, position) {
@@ -97,6 +127,7 @@ function addDomino(renderInfo, physicsInfo, ammoHelper, size, position) {
 
   const domino = new Box(size.x, size.y, size.z, materials.white)
   domino.mesh.position.set(position.x, position.y + size.y / 2, position.z)
+  domino.mesh.name = 'domino'
 
   const rigidDomino = ammoHelper.createRigidBody(
     domino.shape,
@@ -106,6 +137,8 @@ function addDomino(renderInfo, physicsInfo, ammoHelper, size, position) {
 
   physicsInfo.addRigidBody(rigidDomino, domino.mesh)
   renderInfo.scene.add(domino.mesh)
+  rigidDomino.setCollisionGroup = physicsInfo.collisionGroup.domino
+  rigidDomino.setCollisionMask = physicsInfo.collisionGroup.foodContainer || physicsInfo.collisionGroup.domino
 
   domino.mesh.userData.rigidBody = rigidDomino
   rigidDomino.threeMesh = domino.mesh

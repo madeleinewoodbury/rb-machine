@@ -22,6 +22,13 @@ const materials = {
     transparent: true,
     opacity: 0.4,
   }),
+  fishFood: new THREE.PointsMaterial({
+    size: 0.5,
+    sizeAttenuation: true,
+    color: 0xffff00,
+    transparent: true,
+    opacity: 0,
+  }),
 }
 
 export default materials

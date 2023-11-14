@@ -27,6 +27,7 @@ class Environment {
     this.raycaster = new THREE.Raycaster()
     this.currentIntersect = null
     this.gui = new GUI()
+    this.feedFish = false
 
     this.addEventListeners()
   }
@@ -197,6 +198,7 @@ class Environment {
     const ball = this.renderInfo.scene.getObjectByName('ball')
     const hangingBall = this.renderInfo.scene.getObjectByName('hangingBall')
     const laser = this.renderInfo.scene.getObjectByName('laser')
+    const foodContainer = this.renderInfo.scene.getObjectByName('foodContainer')
 
     if (elevator.start) {
       if (elevator.position.y < 53) {
@@ -228,6 +230,14 @@ class Environment {
       hangingBall.userData.rigidBody = updatedRigidbody
       hangingBall.mass = 35
     }
+
+    if(this.physicsInfo.collisions['foodContainer'] === 'domino') {
+      if(this.ammoHelper.isHorizontal(foodContainer)) {
+        this.physicsInfo.collisions['foodContainer'] = null
+        // this.animateFishFood()
+        this.feedFish = true
+      }
+    }
   }
 
   animateParticles(deltaTime) {
@@ -247,6 +257,27 @@ class Environment {
       windParticles.material.opacity += 0.01
     }
   }
+  
+  animateFishFood() {
+    const fishFood = this.renderInfo.scene.getObjectByName('fishFood')
+
+    if(fishFood.position.y > 7) {
+      if(fishFood.material.opacity < 1) {
+        fishFood.material.opacity += 0.1
+      }
+    } else {
+      if(fishFood.material.opacity > 0) {
+        fishFood.material.opacity -= 0.1
+      }
+    }
+
+    if(fishFood.position.y < 0) {
+      this.feedFish = false
+    }
+
+    fishFood.position.y -= 0.1
+
+  }
 
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta()
@@ -254,6 +285,7 @@ class Environment {
     this.stats.begin()
     this.handleIntersects()
     this.handleEvents()
+    if(this.feedFish) this.animateFishFood()
     this.animateParticles(deltaTime)
     this.physicsInfo.update(deltaTime)
     this.renderInfo.update(deltaTime)

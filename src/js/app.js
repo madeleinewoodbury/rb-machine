@@ -9,4 +9,5 @@ Ammo().then(async (AmmoLib) => {
 
   // Start
   environment.start()
+
 })

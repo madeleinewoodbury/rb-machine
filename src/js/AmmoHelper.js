@@ -1,3 +1,5 @@
+import * as THREE from "three";
+
 class AmmoHelper {
   constructor() {
     this.transform = undefined;
@@ -36,6 +38,20 @@ class AmmoHelper {
 
     const rigidBody = new Ammo.btRigidBody(rbInfo);
     return rigidBody;
+  }
+
+  isHorizontal(mesh) {
+    const transform = new Ammo.btTransform();
+    const rigidBody = mesh.userData.rigidBody;
+    const motionState = rigidBody.getMotionState();
+    motionState.getWorldTransform(transform);
+
+    const rotation = transform.getRotation();
+    const quaternion = new THREE.Quaternion(rotation.x(), rotation.y(), rotation.z(), rotation.w());
+
+    const euler = new THREE.Euler().setFromQuaternion(quaternion);
+
+    return Math.abs(euler.z) > 0.7;
   }
 
   generateTriangleShape(mesh, useConvexShape=false) {
