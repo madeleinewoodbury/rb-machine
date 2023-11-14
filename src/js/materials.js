@@ -1,23 +1,23 @@
-import * as THREE from 'three'
+import * as THREE from 'three';
 
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader();
 
-const waterTexture = textureLoader.load('/textures/water.jpg')
-waterTexture.wrapS = THREE.RepeatWrapping
-waterTexture.wrapT = THREE.RepeatWrapping
+const waterTexture = textureLoader.load('/textures/water.jpg');
+waterTexture.wrapS = THREE.RepeatWrapping;
+waterTexture.wrapT = THREE.RepeatWrapping;
 
-const cloudTexture = textureLoader.load('/textures/cloud.png')
-cloudTexture.wrapS = THREE.RepeatWrapping
-cloudTexture.wrapT = THREE.RepeatWrapping
+const cloudTexture = textureLoader.load('/textures/cloud.png');
+cloudTexture.wrapS = THREE.RepeatWrapping;
+cloudTexture.wrapT = THREE.RepeatWrapping;
 
 const uniforms = {
-  baseTexture: { type: "t", value: waterTexture },
-  baseSpeed: { type: "f", value: 0.15 },
-  noiseTexture: { type: "t", value: cloudTexture },
-  noiseScale: { type: "f", value: 0.1 },
-  alpha: { type: "f", value: 0.01 },
-  time: { type: "f", value: 0.2 }
-}
+  baseTexture: { type: 't', value: waterTexture },
+  baseSpeed: { type: 'f', value: 0.15 },
+  noiseTexture: { type: 't', value: cloudTexture },
+  noiseScale: { type: 'f', value: 0.1 },
+  alpha: { type: 'f', value: 0.01 },
+  time: { type: 'f', value: 0.2 },
+};
 
 // Define all materials here
 const materials = {
@@ -29,9 +29,14 @@ const materials = {
   grey: new THREE.MeshStandardMaterial({ color: 0xc2c2c2 }),
 
   plane: new THREE.MeshStandardMaterial({ color: 0x158000 }),
-  tube: new THREE.MeshStandardMaterial({ color: 0x00ffff, wireframe: false, transparent: true, opacity: 0.5 }), // cyan
+  tube: new THREE.MeshStandardMaterial({
+    color: 0x00ffff,
+    wireframe: false,
+    transparent: true,
+    opacity: 0.5,
+  }), // cyan
   wind: new THREE.PointsMaterial({
-    size: 0.1,
+    size: 0.25,
     sizeAttenuation: true,
     color: 0xffffff,
   }),
@@ -53,7 +58,7 @@ const materials = {
     vertexShader: document.getElementById('vertexShader').textContent,
     fragmentShader: document.getElementById('fragmentShader').textContent,
     transparent: true,
-  })
-}
+  }),
+};
 
-export default materials
+export default materials;
