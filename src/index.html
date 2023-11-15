@@ -1,24 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RB Maskin</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RB Maskin</title>
-  <link rel="stylesheet" href="./style.css" />
-</head>
-
-<body>
-  <canvas id="canvas"></canvas>
-  <script type="x-shader/x-vertex" id="vertexShader">
+  <body>
+    <canvas id="canvas"></canvas>
+    <script type="x-shader/x-vertex" id="vertexShader">
       varying vec2 vUv;
       void main() {
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
           vUv = uv;
       }
-  </script>
+    </script>
 
-  <script type="x-shader/x-fragment" id="fragmentShader">
+    <script type="x-shader/x-fragment" id="fragmentShader">
       uniform float baseSpeed;
       uniform float noiseScale;
       uniform float alpha;
@@ -38,9 +37,8 @@
           baseColor.a = alpha;
           gl_FragColor = baseColor + vec4(0.0, 0.0, 1.0, 1.0);
       }
-  </script>
-  <script src="../lib/ammo/ammo.js"></script>
-  <script type="module" src="./js/app.js"></script>
-</body>
-
+    </script>
+    <script src="../lib/ammo/ammo.js"></script>
+    <script type="module" src="./js/app.js"></script>
+  </body>
 </html>

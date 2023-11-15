@@ -1,23 +1,23 @@
-import * as THREE from 'three';
+import * as THREE from 'three'
 
-const textureLoader = new THREE.TextureLoader();
+const textureLoader = new THREE.TextureLoader()
 
-const waterTexture = textureLoader.load('/textures/water.jpg');
-waterTexture.wrapS = THREE.RepeatWrapping;
-waterTexture.wrapT = THREE.RepeatWrapping;
+const waterTexture = textureLoader.load('/textures/water.jpg')
+waterTexture.wrapS = THREE.RepeatWrapping
+waterTexture.wrapT = THREE.RepeatWrapping
 
-const cloudTexture = textureLoader.load('/textures/cloud.png');
-cloudTexture.wrapS = THREE.RepeatWrapping;
-cloudTexture.wrapT = THREE.RepeatWrapping;
+const cloudTexture = textureLoader.load('/textures/cloud.png')
+cloudTexture.wrapS = THREE.RepeatWrapping
+cloudTexture.wrapT = THREE.RepeatWrapping
 
 const uniforms = {
   baseTexture: { type: 't', value: waterTexture },
-  baseSpeed: { type: 'f', value: 0.15 },
+  baseSpeed: { type: 'f', value: 0.5 },
   noiseTexture: { type: 't', value: cloudTexture },
-  noiseScale: { type: 'f', value: 0.1 },
-  alpha: { type: 'f', value: 0.01 },
+  noiseScale: { type: 'f', value: 0.5 },
+  alpha: { type: 'f', value: 0.1 },
   time: { type: 'f', value: 0.2 },
-};
+}
 
 // Define all materials here
 const materials = {
@@ -57,8 +57,7 @@ const materials = {
     uniforms: uniforms,
     vertexShader: document.getElementById('vertexShader').textContent,
     fragmentShader: document.getElementById('fragmentShader').textContent,
-    transparent: true,
   }),
-};
+}
 
-export default materials;
+export default materials
