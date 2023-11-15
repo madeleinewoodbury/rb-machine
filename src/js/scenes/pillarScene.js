@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import materials from '../materials'
+import materials from '../utils/materials.js'
 import Pillar from '../sceneObjects/Pillar.js'
 import Cylinder from '../sceneObjects/Cylinder.js'
 import Box from '../sceneObjects/Box.js'

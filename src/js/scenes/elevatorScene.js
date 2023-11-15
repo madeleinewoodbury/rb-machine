@@ -1,7 +1,7 @@
 import Elevator from '../sceneObjects/Elevator.js'
 import ElevatorShaft from '../sceneObjects/ElevatorShaft.js'
 import Sphere from '../sceneObjects/Sphere.js'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 
 function addElevatorScene(renderInfo, physicsInfo, ammoHelper) {
   const position = { x: 55, y: 0, z: -55 }

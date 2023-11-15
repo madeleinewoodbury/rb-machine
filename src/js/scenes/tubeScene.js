@@ -1,4 +1,4 @@
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 import Tube from '../sceneObjects/Tube.js'
 import Box from '../sceneObjects/Box.js'
 
@@ -24,7 +24,7 @@ function addPlateau(renderInfo, physicsInfo, ammoHelper) {
   const mass = 0
   // const plateau = new Box(48, 53, 10, materials.white)
   // plateau.mesh.position.set(28, 26.5, -52.5)
-  const plateau = new Box(48, 1, 6, materials.white)
+  const plateau = new Box(48, 1, 6, materials.wood)
   plateau.mesh.position.set(28, 52.5, -52.5)
 
   const rigidBody = ammoHelper.createRigidBody(

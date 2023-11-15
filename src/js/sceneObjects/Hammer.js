@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 import Cylinder from './Cylinder.js'
 
 class Hammer {

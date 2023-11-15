@@ -73,9 +73,14 @@ class RenderInfo {
     camera3.position.set(0, 80, -100)
     camera3.target = new THREE.Vector3(10, 50, -55)
     camera3.lookAt(camera3.target)
+
+    const camera4 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
+    camera4.position.set(60, 40, -100)
+    camera4.target = new THREE.Vector3(60, 20, -55)
+    camera4.lookAt(camera4.target)
     
-    this.cameras.push(camera3)
-    this.scene.add(camera3)
+    this.cameras.push(camera4)
+    this.scene.add(camera4)
 
     this.activeCamera = this.cameras[0]
   }
@@ -95,6 +100,7 @@ class RenderInfo {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     this.renderer.shadowMap.enabled = true
+    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
     this.renderer.gammaInput = true
     this.renderer.gammaOutput = true
   }

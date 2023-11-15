@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import Fan from '../sceneObjects/Fan.js'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 
 function addWindScene(renderInfo, physicsInfo, ammoHelper) {
   addWindParticles(renderInfo)

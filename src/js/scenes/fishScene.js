@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 import Aquarium from '../sceneObjects/Aquarium.js'
 
 function addFishScene(renderInfo, physicsInfo, ammoHelper) {

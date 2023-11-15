@@ -1,6 +1,7 @@
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import Hammer from '../sceneObjects/Hammer.js'
 import Box from '../sceneObjects/Box.js'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 
 function addHammerScene(renderInfo, physicsInfo, ammoHelper) {
   addHammer(renderInfo, physicsInfo, ammoHelper)
@@ -21,16 +22,26 @@ function addHammer(renderInfo, physicsInfo, ammoHelper) {
 }
 
 function addButton(renderInfo, physicsInfo, ammoHelper) {
-  const mass = 10
-  const button = new Box(10, 2, 20, materials.red)
-  button.mesh.name = 'laserButton'
-  button.mesh.position.set(-55, 1.5, -52.5)
+  const loader = new GLTFLoader()
+  loader.load('./models/Button.glb', (gltf) => {
+    const button = gltf.scene
+    console.log(button);
+    button.position.set(-55, 4.5, -52.5)
+    // button.rotateY(Math.PI / 2)
+    button.scale.set(10, 10, 10)
+    button.name = 'button'
+    renderInfo.scene.add(button)
+  })
+  // const mass = 10
+  // const button = new Box(10, 2, 20, materials.red)
+  // button.mesh.name = 'laserButton'
+  // button.mesh.position.set(-55, 1.5, -52.5)
 
-  const rigidBody = ammoHelper.createRigidBody(button.shape, button.mesh, mass)
-  physicsInfo.addRigidBody(rigidBody, button.mesh)
-  renderInfo.scene.add(button.mesh)
-  button.mesh.userData.rigidBody = rigidBody
-  rigidBody.threeMesh = button.mesh
+  // const rigidBody = ammoHelper.createRigidBody(button.shape, button.mesh, mass)
+  // physicsInfo.addRigidBody(rigidBody, button.mesh)
+  // renderInfo.scene.add(button.mesh)
+  // button.mesh.userData.rigidBody = rigidBody
+  // rigidBody.threeMesh = button.mesh
 }
 
 export default addHammerScene

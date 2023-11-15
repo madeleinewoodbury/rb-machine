@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import materials from '../materials.js'
+import materials from '../utils/materials.js'
 import Sphere from '../sceneObjects/Sphere.js'
 import Box from '../sceneObjects/Box.js'
 import Cylinder from '../sceneObjects/Cylinder.js'
@@ -76,11 +76,11 @@ function addRopeStand(renderInfo, position, baseHeight, armLength, ropeLength) {
   const ropeThing = new THREE.Group()
   ropeThing.name = 'ropeThing'
 
-  const base = new Box(1, baseHeight, 1, materials.yellow)
+  const base = new Box(1, baseHeight, 1, materials.wood)
   base.mesh.position.set(position.x, baseHeight / 2, position.z)
   ropeThing.add(base.mesh)
 
-  const arm = new Box(1, 1, armLength, materials.yellow)
+  const arm = new Box(1, 1, armLength, materials.wood)
   arm.mesh.position.set(
     position.x,
     baseHeight + arm.height / 2,
