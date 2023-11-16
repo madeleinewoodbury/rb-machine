@@ -57,6 +57,7 @@ class RenderInfo {
     camera1.position.set(0, 50, 120)
     camera1.target = new THREE.Vector3(0, 20, 0)
     camera1.lookAt(camera1.target)
+    camera1.name = 'camera1'
 
     this.cameras.push(camera1)
     this.scene.add(camera1)
@@ -65,6 +66,7 @@ class RenderInfo {
     camera2.position.set(82, 5, -55)
     camera2.target = new THREE.Vector3(80, 5, -55)
     camera2.lookAt(camera2.target)
+    camera2.name = 'camera2'
     
     this.cameras.push(camera2)
     this.scene.add(camera2)
@@ -73,11 +75,13 @@ class RenderInfo {
     camera3.position.set(0, 80, -100)
     camera3.target = new THREE.Vector3(10, 50, -55)
     camera3.lookAt(camera3.target)
+    camera3.name = 'camera3'
 
     const camera4 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
     camera4.position.set(60, 40, -100)
     camera4.target = new THREE.Vector3(60, 20, -55)
     camera4.lookAt(camera4.target)
+    camera4.name = 'camera4'
     
     this.cameras.push(camera4)
     this.scene.add(camera4)

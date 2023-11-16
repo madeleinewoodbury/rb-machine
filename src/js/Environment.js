@@ -28,11 +28,12 @@ class Environment {
     this.currentIntersect = null;
     this.gui = new GUI();
     this.feedFish = false;
+    this.interactive = false;
 
     this.addEventListeners();
   }
 
-  start() {
+  initialize() {
     this.physicsInfo.setup();
     this.renderInfo.addGuiControls(this.gui);
 
@@ -43,6 +44,11 @@ class Environment {
 
     this.addSceneObjects();
     this.animate(0);
+  }
+
+  start() {
+    this.interactive = true;
+    this.renderInfo.switchCamera(1);
   }
 
   addSceneObjects() {
@@ -66,7 +72,7 @@ class Environment {
       new THREE.BoxGeometry(width, height, depth),
       // materials.grass
       // materials.stoneFloor
-      materials.plane 
+      materials.plane
       // materials.waterCloud
     );
     plane.receiveShadow = true;
@@ -153,8 +159,6 @@ class Environment {
     }
   }
 
-  keyUp(code) {}
-
   moveRigidBody(mesh, direction) {
     const transform = new Ammo.btTransform();
     const motionState = mesh.userData.rigidBody.getMotionState();
@@ -200,6 +204,9 @@ class Environment {
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
           this.physicsInfo.applyForce(ball, force, relPos);
+        } else if(elevator.position.y > 10 && elevator.position.y < 10.5) {
+          // Switch camera
+          if
         }
       } else {
         elevator.start = false;
@@ -279,7 +286,7 @@ class Environment {
     const water = this.renderInfo.scene.getObjectByName("water");
 
     this.stats.begin();
-    this.handleIntersects();
+    this.interactive && this.handleIntersects();
     this.handleEvents();
     if (this.feedFish) this.animateFishFood();
     this.animateParticles(deltaTime);

@@ -25,7 +25,10 @@ function addBalancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
 }
 
 function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
-  const cylinder = new Cylinder(0.5, 5, materials.blue)
+  const lightWoodMaterial = materials.wood.clone()
+  lightWoodMaterial.color.set(0xae7a4c)
+
+  const cylinder = new Cylinder(0.5, 5, lightWoodMaterial)
   cylinder.mesh.position.x = position.x
   cylinder.mesh.position.z = position.z
   const cylinderBody = ammoHelper.createRigidBody(
@@ -40,7 +43,7 @@ function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
   const boardGroup = new THREE.Group()
   const compoundShape = new Ammo.btCompoundShape()
 
-  const board = new Box(20, 0.5, 3, materials.blue)
+  const board = new Box(20, 0.5, 3, lightWoodMaterial)
   board.mesh.position.set(0, cylinder.height + board.height / 2, 0)
   boardGroup.add(board.mesh)
 
