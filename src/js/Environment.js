@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import * as TWEEN from "@tweenjs/tween.js";
 import GUI from "lil-gui";
 import Stats from "stats.js";
 import RenderInfo from "./RenderInfo.js";
@@ -30,6 +31,11 @@ class Environment {
     this.feedFish = false;
     this.interactive = false;
     this.cameraSequence = [1, 2, 3, 4, 0];
+
+    this.hitSound = new Audio('/sounds/hit.mp3');
+    this.dingSound = new Audio('/sounds/ding.mp3');
+    this.elevatorSound = new Audio('/sounds/elevator-move.mp3');
+    this.laserSound = new Audio('/sounds/laser.mp3');
 
     this.addEventListeners();
   }
@@ -116,6 +122,9 @@ class Environment {
   mouseClick(e) {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === "button") {
+        this.dingSound.volume = Math.random()
+        this.dingSound.currentTime = 0;
+        this.dingSound.play();
         const elevator = this.renderInfo.scene.getObjectByName("elevator");
         elevator.start = true;
       }
@@ -186,7 +195,7 @@ class Environment {
     const intersects = this.raycaster.intersectObjects(intersectObjects);
 
     if (intersects.length) {
-      this.currentIntersect = intersects[0];
+        this.currentIntersect = intersects[0];
     } else {
       this.currentIntersect = null;
     }
@@ -198,6 +207,7 @@ class Environment {
     const ball = this.renderInfo.scene.getObjectByName("ball");
     const hangingBall = this.renderInfo.scene.getObjectByName("hangingBall");
     const laser = this.renderInfo.scene.getObjectByName("laser");
+    const button = this.renderInfo.scene.getObjectByName("laserButton");
     const foodContainer =
       this.renderInfo.scene.getObjectByName("foodContainer");
 
@@ -243,15 +253,53 @@ class Environment {
       this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall);
       hangingBall.userData.rigidBody = updatedRigidbody;
       hangingBall.mass = 35;
+
+      this.laserSound.volume = 0.75
+      this.laserSound.currentTime = 0;
+      this.laserSound.play();
+
+      button.children[1].position.y = 1.5
+
     }
 
-    if (this.physicsInfo.collisions["foodContainer"] === "domino") {
+  
+
+    if (this.physicsInfo.collisions["foodContainer"] === "domino4") {
       // The cylinder will rotate around the z-axis
       const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody);
       if (Math.abs(euler.z) > 0.7) {
         this.physicsInfo.collisions["foodContainer"] = null;
         this.feedFish = true;
       }
+    }
+
+    if(this.physicsInfo.newCollisions["domino0-domino1"] ){
+      this.hitSound.volume = 1
+      this.hitSound.currentTime = 0;
+      this.hitSound.play();
+
+      this.physicsInfo.newCollisions["domino0-domino1"] = false;
+    }
+
+    if(this.physicsInfo.newCollisions["domino1-domino2"]){
+      this.hitSound.volume = 1
+      this.hitSound.currentTime = 0;
+      this.hitSound.play();
+      this.physicsInfo.newCollisions["domino1-domino2"] = false;
+    }
+
+    if(this.physicsInfo.newCollisions["domino2-domino3"]){
+      this.hitSound.volume = 1
+      this.hitSound.currentTime = 0;
+      this.hitSound.play();
+      this.physicsInfo.newCollisions["domino2-domino3"] = false;
+    }
+
+    if(this.physicsInfo.newCollisions["domino3-domino4"]){
+      this.hitSound.volume = 1
+      this.hitSound.currentTime = 0;
+      this.hitSound.play();
+      this.physicsInfo.newCollisions["domino3-domino4"] = false;
     }
   }
 
@@ -294,6 +342,16 @@ class Environment {
     fishFood.position.y -= 0.1;
   }
 
+  // setTween() {
+  //   const laserButton = this.renderInfo.scene.getObjectByName("laserButton");
+
+  //   this.tween = new TWEEN.Tween(laserButton.mesh.position)
+  //   .to({ y: 3 }, 1000)
+  //   .repeat(Infinity)
+  //   .yoyo(true)
+  //   .start()
+  // }
+
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta();
     const elapsedTime = this.renderInfo.clock.getElapsedTime();
@@ -304,6 +362,7 @@ class Environment {
     this.handleEvents();
     if (this.feedFish) this.animateFishFood();
     this.animateParticles(deltaTime);
+    // TWEEN.update(currentTime);
 
     this.physicsInfo.update(deltaTime);
     water.material.uniforms.time.value = elapsedTime;

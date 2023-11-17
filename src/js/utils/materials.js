@@ -90,7 +90,7 @@ const materials = {
     map: textures.sciFiWall.color,
     normalMap: textures.sciFiWall.normal,
     displacementMap: textures.sciFiWall.displacement,
-    displacementScale: 0.8,
+    displacementScale: 0.1,
     roughnessMap: textures.sciFiWall.roughness,
     roughness: 0.5,
     aoMap: textures.sciFiWall.ao,

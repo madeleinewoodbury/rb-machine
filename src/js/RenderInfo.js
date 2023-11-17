@@ -54,7 +54,7 @@ class RenderInfo {
     const aspectRatio = window.innerWidth / window.innerHeight
 
     const camera1 = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 1000)
-    camera1.position.set(0, 50, 120)
+    camera1.position.set(0, 60, 120)
     camera1.target = new THREE.Vector3(0, 20, 0)
     camera1.lookAt(camera1.target)
     camera1.name = 'camera1'

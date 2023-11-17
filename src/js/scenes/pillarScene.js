@@ -118,17 +118,18 @@ function addFishFood(renderInfo, physicsInfo, ammoHelper) {
 
 function addDominos(renderInfo, physicsInfo, ammoHelper, size, position) {
   for (let i = 0; i < 5; i++) {
-    addDomino(renderInfo, physicsInfo, ammoHelper, size, position)
+    const name = 'domino' + i
+    addDomino(renderInfo, physicsInfo, ammoHelper, size, position, name)
     position.x -= 3.25
   }
 }
 
-function addDomino(renderInfo, physicsInfo, ammoHelper, size, position) {
+function addDomino(renderInfo, physicsInfo, ammoHelper, size, position, name) {
   const mass = 5
 
   const domino = new Box(size.x, size.y, size.z, materials.white)
   domino.mesh.position.set(position.x, position.y + size.y / 2, position.z)
-  domino.mesh.name = 'domino'
+  domino.mesh.name = name
 
   const rigidDomino = ammoHelper.createRigidBody(
     domino.shape,

@@ -14,6 +14,7 @@ class PhysicsInfo {
     };
 
     this.collisions = {};
+    this.newCollisions = {};
   }
 
   /**
@@ -128,6 +129,7 @@ class PhysicsInfo {
 
     // collision detection
     this.checkCollisions();
+
   }
 
   // BASER PÅ KODEEKSEMPEL: modul7/ammoCollisions
@@ -158,6 +160,10 @@ class PhysicsInfo {
 
             // Collision
             if (distance <= 0) {
+              const collisionKey = `${rigidBody0.threeMesh.name}-${rigidBody1.threeMesh.name}`
+              if(!(collisionKey in this.newCollisions)) {
+                this.newCollisions[collisionKey] = true
+              }
               if (rigidBody0.threeMesh.name in this.collisions) {
                 if (
                   !this.collisions[rigidBody0.threeMesh.name] ===
