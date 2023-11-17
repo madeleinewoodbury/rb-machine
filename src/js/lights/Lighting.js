@@ -29,11 +29,19 @@ class Lighting {
     this.pointLight1 = {
       name: 'Point Light 1',
       color: '#ffffff',
-      intensity: 50,
+      intensity: 70,
       distance: 50,
-      position: { x: 2.5, y: 2.5, z: 0 },
+      position: { x: -24, y: 13, z: 25 },
       castShadow: true,
       shadowMapSize: 1024,
+    }
+    this.pointLight2 = {
+      name: 'Point Light 2',
+      color: '#ffffff',
+      intensity: 10,
+      distance: 3,
+      position: { x: 58, y: 6, z: -56 },
+      castShadow: false,
     }
   }
 
@@ -47,6 +55,7 @@ class Lighting {
     this.addAmbientLight(gui, this.amibientLight);
     this.addDirectionalLight(gui, this.directionalLight);
     this.addPointLight(gui, this.pointLight1);
+    this.addPointLight(gui, this.pointLight2);
   }
 
   /**
@@ -125,7 +134,7 @@ class Lighting {
       pointLight.light.castShadow = castShadow
       pointLight.light.shadow.mapSize.width = shadowMapSize
       pointLight.addGUIFolder(folder)
-      pointLight.addHelper(5, folder)
+      pointLight.addHelper(1, folder)
   
       this.group.add(pointLight.light, pointLight.helper)
     }

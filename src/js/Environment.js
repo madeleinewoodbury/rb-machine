@@ -29,6 +29,7 @@ class Environment {
     this.gui = new GUI();
     this.feedFish = false;
     this.interactive = false;
+    this.cameraSequence = [1, 2, 3, 4, 0];
 
     this.addEventListeners();
   }
@@ -48,7 +49,7 @@ class Environment {
 
   start() {
     this.interactive = true;
-    this.renderInfo.switchCamera(1);
+    this.renderInfo.switchCamera(this.cameraSequence.shift());
   }
 
   addSceneObjects() {
@@ -103,7 +104,6 @@ class Environment {
   addEventListeners() {
     window.addEventListener("resize", () => this.renderInfo.resize());
     window.addEventListener("keydown", (e) => this.keyDown(e.code));
-    window.addEventListener("keyup", (e) => this.keyUp(e.code));
     window.addEventListener("mousemove", (e) => this.mouseMove(e));
     window.addEventListener("click", (e) => this.mouseClick(e));
   }
@@ -153,8 +153,12 @@ class Environment {
         this.renderInfo.switchCamera(2);
         break;
       case "Digit4":
-        // Camera 3
-        this.renderInfo.switchCamera(2);
+        // Camera 4
+        this.renderInfo.switchCamera(3);
+        break;
+      case "Digit5":
+        // Camera 5
+        this.renderInfo.switchCamera(4);
         break;
     }
   }
@@ -199,20 +203,30 @@ class Environment {
 
     if (elevator.start) {
       if (elevator.position.y < 53) {
-        this.moveRigidBody(elevator, { x: 0, y: 0.05, z: 0 });
+        this.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
         if (elevator.position.y > 52.5) {
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
           this.physicsInfo.applyForce(ball, force, relPos);
-        } else if(elevator.position.y > 10 && elevator.position.y < 10.5) {
+        } else if (
+          elevator.position.y > 15 &&
+          this.cameraSequence.length === 4
+        ) {
           // Switch camera
-          if
+          this.renderInfo.switchCamera(this.cameraSequence.shift());
         }
       } else {
         elevator.start = false;
       }
+    } else if (this.cameraSequence.length === 3 && ball.position.x < 30) {
+      this.renderInfo.switchCamera(this.cameraSequence.shift());
+    } else if (this.cameraSequence.length === 2 && ball.position.x < -10) {
+      this.renderInfo.switchCamera(this.cameraSequence.shift());
+    } else if(this.cameraSequence.length === 1) {
+      if(hangingBall.position.y < 44) {
+        this.renderInfo.switchCamera(this.cameraSequence.shift());
+      }
     }
-
     if (
       this.physicsInfo.collisions["hammer"] === "laserButton" &&
       hangingBall.mass === 0

@@ -12,6 +12,7 @@ class Elevator {
     this.restituition = 0.0
     this.collisionFlag = 2
     this.activatuonState = 4
+    this.material = materials.metal
 
     this.generate()
   }
@@ -22,7 +23,7 @@ class Elevator {
 
     this.side1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.depth),
-      materials.blue
+      this.material
     )
     this.side1.position.set(0, this.height / 2, 0)
     this.side1.receiveShadow = true

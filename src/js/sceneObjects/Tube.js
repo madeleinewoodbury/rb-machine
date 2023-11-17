@@ -9,7 +9,7 @@ class Tube {
     this.radialSegments = 32
     this.tubularSegments = 32
     this.arc = Math.PI / 1.5
-    this.wireframe = true
+    this.material = materials.metalGrill
 
     this.generate()
   }
@@ -26,7 +26,7 @@ class Tube {
         this.tubularSegments,
         this.arc
       ),
-      materials.tube
+      this.material
     )
 
     this.tube1.position.set(0, 40, 0)

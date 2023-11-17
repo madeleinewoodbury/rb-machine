@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 import textures from './textures.js'
 
-
 // Define all materials here
 const materials = {
   white: new THREE.MeshStandardMaterial({ color: 0xffffff }),
@@ -76,6 +75,7 @@ const materials = {
     metalness: 0.2,
     alphaMap: textures.metalGrill.alpha,
     transparent: true,
+    side: THREE.DoubleSide,
   }),
   wood: new THREE.MeshStandardMaterial({
     map: textures.wood.color,
@@ -90,12 +90,12 @@ const materials = {
     map: textures.sciFiWall.color,
     normalMap: textures.sciFiWall.normal,
     displacementMap: textures.sciFiWall.displacement,
-    displacementScale: 0.1,
+    displacementScale: 0.8,
     roughnessMap: textures.sciFiWall.roughness,
-    roughness: 0.1,
+    roughness: 0.5,
     aoMap: textures.sciFiWall.ao,
     metalnessMap: textures.sciFiWall.metallic,
-    metalness: 0.5,
+    metalness: 0.1,
   }),
   stoneWall: new THREE.MeshStandardMaterial({
     map: textures.stoneWall.color,
@@ -105,7 +105,15 @@ const materials = {
     roughnessMap: textures.stoneWall.roughness,
     roughness: 0.9,
     aoMap: textures.stoneWall.ao,
-  })
+  }),
+  metal: new THREE.MeshStandardMaterial({
+    color: '#ff7700',
+    map: textures.metal.color,
+    normalMap: textures.metal.normal,
+    roughnessMap: textures.metal.roughness,
+    roughness: 0.9,
+    aoMap: textures.metal.ao,
+  }),
 }
 
 export default materials

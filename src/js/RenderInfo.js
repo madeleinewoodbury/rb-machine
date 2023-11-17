@@ -49,7 +49,7 @@ class RenderInfo {
 
     this.scene.add(boxMesh)
   }
-  
+
   setupCameras() {
     const aspectRatio = window.innerWidth / window.innerHeight
 
@@ -62,33 +62,53 @@ class RenderInfo {
     this.cameras.push(camera1)
     this.scene.add(camera1)
 
-    const camera2 = new THREE.PerspectiveCamera(55, aspectRatio, 0.1, 1000)
-    camera2.position.set(82, 5, -55)
-    camera2.target = new THREE.Vector3(80, 5, -55)
+    const camera2 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
+    camera2.position.set(82, 10, -54)
+    camera2.target = new THREE.Vector3(70, 10, -55)
     camera2.lookAt(camera2.target)
     camera2.name = 'camera2'
-    
+
     this.cameras.push(camera2)
     this.scene.add(camera2)
 
     const camera3 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
-    camera3.position.set(0, 80, -100)
-    camera3.target = new THREE.Vector3(10, 50, -55)
+    camera3.position.set(40, 60, -100)
+    camera3.target = new THREE.Vector3(60, 40, -55)
     camera3.lookAt(camera3.target)
     camera3.name = 'camera3'
 
+    this.cameras.push(camera3)
+    this.scene.add(camera3)
+
     const camera4 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
-    camera4.position.set(60, 40, -100)
-    camera4.target = new THREE.Vector3(60, 20, -55)
+    camera4.position.set(-50, 40, -90)
+    camera4.target = new THREE.Vector3(-10, 40, -55)
     camera4.lookAt(camera4.target)
     camera4.name = 'camera4'
-    
+
     this.cameras.push(camera4)
     this.scene.add(camera4)
 
+    const camera5 = new THREE.PerspectiveCamera(40, aspectRatio, 0.1, 1000)
+    camera5.position.set(50, 50, 30)
+    camera5.target = new THREE.Vector3(-50, 30, -55)
+    camera5.lookAt(camera5.target)
+    camera5.name = 'camera5'
+
+    this.cameras.push(camera5)
+    this.scene.add(camera5)
+
+    const camera6 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000)
+    camera6.position.set(32, 45, 45)
+    camera6.target = new THREE.Vector3(-50, 30, -55)
+    camera6.lookAt(camera6.target)
+    camera6.name = 'camera6'
+
+    this.cameras.push(camera6)
+    this.scene.add(camera6)
+
     this.activeCamera = this.cameras[0]
   }
-
 
   setupControls() {
     this.controls = new OrbitControls(this.activeCamera, this.canvas)
@@ -110,7 +130,7 @@ class RenderInfo {
   }
 
   switchCamera(cameraIndex) {
-    if(this.activeCamera === this.cameras[cameraIndex]) {
+    if (this.activeCamera === this.cameras[cameraIndex]) {
       return
     }
 
