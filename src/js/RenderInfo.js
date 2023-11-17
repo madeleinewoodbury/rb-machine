@@ -1,6 +1,5 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import Camera from './Camera.js'
 
 /**
  * Class representing the render information. This class is responsible for

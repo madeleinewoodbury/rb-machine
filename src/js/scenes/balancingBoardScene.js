@@ -19,9 +19,9 @@ function addBalancingBoardScene(renderInfo, physicsInfo, ammoHelper) {
   }
 
   addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position)
-  addBall(renderInfo, physicsInfo, ballPosition, 2.2, 'balancingBall')
+  addBall(renderInfo, physicsInfo, ammoHelper, ballPosition, 2.2, 'balancingBall')
   addRopeStand(renderInfo, ropePosition, baseHeight, armLength, ropeLength)
-  addBall(renderInfo, physicsInfo, hangingBallPosition, 0, 'hangingBall')
+  addBall(renderInfo, physicsInfo, ammoHelper, hangingBallPosition, 0, 'hangingBall')
 }
 
 function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
@@ -115,7 +115,7 @@ function addRope(ropeLength) {
   return line
 }
 
-function addBall(renderInfo, physicsInfo, position, mass, name) {
+function addBall(renderInfo, physicsInfo, ammoHelper, position, mass, name) {
   const radius = 1.5
 
   const ball = new Sphere(radius, materials.red)
@@ -123,7 +123,7 @@ function addBall(renderInfo, physicsInfo, position, mass, name) {
   ball.mesh.position.set(position.x, position.y, position.z)
   ball.mesh.mass = mass
 
-  const rigidBody = physicsInfo.createRigidBody(ball.shape, ball.mesh, mass)
+  const rigidBody = ammoHelper.createRigidBody(ball.shape, ball.mesh, mass)
   ball.setFriction(rigidBody)
   ball.setRestituition(rigidBody)
   ball.setRollingFriction(rigidBody)

@@ -82,7 +82,6 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   rigidBody.setCollisionGroup = physicsInfo.collisionGroup.foodContainer
   rigidBody.setCollisionMask = physicsInfo.collisionGroup.domino
 
-
   physicsInfo.addRigidBody(rigidBody, foodContainer.mesh)
   renderInfo.scene.add(foodContainer.mesh)
 

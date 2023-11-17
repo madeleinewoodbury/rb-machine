@@ -77,10 +77,7 @@ class Environment {
 
     const plane = new THREE.Mesh(
       new THREE.BoxGeometry(width, height, depth),
-      // materials.grass
-      // materials.stoneFloor
       materials.plane
-      // materials.waterCloud
     );
     plane.receiveShadow = true;
     plane.position.set(0, -height / 2, 0);
@@ -91,7 +88,7 @@ class Environment {
     );
     shape.setMargin(0.05);
 
-    const rigidBody = this.physicsInfo.createRigidBody(shape, plane, mass);
+    const rigidBody = this.ammoHelper.createRigidBody(shape, plane, mass);
     rigidBody.setFriction(0.8);
     rigidBody.setRestitution(0.7);
 
@@ -237,10 +234,9 @@ class Environment {
         this.renderInfo.switchCamera(this.cameraSequence.shift());
       }
     }
-    if (
-      this.physicsInfo.collisions["hammer"] === "laserButton" &&
-      hangingBall.mass === 0
-    ) {
+
+    if(this.physicsInfo.collisions["hammer-laserButton"]){
+      this.physicsInfo.collisions["hammer-laserButton"] = false;
       laser.material.opacity = 1;
       const rigidBall = hangingBall.userData.rigidBody;
       const shape = rigidBall.getCollisionShape();
@@ -259,47 +255,44 @@ class Environment {
       this.laserSound.play();
 
       button.children[1].position.y = 1.5
-
     }
 
-  
-
-    if (this.physicsInfo.collisions["foodContainer"] === "domino4") {
+    if (this.physicsInfo.collisions["foodContainer-domino4"]) {
       // The cylinder will rotate around the z-axis
       const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody);
       if (Math.abs(euler.z) > 0.7) {
-        this.physicsInfo.collisions["foodContainer"] = null;
+        this.physicsInfo.collisions["foodContainer-domino4"] = false;
         this.feedFish = true;
       }
     }
 
-    if(this.physicsInfo.newCollisions["domino0-domino1"] ){
+    if(this.physicsInfo.collisions["domino0-domino1"] ){
       this.hitSound.volume = 1
       this.hitSound.currentTime = 0;
       this.hitSound.play();
 
-      this.physicsInfo.newCollisions["domino0-domino1"] = false;
+      this.physicsInfo.collisions["domino0-domino1"] = false;
     }
 
-    if(this.physicsInfo.newCollisions["domino1-domino2"]){
+    if(this.physicsInfo.collisions["domino1-domino2"]){
       this.hitSound.volume = 1
       this.hitSound.currentTime = 0;
       this.hitSound.play();
-      this.physicsInfo.newCollisions["domino1-domino2"] = false;
+      this.physicsInfo.collisions["domino1-domino2"] = false;
     }
 
-    if(this.physicsInfo.newCollisions["domino2-domino3"]){
+    if(this.physicsInfo.collisions["domino2-domino3"]){
       this.hitSound.volume = 1
       this.hitSound.currentTime = 0;
       this.hitSound.play();
-      this.physicsInfo.newCollisions["domino2-domino3"] = false;
+      this.physicsInfo.collisions["domino2-domino3"] = false;
     }
 
-    if(this.physicsInfo.newCollisions["domino3-domino4"]){
+    if(this.physicsInfo.collisions["domino3-domino4"]){
       this.hitSound.volume = 1
       this.hitSound.currentTime = 0;
       this.hitSound.play();
-      this.physicsInfo.newCollisions["domino3-domino4"] = false;
+      this.physicsInfo.collisions["domino3-domino4"] = false;
     }
   }
 

@@ -13,7 +13,7 @@ function addTube(renderInfo, physicsInfo, ammoHelper) {
 
   const compoundShape = tube.getCompoundShape(ammoHelper)
 
-  const rigidBody = physicsInfo.createRigidBody(compoundShape, tube.mesh, 0)
+  const rigidBody = ammoHelper.createRigidBody(compoundShape, tube.mesh, 0)
   physicsInfo.addRigidBody(rigidBody, tube.mesh)
   renderInfo.scene.add(tube.mesh)
   tube.mesh.userData.rigidBody = rigidBody

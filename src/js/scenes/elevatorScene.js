@@ -8,7 +8,7 @@ function addElevatorScene(renderInfo, physicsInfo, ammoHelper) {
 
   addElevator(renderInfo, physicsInfo, ammoHelper, position)
   addElevatorShaft(renderInfo, physicsInfo, ammoHelper, position)
-  addBall(renderInfo, physicsInfo, position)
+  addBall(renderInfo, physicsInfo, ammoHelper, position)
 }
 
 function addElevator(renderInfo, physicsInfo, ammoHelper, position) {
@@ -20,7 +20,7 @@ function addElevator(renderInfo, physicsInfo, ammoHelper, position) {
   // elevator.mesh.position.set(55, 0, -55)
   elevator.mesh.position.set(position.x, position.y, position.z)
   const elevatorShape = elevator.getCompoundShape(ammoHelper)
-  const rigidBody = physicsInfo.createRigidBody(
+  const rigidBody = ammoHelper.createRigidBody(
     elevatorShape,
     elevator.mesh,
     elevator.mass
@@ -48,7 +48,7 @@ function addElevatorShaft(renderInfo, physicsInfo, ammoHelper, position) {
 
   const compoundShape = elevatorShaft.getCompoundShape(ammoHelper)
 
-  const rigidBody = physicsInfo.createRigidBody(
+  const rigidBody = ammoHelper.createRigidBody(
     compoundShape,
     elevatorShaft.mesh,
     mass
@@ -59,7 +59,7 @@ function addElevatorShaft(renderInfo, physicsInfo, ammoHelper, position) {
   rigidBody.threeMesh = elevatorShaft.mesh
 }
 
-function addBall(renderInfo, physicsInfo, position) {
+function addBall(renderInfo, physicsInfo, ammoHelper, position) {
   const radius = 1.5
   const mass = 8
   // const pos = { x: 55, y: 2, z: -52.75 }
@@ -69,7 +69,7 @@ function addBall(renderInfo, physicsInfo, position) {
   ball.mesh.position.set(position.x, position.y + 2, position.z + 2.75)
   ball.mesh.name = 'ball'
 
-  const rigidBody = physicsInfo.createRigidBody(ball.shape, ball.mesh, mass)
+  const rigidBody = ammoHelper.createRigidBody(ball.shape, ball.mesh, mass)
   ball.setFriction(rigidBody)
   ball.setRestituition(rigidBody)
   ball.setRollingFriction(rigidBody)

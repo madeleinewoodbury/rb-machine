@@ -1,4 +1,13 @@
+// --------------------------------------------------
+// Metodene update og checkCollisions er basert på kodeeksempler fra modul 7 ammoCollisions
+// --------------------------------------------------
 
+/**
+ * Class for handling physics in the scene. It sets up the physics world and
+ * updates the world every frame. It also handles collisions. 
+ * @class PhysicsInfo
+ * @param {number} gravity - The gravity of the physics world. Defaults to -9.82.
+ */ 
 class PhysicsInfo {
   constructor(gravity = -9.82) {
     this.gravity = gravity;
@@ -11,10 +20,10 @@ class PhysicsInfo {
       foodContainer: 2,
       hammer: 3,
       button: 4,
+      pillar: 5,
     };
 
     this.collisions = {};
-    this.newCollisions = {};
   }
 
   /**
@@ -39,21 +48,40 @@ class PhysicsInfo {
     this.world.setGravity(new Ammo.btVector3(0, this.gravity, 0));
   }
 
+  /**
+   * Add rigid body to the physics world and add the mesh to the rigid bodies array
+   * @param {Ammo.btRigidBody} body - The rigid body to add to the physics world.
+   * @param {THREE.Mesh} mesh - The mesh to add to the rigid bodies array.
+   * @returns {void}
+   */
   addRigidBody(body, mesh) {
-    if (body.collisionGroup && body.collisionMask) {
-      this.world.addRigidBody(body, body.collisionGroup, body.collisionMask);
-    } else {
-      this.world.addRigidBody(body);
-    }
-
+    this.world.addRigidBody(body);
     this.rigidBodies.push(mesh);
   }
 
+  /**
+   * Add a point to point constraint between two bodies
+   * @param {Ammo.btRigidBody} bodyA - The first body.
+   * @param {Ammo.btRigidBody} bodyB - The second body.
+   * @param {Ammo.btVector3} pivotA - The pivot point on the first body.
+   * @param {Ammo.btVector3} pivotB - The pivot point on the second body.
+   * @returns {void}
+   */
   addP2PConstraint(bodyA, bodyB, pivotA, pivotB) {
     const p2p = new Ammo.btPoint2PointConstraint(bodyA, bodyB, pivotA, pivotB);
     this.world.addConstraint(p2p, true);
   }
 
+  /**
+   * Add a hinge constraint between two bodies
+   * @param {Ammo.btRigidBody} bodyA - The first body.
+   * @param {Ammo.btRigidBody} bodyB - The second body.
+   * @param {Ammo.btVector3} pivotA - The pivot point on the first body.
+   * @param {Ammo.btVector3} pivotB - The pivot point on the second body.
+   * @param {Ammo.btVector3} axisA - The axis of rotation on the first body.
+   * @param {Ammo.btVector3} axisB - The axis of rotation on the second body.
+   * @returns {void}
+   */ 
   addHingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB) {
     const hingeConstraint = new Ammo.btHingeConstraint(
       bodyA,
@@ -69,6 +97,13 @@ class PhysicsInfo {
     this.world.addConstraint(hingeConstraint, false);
   }
 
+  /**
+   * Apply a force to a rigid body
+   * @param {THREE.Mesh} mesh - The mesh to apply the force to.
+   * @param {Ammo.btVector3} force - The force to apply.
+   * @param {Ammo.btVector3} relPos - The relative position to apply the force to.
+   * @returns {void}
+   */ 
   applyForce(mesh, force, relPos) {
     if (!mesh.userData.rigidBody) return;
 
@@ -77,37 +112,11 @@ class PhysicsInfo {
     rigidBody.applyForce(force, relPos);
   }
 
-  createRigidBody(shape, mesh, mass) {
-    const transform = new Ammo.btTransform();
-    transform.setIdentity();
-
-    const pos = mesh.position;
-    transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
-
-    const quat = mesh.quaternion;
-    transform.setRotation(
-      new Ammo.btQuaternion(quat.x, quat.y, quat.z, quat.w)
-    );
-
-    const scale = mesh.scale;
-    shape.setLocalScaling(new Ammo.btVector3(scale.x, scale.y, scale.z));
-
-    const motionState = new Ammo.btDefaultMotionState(transform);
-    const localInertia = new Ammo.btVector3(0, 0, 0);
-    shape.calculateLocalInertia(mass, localInertia);
-
-    const rbInfo = new Ammo.btRigidBodyConstructionInfo(
-      mass,
-      motionState,
-      shape,
-      localInertia
-    );
-    const body = new Ammo.btRigidBody(rbInfo);
-
-    return body;
-  }
-
-  // FRA KODEEKSEMPEL: modul7/ammoCollisions
+  /**
+   * Update the physics world. This method should be called every frame. 
+   * @param {number} deltaTime - The time since the last frame.
+   * @returns {void}
+   */ 
   update(deltaTime) {
     // Step world
     this.world.stepSimulation(deltaTime, 10);
@@ -127,12 +136,14 @@ class PhysicsInfo {
       }
     }
 
-    // collision detection
+    // Check if there are any new collisions
     this.checkCollisions();
-
   }
 
-  // BASER PÅ KODEEKSEMPEL: modul7/ammoCollisions
+  /**
+   * Check if there are any new collisions. If there are, add them to the collisions object. 
+   * @returns {void}
+   */
   checkCollisions() {
     // Find all possible contact points (broadsphase)
     const numManifolds = this.world.getDispatcher().getNumManifolds();
@@ -160,26 +171,13 @@ class PhysicsInfo {
 
             // Collision
             if (distance <= 0) {
-              const collisionKey = `${rigidBody0.threeMesh.name}-${rigidBody1.threeMesh.name}`
-              if(!(collisionKey in this.newCollisions)) {
-                this.newCollisions[collisionKey] = true
+              // Set a unique key for the collision
+              const collisionKey = `${rigidBody0.threeMesh.name}-${rigidBody1.threeMesh.name}`;
+              if (!(collisionKey in this.collisions)) {
+                // Add the collision to the newCollisions object
+                this.collisions[collisionKey] = true;
               }
-              if (rigidBody0.threeMesh.name in this.collisions) {
-                if (
-                  !this.collisions[rigidBody0.threeMesh.name] ===
-                  rigidBody1.threeMesh.name
-                )
-                  this.collisions[rigidBody0.threeMesh.name] =
-                    rigidBody1.threeMesh.name;
-              } else {
-                this.collisions[rigidBody0.threeMesh.name] =
-                  rigidBody1.threeMesh.name;
-              }
-            } else {
-              if (rigidBody0.threeMesh.name in this.collisions) {
-                delete this.collisions[rigidBody0.threeMesh.name];
-              }
-            }
+            } 
           }
         }
       }
