@@ -1,13 +1,12 @@
 import * as THREE from "three";
-import * as TWEEN from "@tweenjs/tween.js";
 import GUI from "lil-gui";
 import Stats from "stats.js";
 import RenderInfo from "./RenderInfo.js";
 import PhysicsInfo from "./PhysicsInfo.js";
 import AmmoHelper from "./AmmoHelper.js";
-import Lighting from "./lights/Lighting.js";
-import materials from "./utils/materials.js";
+import sounds from './utils/sounds.js'
 
+import addWorldScene from "./scenes/worldScene.js";
 import addElevatorScene from "./scenes/elevatorScene.js";
 import addTubeScene from "./scenes/tubeScene.js";
 import addBalancingBoardScene from "./scenes/balancingBoardScene.js";
@@ -28,18 +27,17 @@ class Environment {
     this.raycaster = new THREE.Raycaster();
     this.currentIntersect = null;
     this.gui = new GUI();
-    this.feedFish = false;
     this.interactive = false;
     this.cameraSequence = [1, 2, 3, 4, 0];
-
-    this.hitSound = new Audio('/sounds/hit.mp3');
-    this.dingSound = new Audio('/sounds/ding.mp3');
-    this.elevatorSound = new Audio('/sounds/elevator-move.mp3');
-    this.laserSound = new Audio('/sounds/laser.mp3');
+    this.sounds = sounds
 
     this.addEventListeners();
   }
 
+  /**
+   * Initializes the environment. It sets up the physics, renderer, and
+   * scene objects. It also adds the GUI controls and stats.
+   */ 
   initialize() {
     this.physicsInfo.setup();
     this.renderInfo.addGuiControls(this.gui);
@@ -53,15 +51,20 @@ class Environment {
     this.animate(0);
   }
 
+  /**
+   * Starts the environment. It sets the environment to interactive mode
+   * and switches the camera to the first camera in the sequence.
+   */ 
   start() {
     this.interactive = true;
     this.renderInfo.switchCamera(this.cameraSequence.shift());
   }
 
+  /**
+   * Adds the scene objects to the scene.
+   */ 
   addSceneObjects() {
-    this.addLights();
-    this.addFloor(200, 0.01, 200);
-
+    addWorldScene(this.renderInfo, this.physicsInfo, this.ammoHelper, this.gui);
     addFishScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addPillarScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addBalancingBoardScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
@@ -72,38 +75,13 @@ class Environment {
     addLaserGunScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
   }
 
-  addFloor(width, height, depth) {
-    const mass = 0;
-
-    const plane = new THREE.Mesh(
-      new THREE.BoxGeometry(width, height, depth),
-      materials.plane
-    );
-    plane.receiveShadow = true;
-    plane.position.set(0, -height / 2, 0);
-    plane.name = "floor";
-
-    const shape = new Ammo.btBoxShape(
-      new Ammo.btVector3(width * 0.5, height * 0.5, depth * 0.5)
-    );
-    shape.setMargin(0.05);
-
-    const rigidBody = this.ammoHelper.createRigidBody(shape, plane, mass);
-    rigidBody.setFriction(0.8);
-    rigidBody.setRestitution(0.7);
-
-    this.physicsInfo.addRigidBody(rigidBody, plane);
-    this.renderInfo.scene.add(plane);
-
-    plane.userData.rigidBody = rigidBody;
-  }
-
-  addLights() {
-    const lights = new Lighting();
-    lights.addLights(this.gui);
-    this.renderInfo.scene.add(lights.group);
-  }
-
+  /**
+   * Adds event listeners to the window.
+   * - resize: Resizes the renderer and updates the camera aspect ratio.
+   * - keydown: Handles keydown events.
+   * - mousemove: Handles mousemove events.
+   * - click: Handles click events.
+   */ 
   addEventListeners() {
     window.addEventListener("resize", () => this.renderInfo.resize());
     window.addEventListener("keydown", (e) => this.keyDown(e.code));
@@ -111,41 +89,36 @@ class Environment {
     window.addEventListener("click", (e) => this.mouseClick(e));
   }
 
+  /**
+   * Handles mousemove events. It updates the mouse position.
+    * @param {MouseEvent} e - The mousemove event.
+    */
   mouseMove(e) {
     this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   }
 
+  /**
+   * Handles click events. It checks if the mouse intersects with the button
+   * and if it does, it starts the elevator.
+   * @param {MouseEvent} e - The click event.
+   */ 
   mouseClick(e) {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === "button") {
-        this.dingSound.volume = Math.random()
-        this.dingSound.currentTime = 0;
-        this.dingSound.play();
+        this.sounds.playDing()
         const elevator = this.renderInfo.scene.getObjectByName("elevator");
         elevator.start = true;
       }
     }
   }
 
+  /**
+   * Handles keydown events. It switches the camera based on the key pressed.
+   * @param {string} code - The key code of the key pressed.
+   */ 
   keyDown(code) {
-    const ball = this.renderInfo.scene.getObjectByName("hangingBall");
-
     switch (code) {
-      case "KeyF":
-        const rigidBall = ball.userData.rigidBody;
-        const shape = rigidBall.getCollisionShape();
-        const updatedRigidbody = this.ammoHelper.createRigidBody(
-          shape,
-          ball,
-          25
-        );
-
-        this.physicsInfo.world.removeRigidBody(rigidBall);
-        this.physicsInfo.addRigidBody(updatedRigidbody, ball);
-
-        ball.userData.rigidBody = updatedRigidbody;
-        break;
       case "Digit1":
         // Camera 1
         this.renderInfo.switchCamera(0);
@@ -169,6 +142,11 @@ class Environment {
     }
   }
 
+  /**
+   * Moves the rigid body in the given direction.
+   * @param {THREE.Mesh} mesh - The mesh to move.
+   * @param {THREE.Vector3} direction - The direction to move the mesh.
+   */ 
   moveRigidBody(mesh, direction) {
     const transform = new Ammo.btTransform();
     const motionState = mesh.userData.rigidBody.getMotionState();
@@ -185,6 +163,10 @@ class Environment {
     motionState.setWorldTransform(transform);
   }
 
+  /**
+   * Handles the intersects. It sets the current intersect to the first
+   * intersected object.
+   */
   handleIntersects() {
     this.raycaster.setFromCamera(this.mouse, this.renderInfo.activeCamera);
     const button = this.renderInfo.scene.getObjectByName("button");
@@ -208,9 +190,17 @@ class Environment {
     const foodContainer =
       this.renderInfo.scene.getObjectByName("foodContainer");
 
+    this.handleElevatorEvent(elevator, ball)
+    this.handleCamerasEvent(ball, hangingBall)
+    this.handleLaserEvent(laser, button, hangingBall)
+    this.handleDominosEvent(foodContainer)
+  }
+
+  handleElevatorEvent(elevator, ball){
     if (elevator.start) {
       if (elevator.position.y < 53) {
         this.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
+        
         if (elevator.position.y > 52.5) {
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
@@ -225,7 +215,11 @@ class Environment {
       } else {
         elevator.start = false;
       }
-    } else if (this.cameraSequence.length === 3 && ball.position.x < 30) {
+    }
+  }
+
+  handleCamerasEvent(ball, hangingBall){
+    if (this.cameraSequence.length === 3 && ball.position.x < 30) {
       this.renderInfo.switchCamera(this.cameraSequence.shift());
     } else if (this.cameraSequence.length === 2 && ball.position.x < -10) {
       this.renderInfo.switchCamera(this.cameraSequence.shift());
@@ -234,7 +228,9 @@ class Environment {
         this.renderInfo.switchCamera(this.cameraSequence.shift());
       }
     }
+  }
 
+  handleLaserEvent(laser, button, hangingBall){
     if(this.physicsInfo.collisions["hammer-laserButton"]){
       this.physicsInfo.collisions["hammer-laserButton"] = false;
       laser.material.opacity = 1;
@@ -250,11 +246,30 @@ class Environment {
       hangingBall.userData.rigidBody = updatedRigidbody;
       hangingBall.mass = 35;
 
-      this.laserSound.volume = 0.75
-      this.laserSound.currentTime = 0;
-      this.laserSound.play();
-
+      this.sounds.playLaserSound()
       button.children[1].position.y = 1.5
+    }
+  }
+
+  handleDominosEvent(foodContainer){
+    if(this.physicsInfo.collisions["domino0-domino1"] ){
+      this.sounds.playHitSound()
+      this.physicsInfo.collisions["domino0-domino1"] = false;
+    }
+
+    if(this.physicsInfo.collisions["domino1-domino2"]){
+      this.sounds.playHitSound()
+      this.physicsInfo.collisions["domino1-domino2"] = false;
+    }
+
+    if(this.physicsInfo.collisions["domino2-domino3"]){
+      this.sounds.playHitSound()
+      this.physicsInfo.collisions["domino2-domino3"] = false;
+    }
+
+    if(this.physicsInfo.collisions["domino3-domino4"]){
+      this.sounds.playHitSound()
+      this.physicsInfo.collisions["domino3-domino4"] = false;
     }
 
     if (this.physicsInfo.collisions["foodContainer-domino4"]) {
@@ -262,88 +277,10 @@ class Environment {
       const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody);
       if (Math.abs(euler.z) > 0.7) {
         this.physicsInfo.collisions["foodContainer-domino4"] = false;
-        this.feedFish = true;
+        this.renderInfo.feedFish = true;
       }
-    }
-
-    if(this.physicsInfo.collisions["domino0-domino1"] ){
-      this.hitSound.volume = 1
-      this.hitSound.currentTime = 0;
-      this.hitSound.play();
-
-      this.physicsInfo.collisions["domino0-domino1"] = false;
-    }
-
-    if(this.physicsInfo.collisions["domino1-domino2"]){
-      this.hitSound.volume = 1
-      this.hitSound.currentTime = 0;
-      this.hitSound.play();
-      this.physicsInfo.collisions["domino1-domino2"] = false;
-    }
-
-    if(this.physicsInfo.collisions["domino2-domino3"]){
-      this.hitSound.volume = 1
-      this.hitSound.currentTime = 0;
-      this.hitSound.play();
-      this.physicsInfo.collisions["domino2-domino3"] = false;
-    }
-
-    if(this.physicsInfo.collisions["domino3-domino4"]){
-      this.hitSound.volume = 1
-      this.hitSound.currentTime = 0;
-      this.hitSound.play();
-      this.physicsInfo.collisions["domino3-domino4"] = false;
     }
   }
-
-  animateParticles(deltaTime) {
-    const windParticles =
-      this.renderInfo.scene.getObjectByName("windParticles");
-    const speed = 3;
-
-    windParticles.position.x -= speed * deltaTime;
-
-    if (windParticles.position.x < 65) {
-      windParticles.material.opacity -= 0.02;
-
-      if (windParticles.material.opacity < 0) {
-        windParticles.position.x = 75;
-        windParticles.material.opacity += 0.1;
-      }
-    } else if (windParticles.material.opacity < 1) {
-      windParticles.material.opacity += 0.01;
-    }
-  }
-
-  animateFishFood() {
-    const fishFood = this.renderInfo.scene.getObjectByName("fishFood");
-
-    if (fishFood.position.y > 7) {
-      if (fishFood.material.opacity < 1) {
-        fishFood.material.opacity += 0.1;
-      }
-    } else {
-      if (fishFood.material.opacity > 0) {
-        fishFood.material.opacity -= 0.1;
-      }
-    }
-
-    if (fishFood.position.y < 0) {
-      this.feedFish = false;
-    }
-
-    fishFood.position.y -= 0.1;
-  }
-
-  // setTween() {
-  //   const laserButton = this.renderInfo.scene.getObjectByName("laserButton");
-
-  //   this.tween = new TWEEN.Tween(laserButton.mesh.position)
-  //   .to({ y: 3 }, 1000)
-  //   .repeat(Infinity)
-  //   .yoyo(true)
-  //   .start()
-  // }
 
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta();
@@ -353,14 +290,11 @@ class Environment {
     this.stats.begin();
     this.interactive && this.handleIntersects();
     this.handleEvents();
-    if (this.feedFish) this.animateFishFood();
-    this.animateParticles(deltaTime);
-    // TWEEN.update(currentTime);
-
     this.physicsInfo.update(deltaTime);
     water.material.uniforms.time.value = elapsedTime;
     this.renderInfo.update(deltaTime);
     this.stats.end();
+
     window.requestAnimationFrame((currentTime) => this.animate(currentTime));
   }
 }
