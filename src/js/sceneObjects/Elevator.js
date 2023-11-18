@@ -1,9 +1,15 @@
 import * as THREE from 'three'
 import materials from '../utils/materials.js'
 
+/**
+ * Elevator class. The shaft consist of four sides with the front and back
+ * sides being open.
+ * @param {height} - The height of the elevator
+ * @param {width} - The width of the elevator
+ * @param {depth} - The depth of the elevator
+ */
 class Elevator {
   constructor(width, height, depth) {
-    this.mass = 0
     this.width = width
     this.height = height
     this.depth = depth
@@ -17,6 +23,10 @@ class Elevator {
     this.generate()
   }
 
+  /**
+   * Generate the elevator mesh. The elevator is made of 4 sides. 
+   * The elevator is open on the front and back.
+   */
   generate() {
     this.mesh = new THREE.Group()
     this.mesh.name = 'elevator'
@@ -52,6 +62,11 @@ class Elevator {
     this.mesh.receiveShadow = true
   }
 
+  /**
+   * Get the compound shape of the elevator.
+   * @param {AmmoHelper} ammoHelper
+   * @returns {Ammo.btCompoundShape} The compound shape of the elevator.
+   */   
   getCompoundShape(ammoHelper) {
     const sideShape = new Ammo.btBoxShape(
       new Ammo.btVector3(this.width / 2, this.height / 2, this.depth / 2)

@@ -1,10 +1,23 @@
+// --------------------------------------------------------------------------
+// Metodene  generateTriangleShape og traverseModel er basert på kodeeksempel
+// fra triangleMeshHelpers.js fra modul7/AmmoAdvancedShapes2triangleMesh
+// --------------------------------------------------------------------------
 import * as THREE from "three";
 
+/**
+ * Helper class for Ammo.js. Contains methods to create rigid bodies, set the 
+ * transform and get the euler rotation. 
+ * @class AmmoHelper
+ */
 class AmmoHelper {
   constructor() {
     this.transform = undefined;
   }
 
+  /**
+   * Set the transform of the mesh.
+   * @param {THREE.Mesh} mesh - The mesh to set the transform.
+   */
   setTransform(mesh) {
     this.transform = new Ammo.btTransform();
     this.transform.setIdentity();
@@ -21,6 +34,13 @@ class AmmoHelper {
     );
   }
 
+  /**
+   * Create a rigid body. The rigid body is made up of a shape and a mesh.
+   * @param {Ammo.btCollisionShape} shape - The shape of the rigid body.
+   * @param {THREE.Mesh} mesh - The mesh of the rigid body.
+   * @param {number} mass - The mass of the rigid body.
+   * @returns {Ammo.btRigidBody} The rigid body.
+   */ 
   createRigidBody(shape, mesh, mass) {
     this.setTransform(mesh);
     shape.setLocalScaling(new Ammo.btVector3(mesh.scale.x, mesh.scale.y, mesh.scale.z));
@@ -40,6 +60,11 @@ class AmmoHelper {
     return rigidBody;
   }
 
+  /**
+   * Get the euler rotation of the rigid body. 
+   * @param {Ammo.btRigidBody} rigidBody - The rigid body to get the euler rotation.
+   * @returns {THREE.Euler} The euler rotation of the rigid body.
+   */ 
   getEuler(rigidBody) {
     const transform = new Ammo.btTransform();
     const motionState = rigidBody.getMotionState();
@@ -52,6 +77,14 @@ class AmmoHelper {
     return euler;
   }
 
+  /**
+ * Generates a triangle shape from the given 3D mesh.
+ *
+ * @param {THREE.Mesh} mesh - The 3D mesh object.
+ * @param {boolean} [useConvexShape=false] - Indicates whether to use a convex or concave 
+ * triangle mesh shape.
+ * @returns {Object} - The generated triangle shape for use in physics simulations.
+ */
   generateTriangleShape(mesh, useConvexShape=false) {
     let vertices = this.traverseModel(mesh)
     let ammoMesh = new Ammo.btTriangleMesh()
@@ -88,6 +121,12 @@ class AmmoHelper {
     return triangleShape
   }
   
+  /**
+   * Traverses the model and returns an array of vertices. 
+   * @param {THREE.Mesh} mesh - The mesh to traverse.
+   * @param {number[]} modelVertices - The array of vertices.
+   * @returns {number[]} The array of vertices.
+   */ 
   traverseModel(mesh, modelVertices = []) {
     if (mesh) {
       if (mesh.geometry) {

@@ -1,3 +1,9 @@
+// --------------------------------------------------
+// Light klassen er fra oblig 3: Robot Arm
+// Nytt, lagt til DirectionalLight.js
+// --------------------------------------------------
+
+
 import * as THREE from "three";
 import AmbientLight from "./AmbientLight.js";
 import DirectionalLight from "./DirectionalLight.js";

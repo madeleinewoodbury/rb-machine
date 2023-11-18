@@ -3,6 +3,7 @@ import ElevatorShaft from '../sceneObjects/ElevatorShaft.js'
 import Sphere from '../sceneObjects/Sphere.js'
 import materials from '../utils/materials.js'
 
+// Add the elevator, the elevator shaft and the ball inside the elevator.
 function addElevatorScene(renderInfo, physicsInfo, ammoHelper) {
   const position = { x: 55, y: 0, z: -55 }
 
@@ -11,19 +12,20 @@ function addElevatorScene(renderInfo, physicsInfo, ammoHelper) {
   addBall(renderInfo, physicsInfo, ammoHelper, position)
 }
 
+// Add the elevator to the scene.
 function addElevator(renderInfo, physicsInfo, ammoHelper, position) {
   const width = 5
   const height = 5
   const depth = 0.5
+  const mass = 0
 
   const elevator = new Elevator(width, height, depth)
-  // elevator.mesh.position.set(55, 0, -55)
   elevator.mesh.position.set(position.x, position.y, position.z)
   const elevatorShape = elevator.getCompoundShape(ammoHelper)
   const rigidBody = ammoHelper.createRigidBody(
     elevatorShape,
     elevator.mesh,
-    elevator.mass
+    mass
   )
 
   rigidBody.setFriction(elevator.friction)
@@ -37,13 +39,13 @@ function addElevator(renderInfo, physicsInfo, ammoHelper, position) {
   rigidBody.threeMesh = elevator.mesh
 }
 
+// Add the elevator shaft to the scene.
 function addElevatorShaft(renderInfo, physicsInfo, ammoHelper, position) {
   const mass = 0
   const height = 58
   const width = 6
   const depth = 1
   const elevatorShaft = new ElevatorShaft(height, width, depth)
-  // elevatorShaft.mesh.position.set(55, 0, -50.5)
   elevatorShaft.mesh.position.set(position.x, position.y, position.z + 4.5)
 
   const compoundShape = elevatorShaft.getCompoundShape(ammoHelper)
@@ -59,13 +61,12 @@ function addElevatorShaft(renderInfo, physicsInfo, ammoHelper, position) {
   rigidBody.threeMesh = elevatorShaft.mesh
 }
 
+// Add the ball ro the scene with the given position.
 function addBall(renderInfo, physicsInfo, ammoHelper, position) {
   const radius = 1.5
   const mass = 8
-  // const pos = { x: 55, y: 2, z: -52.75 }
 
   const ball = new Sphere(radius, materials.red)
-  // ball.mesh.position.set(pos.x, pos.y, pos.z)
   ball.mesh.position.set(position.x, position.y + 2, position.z + 2.75)
   ball.mesh.name = 'ball'
 

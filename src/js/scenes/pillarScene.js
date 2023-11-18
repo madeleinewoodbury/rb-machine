@@ -4,6 +4,7 @@ import Pillar from '../sceneObjects/Pillar.js'
 import Cylinder from '../sceneObjects/Cylinder.js'
 import Box from '../sceneObjects/Box.js'
 
+// Add the pillar scene with a pillar, a food container, dominos and fish food.
 function addPillarScene(renderInfo, physicsInfo, ammoHelper) {
   const baseSize = { x: 1, y: 30, z: 7 }
   const plateauSize = { x: 25, y: 1, z: 7 }
@@ -37,9 +38,10 @@ function addPillarScene(renderInfo, physicsInfo, ammoHelper) {
     foodContainerPosition
   )
   addDominos(renderInfo, physicsInfo, ammoHelper, dominoSize, dominoPosition)
-  addFishFood(renderInfo, physicsInfo, ammoHelper)
+  addFishFood(renderInfo)
 }
 
+// Add the pillar to the scene.
 function addPillar(
   renderInfo,
   physicsInfo,
@@ -65,6 +67,7 @@ function addPillar(
   pillar.mesh.userData.rigidBody = rigidBody
 }
 
+// Add the food container to the scene.
 function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   const mass = 3
 
@@ -79,6 +82,9 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   )
   rigidBody.setFriction(0.8)
   rigidBody.setRestitution(0.7)
+
+  // Set the collision group and mask so that the food container can collide with
+  // the dominos
   rigidBody.setCollisionGroup = physicsInfo.collisionGroup.foodContainer
   rigidBody.setCollisionMask = physicsInfo.collisionGroup.domino
 
@@ -90,12 +96,16 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
 
 }
 
-function addFishFood(renderInfo, physicsInfo, ammoHelper) {
+// Add the fish food to the scene. The fish food is made of particles. The
+// particles are initially transparent. When the food container is hit by a
+// domino, the particles become visible.
+function addFishFood(renderInfo) {
   const particleGeometry = new THREE.BufferGeometry()
   const particleCount = 200
 
   const positions = new Float32Array(particleCount * 3)
 
+  // Approach based on examples from Threejs-journey by Bruno Simon
   for (let i = 0; i < positions.length; i += 3) {
     positions[i] = (Math.random() - 0.5) * 5
     positions[i + 1] = (Math.random() - 0.5) * 10
@@ -115,6 +125,7 @@ function addFishFood(renderInfo, physicsInfo, ammoHelper) {
   renderInfo.scene.add(particles)
 }
 
+// Add the dominos to the scene. The dominos are placed on the pillar.
 function addDominos(renderInfo, physicsInfo, ammoHelper, size, position) {
   for (let i = 0; i < 5; i++) {
     const name = 'domino' + i
@@ -123,6 +134,7 @@ function addDominos(renderInfo, physicsInfo, ammoHelper, size, position) {
   }
 }
 
+// Add a domino to the scene with the given size, position and name.
 function addDomino(renderInfo, physicsInfo, ammoHelper, size, position, name) {
   const mass = 5
 
@@ -138,6 +150,9 @@ function addDomino(renderInfo, physicsInfo, ammoHelper, size, position, name) {
 
   physicsInfo.addRigidBody(rigidDomino, domino.mesh)
   renderInfo.scene.add(domino.mesh)
+
+  // Set the collision group and mask so that the dominos can collide with the
+  // food container and other dominos.
   rigidDomino.setCollisionGroup = physicsInfo.collisionGroup.domino
   rigidDomino.setCollisionMask = physicsInfo.collisionGroup.foodContainer || physicsInfo.collisionGroup.domino
 

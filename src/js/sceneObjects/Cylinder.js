@@ -1,5 +1,13 @@
 import * as THREE from 'three'
 
+/**
+ * Cylinder class. The cylinder is made of a mesh and a shape.
+ * @param {number} radius - The radius of the cylinder.
+ * @param {number} height - The height of the cylinder.
+ * @param {THREE.Material} material - The material of the cylinder.
+ * @param {number} radialSegments - The number of segments of the cylinder. Default is 24.
+ * @param {number} heightSegments - The number of segments of the cylinder. Default is 1.
+ */
 class Cylinder {
   constructor(
     radius,
@@ -18,6 +26,9 @@ class Cylinder {
     this.generate()
   }
 
+  /**
+   * Generate the cylinder mesh and shape.
+   */
   generate() {
     this.mesh = new THREE.Mesh(
       new THREE.CylinderGeometry(

@@ -1,16 +1,17 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import Box from "../sceneObjects/Box.js";
 import Cylinder from "../sceneObjects/Cylinder.js";
 import materials from "../utils/materials.js";
 
+// Add a laser gun scene with a laser gun, a laser stand and a laser.
 function addLaserGunScene(renderInfo, physicsInfo, ammoHelper) {
   addLaserGun(renderInfo, physicsInfo, ammoHelper);
   addLaserStand(renderInfo, physicsInfo, ammoHelper);
   addLaser(renderInfo);
 }
 
-function addLaserGun(renderInfo, physicsInfo, ammoHelper) {
+// Add the laser gun model to the scene.
+function addLaserGun(renderInfo) {
   const loader = new GLTFLoader();
   loader.load("./models/LaserGun.glb", (gltf) => {
     const laserGun = gltf.scene;
@@ -22,6 +23,9 @@ function addLaserGun(renderInfo, physicsInfo, ammoHelper) {
   });
 }
 
+// Add the laser to the scene. The laser is made of a line. The line is
+// initially transparent. When the laser button is pressed, the laser becomes
+// visible.
 function addLaser(renderInfo) {
   const material = new THREE.LineBasicMaterial({
     color: 0xff0000,
@@ -31,7 +35,6 @@ function addLaser(renderInfo) {
   const points = [];
 
   points.push(new THREE.Vector3(-66.3, 46.6, -52.5));
-  // points.push(new THREE.Vector3(18, 46.75, 25))
   points.push(new THREE.Vector3(27, 46.75, 25));
 
   const geometry = new THREE.BufferGeometry().setFromPoints(points);
@@ -41,10 +44,9 @@ function addLaser(renderInfo) {
   renderInfo.scene.add(line);
 }
 
+// Add the laser stand to the scene. The laser gun is placed on the laser stand.
 function addLaserStand(renderInfo, physicsInfo, ammoHelper) {
-  // const stand = new Box(15, 41, 15, materials.sciFiWall)
   const stand = new Cylinder(5, 41, materials.sciFiWall);
-  // stand.mesh.position.set(-66, 0, -52.5);
   stand.mesh.position.x = -66;
   stand.mesh.position.z = -52.5;
   stand.mesh.name = "stand";

@@ -1,6 +1,13 @@
 import * as THREE from 'three'
 import materials from '../utils/materials.js'
 
+/**
+ * ElevatorShaft class. The shaft consist of two sides where the elevator will
+ * be in between.
+ * @param {height} - The height of the elevator shaft
+ * @param {width} - The width of the elevator shaft
+ * @param {depth} - The depth of the elevator shaft
+ */
 class ElevatorShaft {
   constructor(height, width, depth) {
     this.height = height
@@ -11,6 +18,9 @@ class ElevatorShaft {
     this.generate()
   }
 
+  /**
+   * Generate the elevator shaft. The shaft is made up of two sides and a top
+   */ 
   generate() {
     this.mesh = new THREE.Group()
     this.mesh.name = 'elevatorShaft'
@@ -26,28 +36,11 @@ class ElevatorShaft {
     this.side2 = this.side1.clone()
     this.side2.position.x = 5 + this.depth / 2 - 0.25
 
-    // this.side3 = new THREE.Mesh(
-    //   new THREE.BoxGeometry(5, this.height - 5, this.depth),
-    //   this.material
-    // )
-    // this.side3.position.set(2.5, this.height / 2 + 2.75, this.width / 2)
-    // this.side3.wireframe = false
-    // // this.side3.rotateY(Math.PI / 2)
-
-    // this.side4 = new THREE.Mesh(
-    //   new THREE.BoxGeometry(5, this.height - 6, this.depth),
-    //   this.material
-    // )
-    // this.side4.wireframe = false
-    // this.side4.position.set(2.5, this.height / 2 - 3, -this.width / 2)
-
     this.top = new THREE.Mesh(
       new THREE.BoxGeometry(7.01, 0.5, 6),
       this.material
     )
-
     this.top.wireframe = false
-
     this.top.name = 'top'
     this.top.position.set(2.25, this.height + 0.25, 0)
 
@@ -65,6 +58,11 @@ class ElevatorShaft {
     this.mesh.add(this.button)
   }
 
+  /**
+   * Get the compound shape of the elevator.
+   * @param {AmmoHelper} ammoHelper
+   * @returns {Ammo.btCompoundShape} The compound shape of the elevator.
+   */ 
   getCompoundShape(ammoHelper) {
     const compoundShape = new Ammo.btCompoundShape()
     ammoHelper.setTransform(this.side1)

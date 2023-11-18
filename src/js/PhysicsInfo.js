@@ -21,6 +21,8 @@ class PhysicsInfo {
       hammer: 3,
       button: 4,
       pillar: 5,
+      aquarium: 6,
+      ball: 7,
     };
 
     this.collisions = {};

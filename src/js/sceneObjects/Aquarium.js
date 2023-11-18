@@ -1,6 +1,13 @@
 import * as THREE from 'three';
 import materials from '../utils/materials.js';
 
+/**
+ * Aquarium class. The aquarium is made of 4 sides and a bottom. 
+ * @param {number} width - The width of the aquarium.
+ * @param {number} height - The height of the aquarium.
+ * @param {number} depth - The depth of the aquarium.
+ * @param {number} edgeWith - The width of the edges of the aquarium. 
+ */
 class Aquarium {
   constructor(width, height, depth, edgeWith) {
     this.width = width;
@@ -14,6 +21,10 @@ class Aquarium {
     this.addSides();
   }
 
+  /**
+   * Add the sides of the aquarium. The aquarium is made of 4 sides and a bottom. 
+   * The aquarium is open at the top.
+   */ 
   addSides(){
     this.side1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.width, this.height, this.edgeWith), 
@@ -28,15 +39,16 @@ class Aquarium {
     this.side3.position.set(this.width/2, this.height/2, 0);
 
     this.side4 = this.side3.clone();
-    // this.side4.position.set(0, this.height/2, -this.depth/2);
     this.side4.position.x = -this.width/2;
-
-    // this.bottom = new THREE.Mesh(new THREE.BoxGeometry(this.width, this.edgeWith, this.depth), materials.bricks);
-    // this.bottom.position.set(0, this.edgeWith/2, 0);
 
     this.mesh.add(this.side1, this.side2, this.side3, this.side4);
   }
 
+  /**
+   * Get the compound shape of the aquarium.
+   * @param {AmmoHelper} ammoHelper 
+   * @returns {Ammo.btCompoundShape} The compound shape of the aquarium
+   */ 
   getCompoundShape(ammoHelper) {
     const compoundShape = new Ammo.btCompoundShape()
     const sideShape = new Ammo.btBoxShape(
@@ -54,12 +66,6 @@ class Aquarium {
 
     ammoHelper.setTransform(this.side4)
     compoundShape.addChildShape(ammoHelper.transform, sideShape)
-
-    // const bottomShape = new Ammo.btBoxShape(
-    //   new Ammo.btVector3(this.width / 2, this.edgeWith / 2, this.depth / 2)
-    //   )
-    //  ammoHelper.setTransform(this.bottom)
-    //   compoundShape.addChildShape(ammoHelper.transform, bottomShape) 
 
     return compoundShape
   }

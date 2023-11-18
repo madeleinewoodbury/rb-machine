@@ -2,17 +2,20 @@ import * as THREE from 'three'
 import Fan from '../sceneObjects/Fan.js'
 import materials from '../utils/materials.js'
 
+// Add a wind scene with a fan and wind particles.
 function addWindScene(renderInfo, physicsInfo, ammoHelper) {
   addWindParticles(renderInfo)
-  addFan(renderInfo, physicsInfo, ammoHelper)
+  addFan(renderInfo)
 }
 
+// Add the wind particles to the scene.
 function addWindParticles(renderInfo) {
   const particleGeometry = new THREE.BufferGeometry()
   const particleCount = 500
 
   const positions = new Float32Array(particleCount * 3)
 
+  // Approach based on examples from Threejs-journey by Bruno Simon
   for (let i = 0; i < positions.length; i += 3) {
     positions[i] = (Math.random() - 0.5) * 20
     positions[i + 1] = (Math.random() - 0.5) * 5
@@ -31,7 +34,8 @@ function addWindParticles(renderInfo) {
   renderInfo.scene.add(particles)
 }
 
-function addFan(renderInfo, physicsInfo, ammoHelper) {
+// Add the fan to the scene.
+function addFan(renderInfo) {
   const baseRadius = 1
   const baseHeight = 54
   const topRadius = 1.5

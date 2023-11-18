@@ -1,6 +1,15 @@
 import * as THREE from 'three'
 import materials from '../utils/materials'
 
+/**
+ * LaserButton class. The laser button is made up of a base and a button.
+ * The base is a box geometry and the button is a cylinder geometry.
+ * @param {number} baseWidth - The width of the base.
+ * @param {number} baseHeight - The height of the base.
+ * @param {number} baseDepth - The depth of the base.
+ * @param {number} radius - The radius of the button.
+ * @param {number} buttonHeight - The height of the button.
+ */ 
 class LaserButton {
   constructor(baseWidth, baseHeight, baseDepth, radius, buttonHeight) {
     this.baseWidth = baseWidth
@@ -12,6 +21,9 @@ class LaserButton {
     this.generate()
   }
 
+  /**
+   * Generate the laser button. The laser button is made up of a base and a button.
+   */
   generate() {
     this.mesh = new THREE.Group()
     this.mesh.name = 'laserButton'
@@ -33,6 +45,11 @@ class LaserButton {
   }
 
 
+  /**
+   * Get the compound shape of the laser button
+   * @param {AmmoHelper} ammoHelper
+   * @returns {Ammo.btCompoundShape} The compound shape of the laser button
+   */
   getCompoundShape(ammoHelper) {
     const compoundShape = new Ammo.btCompoundShape()
     ammoHelper.setTransform(this.base)

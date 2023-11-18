@@ -1,6 +1,18 @@
 import * as THREE from "three";
 import materials from "../utils/materials.js";
 
+/**
+ * Fan class. The fan is made up of a base, top and two blades.
+ * The base is a cylinder geometry, the top is a capsule geometry
+ * and the blades are box geometries.
+ * @param {number} baseRadius - The radius of the base.
+ * @param {number} baseHeight - The height of the base.
+ * @param {number} topRadius - The radius of the top.
+ * @param {number} topLength - The length of the top.
+ * @param {number} bladeWidth - The width of the blades.
+ * @param {number} bladeHeight - The height of the blades.
+ * @param {number} bladeDepth - The depth of the blades.
+ */
 class Fan {
   constructor(
     baseRadius,
@@ -27,6 +39,9 @@ class Fan {
     this.addBlades();
   }
 
+  /** 
+   * Add the base of the fan. The base is made up of a cylinder geometry
+   */ 
   addBase() {
     const base = new THREE.Mesh(
       new THREE.CylinderGeometry(
@@ -42,6 +57,9 @@ class Fan {
     this.group.add(base);
   }
 
+  /**
+   * Add the top. The top is made up of a cylinder geometry.
+   */ 
   addTop() {
     const capsule = new THREE.Mesh(
       new THREE.CapsuleGeometry(
@@ -57,6 +75,10 @@ class Fan {
     this.group.add(capsule);
   }
 
+  /**
+   * Add the blades. The two blades are made up up a box geomtry and are
+   * positioned across each other.
+   */
   addBlades() {
     const blade1 = new THREE.Mesh(
       new THREE.BoxGeometry(this.bladeWidth, this.bladeHeight, this.bladeDepth),

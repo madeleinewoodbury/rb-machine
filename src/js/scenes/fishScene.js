@@ -3,6 +3,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import materials from '../utils/materials.js'
 import Aquarium from '../sceneObjects/Aquarium.js'
 
+// Add a fish scene with an aquarium, water, and a fish.
 function addFishScene(renderInfo, physicsInfo, ammoHelper) {
   const aquariumSize = { width: 30, height: 10, depth: 20, edgeWith: 0.1 }
   const position = { x: -30, y: 0, z: 25 }
@@ -12,6 +13,7 @@ function addFishScene(renderInfo, physicsInfo, ammoHelper) {
   addFish(renderInfo, position)
 }
 
+// Add the fish model to the scene.
 function addFish(renderInfo, position) {
   const loader = new GLTFLoader()
   loader.load('./models/Goldfish.glb', (gltf) => {
@@ -24,6 +26,7 @@ function addFish(renderInfo, position) {
   })
 }
 
+// Add the aquarium to the scene.
 function addAquarium(renderInfo, physicsInfo, ammoHelper, size, position) {
   const mass = 0
 
@@ -47,6 +50,9 @@ function addAquarium(renderInfo, physicsInfo, ammoHelper, size, position) {
   aquarium.mesh.userData.rigidBody = rigidBody
 }
 
+// Add the water to the scene. The water is made of two planes, one for the
+// bottom and one for the top. The top plane is transparent. The bottom plane 
+// has a cloud texture to make the water look more realistic.
 function addWater(renderInfo, size, position) {
   const height = size.height * 0.9
 

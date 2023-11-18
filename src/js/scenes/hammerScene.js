@@ -1,15 +1,13 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import Hammer from '../sceneObjects/Hammer.js'
 import LaserButton from '../sceneObjects/LaserButton.js'
-import Box from '../sceneObjects/Box.js'
-import Cylinder from '../sceneObjects/Cylinder.js'
-import materials from '../utils/materials.js'
 
+// Add a hammer scene with a hammer and a button.
 function addHammerScene(renderInfo, physicsInfo, ammoHelper) {
   addHammer(renderInfo, physicsInfo, ammoHelper)
   addButton(renderInfo, physicsInfo, ammoHelper)
 }
 
+// Add the hammer to the scene.
 function addHammer(renderInfo, physicsInfo, ammoHelper) {
   const mass = 1
   const hammer = new Hammer(1, 25, 3, 10)
@@ -23,6 +21,7 @@ function addHammer(renderInfo, physicsInfo, ammoHelper) {
   rigidBody.threeMesh = hammer.group
 }
 
+// Add the button to the scene.
 function addButton(renderInfo, physicsInfo, ammoHelper) {
   const mass = 10
   const button = new LaserButton(10, 2, 20, 3, 2)

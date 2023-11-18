@@ -1,3 +1,8 @@
+// --------------------------------------------------
+// Light klassen er fra oblig 3: Robot Arm
+// --------------------------------------------------
+
+
 /**
  * Base Light class. All lights inherit from this class.
  * It contains the color and intensity properties. Includes methods to

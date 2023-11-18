@@ -1,6 +1,14 @@
 import * as THREE from 'three'
 import materials from '../utils/materials'
 
+/**
+ * Pillar class. The pillar is made up of a base and a plateau.
+ * The base is a box geometry and the plateau is a box geometry.
+ * @param {THREE.Vector3} baseSize - The size of the base.
+ * @param {THREE.Vector3} plateauSize - The size of the plateau.
+ * @param {number} baseX - The x position of the base.
+ * @param {number} baseZ - The z position of the base.
+ */
 class Pillar {
   constructor(baseSize, plateauSize, baseX, baseZ) {
     this.baseSize = baseSize
@@ -11,6 +19,10 @@ class Pillar {
     this.generate()
   }
 
+  /**
+   * Generate the pillar. The pillar is made up of a base and a plateau.
+   * The base is a box geometry and the plateau is a box geometry.
+   */ 
   generate() {
     this.mesh = new THREE.Group()
     this.mesh.name = 'pillar'
@@ -19,7 +31,7 @@ class Pillar {
       new THREE.BoxGeometry(this.baseSize.x, this.baseSize.y, this.baseSize.z),
       materials.wood
     )
-    this.base.position.set(this.baseX, this.baseSize.y / 2, this.baseZ) // z: 8
+    this.base.position.set(this.baseX, this.baseSize.y / 2, this.baseZ) 
     this.base.castShadow = true
     this.mesh.add(this.base)
 
@@ -41,6 +53,11 @@ class Pillar {
     this.mesh.add(this.plateau)
   }
 
+  /**
+   * Get the compound shape of the pillar
+   * @param {AmmoHelper} ammoHelper
+   * @returns {Ammo.btCompoundShape} The compound shape of the pillar
+   */ 
   getCompoundShape(ammoHelper) {
     const compoundShape = new Ammo.btCompoundShape()
     ammoHelper.setTransform(this.base)

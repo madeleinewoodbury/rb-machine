@@ -1,6 +1,12 @@
 import * as THREE from 'three'
 import materials from '../utils/materials.js'
 
+/**
+ * Tube class. The tube is made up of two torus geometries. The toruses
+ * are positioned and rotated to form a tube.
+ * @param {number} torusRadius - The radius of the torus.
+ * @param {number} tubeRadius - The radius of the tube.
+ */
 class Tube {
   constructor(torusRadius, tubeRadius) {
     this.torusRadius = torusRadius
@@ -14,6 +20,10 @@ class Tube {
     this.generate()
   }
 
+  /**
+   * Generate the tube. The tube is made up of two torus geometries. The toruses
+   * are positioned and rotated to form a tube.
+   */ 
   generate() {
     this.mesh = new THREE.Group()
     this.mesh.name = 'tube'
@@ -43,6 +53,11 @@ class Tube {
     this.mesh.receiveShadow = true
   }
 
+  /**
+   * Get the compound shape of the tube
+   * @param {AmmoHelper} ammoHelper
+   * @returns {Ammo.btCompoundShape} The compound shape of the tube
+   */
   getCompoundShape(ammoHelper) {
     const compoundShape = new Ammo.btCompoundShape()
     ammoHelper.setTransform(this.tube1)

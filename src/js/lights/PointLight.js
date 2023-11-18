@@ -1,3 +1,7 @@
+// --------------------------------------------------
+// PointLight klassen er fra oblig 3: Robot Arm
+// --------------------------------------------------
+
 import * as THREE from 'three'
 import Light from './Light.js'
 
