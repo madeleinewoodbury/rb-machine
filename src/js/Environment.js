@@ -1,10 +1,12 @@
 import * as THREE from "three";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import GUI from "lil-gui";
 import Stats from "stats.js";
 import RenderInfo from "./RenderInfo.js";
 import PhysicsInfo from "./PhysicsInfo.js";
 import AmmoHelper from "./AmmoHelper.js";
-import sounds from './utils/sounds.js'
+import sounds from "./utils/sounds.js";
 
 import addWorldScene from "./scenes/worldScene.js";
 import addElevatorScene from "./scenes/elevatorScene.js";
@@ -15,6 +17,8 @@ import addWindScene from "./scenes/windScene.js";
 import addHammerScene from "./scenes/hammerScene.js";
 import addFishScene from "./scenes/fishScene.js";
 import addLaserGunScene from "./scenes/laserGunScene.js";
+
+import materials from "./utils/materials.js";
 
 class Environment {
   constructor() {
@@ -29,7 +33,7 @@ class Environment {
     this.gui = new GUI();
     this.interactive = false;
     this.cameraSequence = [1, 2, 3, 4, 0];
-    this.sounds = sounds
+    this.sounds = sounds;
 
     this.addEventListeners();
   }
@@ -37,7 +41,7 @@ class Environment {
   /**
    * Initializes the environment. It sets up the physics, renderer, and
    * scene objects. It also adds the GUI controls and stats.
-   */ 
+   */
   initialize() {
     this.physicsInfo.setup();
     this.renderInfo.addGuiControls(this.gui);
@@ -54,7 +58,7 @@ class Environment {
   /**
    * Starts the environment. It sets the environment to interactive mode
    * and switches the camera to the first camera in the sequence.
-   */ 
+   */
   start() {
     this.interactive = true;
     this.renderInfo.switchCamera(this.cameraSequence.shift());
@@ -62,7 +66,7 @@ class Environment {
 
   /**
    * Adds the scene objects to the scene.
-   */ 
+   */
   addSceneObjects() {
     addWorldScene(this.renderInfo, this.physicsInfo, this.ammoHelper, this.gui);
     addFishScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
@@ -73,6 +77,38 @@ class Environment {
     addHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addLaserGunScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
+
+    // this.renderInfo.scene.add(getText())
+    this.addText();
+  }
+
+  addText() {
+    const fontLoader = new FontLoader();
+    fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
+      const textGeometry = new TextGeometry("Hit up button", {
+        font: font,
+        size: 2,
+        height: 0.5,
+        curveSegments: 5,
+        bevelEnabled: true,
+        bevelThickness: 0.03,
+        bevelSize: 0.02,
+        bevelOffset: 0,
+        bevelSegments: 4,
+      });
+
+      textGeometry.center();
+
+      const material = new THREE.MeshBasicMaterial({ wireframe: true });
+      // const material = new THREE.MeshMatcapMaterial({
+      //   matcap: matcapTexture,
+      // })
+      const text = new THREE.Mesh(textGeometry, materials.yellow);
+      text.position.set(60, 4, -65)
+      text.rotation.set(0, Math.PI / 2.75, 0)
+
+      this.renderInfo.scene.add(text)
+    });
   }
 
   /**
@@ -81,7 +117,7 @@ class Environment {
    * - keydown: Handles keydown events.
    * - mousemove: Handles mousemove events.
    * - click: Handles click events.
-   */ 
+   */
   addEventListeners() {
     window.addEventListener("resize", () => this.renderInfo.resize());
     window.addEventListener("keydown", (e) => this.keyDown(e.code));
@@ -91,8 +127,8 @@ class Environment {
 
   /**
    * Handles mousemove events. It updates the mouse position.
-    * @param {MouseEvent} e - The mousemove event.
-    */
+   * @param {MouseEvent} e - The mousemove event.
+   */
   mouseMove(e) {
     this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
@@ -102,11 +138,11 @@ class Environment {
    * Handles click events. It checks if the mouse intersects with the button
    * and if it does, it starts the elevator.
    * @param {MouseEvent} e - The click event.
-   */ 
+   */
   mouseClick(e) {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === "button") {
-        this.sounds.playDing()
+        this.sounds.playDing();
         const elevator = this.renderInfo.scene.getObjectByName("elevator");
         elevator.start = true;
       }
@@ -116,7 +152,7 @@ class Environment {
   /**
    * Handles keydown events. It switches the camera based on the key pressed.
    * @param {string} code - The key code of the key pressed.
-   */ 
+   */
   keyDown(code) {
     switch (code) {
       case "Digit1":
@@ -146,7 +182,7 @@ class Environment {
    * Moves the rigid body in the given direction.
    * @param {THREE.Mesh} mesh - The mesh to move.
    * @param {THREE.Vector3} direction - The direction to move the mesh.
-   */ 
+   */
   moveRigidBody(mesh, direction) {
     const transform = new Ammo.btTransform();
     const motionState = mesh.userData.rigidBody.getMotionState();
@@ -174,7 +210,7 @@ class Environment {
     const intersects = this.raycaster.intersectObjects(intersectObjects);
 
     if (intersects.length) {
-        this.currentIntersect = intersects[0];
+      this.currentIntersect = intersects[0];
     } else {
       this.currentIntersect = null;
     }
@@ -190,17 +226,17 @@ class Environment {
     const foodContainer =
       this.renderInfo.scene.getObjectByName("foodContainer");
 
-    this.handleElevatorEvent(elevator, ball)
-    this.handleCamerasEvent(ball, hangingBall)
-    this.handleLaserEvent(laser, button, hangingBall)
-    this.handleDominosEvent(foodContainer)
+    this.handleElevatorEvent(elevator, ball);
+    this.handleCamerasEvent(ball, hangingBall);
+    this.handleLaserEvent(laser, button, hangingBall);
+    this.handleDominosEvent(foodContainer);
   }
 
-  handleElevatorEvent(elevator, ball){
+  handleElevatorEvent(elevator, ball) {
     if (elevator.start) {
       if (elevator.position.y < 53) {
         this.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
-        
+
         if (elevator.position.y > 52.5) {
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
@@ -218,20 +254,20 @@ class Environment {
     }
   }
 
-  handleCamerasEvent(ball, hangingBall){
+  handleCamerasEvent(ball, hangingBall) {
     if (this.cameraSequence.length === 3 && ball.position.x < 30) {
       this.renderInfo.switchCamera(this.cameraSequence.shift());
     } else if (this.cameraSequence.length === 2 && ball.position.x < -10) {
       this.renderInfo.switchCamera(this.cameraSequence.shift());
-    } else if(this.cameraSequence.length === 1) {
-      if(hangingBall.position.y < 44) {
+    } else if (this.cameraSequence.length === 1) {
+      if (hangingBall.position.y < 44) {
         this.renderInfo.switchCamera(this.cameraSequence.shift());
       }
     }
   }
 
-  handleLaserEvent(laser, button, hangingBall){
-    if(this.physicsInfo.collisions["hammer-laserButton"]){
+  handleLaserEvent(laser, button, hangingBall) {
+    if (this.physicsInfo.collisions["hammer-laserButton"]) {
       this.physicsInfo.collisions["hammer-laserButton"] = false;
       laser.material.opacity = 1;
       const rigidBall = hangingBall.userData.rigidBody;
@@ -246,29 +282,29 @@ class Environment {
       hangingBall.userData.rigidBody = updatedRigidbody;
       hangingBall.mass = 35;
 
-      this.sounds.playLaserSound()
-      button.children[1].position.y = 1.5
+      this.sounds.playLaserSound();
+      button.children[1].position.y = 1.5;
     }
   }
 
-  handleDominosEvent(foodContainer){
-    if(this.physicsInfo.collisions["domino0-domino1"] ){
-      this.sounds.playHitSound()
+  handleDominosEvent(foodContainer) {
+    if (this.physicsInfo.collisions["domino0-domino1"]) {
+      this.sounds.playHitSound();
       this.physicsInfo.collisions["domino0-domino1"] = false;
     }
 
-    if(this.physicsInfo.collisions["domino1-domino2"]){
-      this.sounds.playHitSound()
+    if (this.physicsInfo.collisions["domino1-domino2"]) {
+      this.sounds.playHitSound();
       this.physicsInfo.collisions["domino1-domino2"] = false;
     }
 
-    if(this.physicsInfo.collisions["domino2-domino3"]){
-      this.sounds.playHitSound()
+    if (this.physicsInfo.collisions["domino2-domino3"]) {
+      this.sounds.playHitSound();
       this.physicsInfo.collisions["domino2-domino3"] = false;
     }
 
-    if(this.physicsInfo.collisions["domino3-domino4"]){
-      this.sounds.playHitSound()
+    if (this.physicsInfo.collisions["domino3-domino4"]) {
+      this.sounds.playHitSound();
       this.physicsInfo.collisions["domino3-domino4"] = false;
     }
 

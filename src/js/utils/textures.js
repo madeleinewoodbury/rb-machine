@@ -21,36 +21,6 @@ bricks.displacement.wrapT = THREE.RepeatWrapping
 bricks.alpha.wrapS = THREE.RepeatWrapping
 bricks.alpha.wrapT = THREE.RepeatWrapping
 
-// Stone floor texture
-const stoneFloor = {
-  color: textureLoader.load('/textures/stoneFloor/stone_floor_basecolor.jpg'),
-  normal: textureLoader.load('/textures/stoneFloor/stone_floor_normal.jpg'),
-  displacement: textureLoader.load(
-    '/textures/stoneFloor/stone_floor_height.png'
-  ),
-  roughness: textureLoader.load(
-    '/textures/stoneFloor/stone_floor_roughness.jpg'
-  ),
-  ao: textureLoader.load('/textures/stoneFloor/stone_floor_ao.jpg'),
-}
-
-stoneFloor.color.colorSpace = THREE.SRGBColorSpace
-stoneFloor.color.repeat.set(4, 4)
-stoneFloor.ao.repeat.set(4, 4)
-stoneFloor.normal.repeat.set(4, 4)
-stoneFloor.roughness.repeat.set(4, 4)
-stoneFloor.displacement.repeat.set(4, 4)
-stoneFloor.color.wrapS = THREE.RepeatWrapping
-stoneFloor.color.wrapT = THREE.RepeatWrapping
-stoneFloor.ao.wrapS = THREE.RepeatWrapping
-stoneFloor.ao.wrapT = THREE.RepeatWrapping
-stoneFloor.normal.wrapS = THREE.RepeatWrapping
-stoneFloor.normal.wrapT = THREE.RepeatWrapping
-stoneFloor.roughness.wrapS = THREE.RepeatWrapping
-stoneFloor.roughness.wrapT = THREE.RepeatWrapping
-stoneFloor.displacement.wrapS = THREE.RepeatWrapping
-stoneFloor.displacement.wrapT = THREE.RepeatWrapping
-
 // Grass texture
 const grass = {
   color: textureLoader.load('/textures/grass/grass_color.jpg'),
@@ -60,10 +30,10 @@ const grass = {
 }
 
 grass.color.colorSpace = THREE.SRGBColorSpace
-grass.color.repeat.set(4, 4)
-grass.ao.repeat.set(4, 4)
-grass.normal.repeat.set(4, 4)
-grass.displacement.repeat.set(4, 4)
+grass.color.repeat.set(16, 16)
+grass.ao.repeat.set(16, 16)
+grass.normal.repeat.set(16, 16)
+grass.displacement.repeat.set(16, 16)
 grass.color.wrapS = THREE.RepeatWrapping
 grass.color.wrapT = THREE.RepeatWrapping
 grass.ao.wrapS = THREE.RepeatWrapping
@@ -159,7 +129,6 @@ const waterUniforms = {
 
 const textures = {
   bricks,
-  stoneFloor,
   grass,
   waterUniforms,
   metalGrill,

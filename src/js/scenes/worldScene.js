@@ -51,7 +51,7 @@ function addGround(renderInfo, physicsInfo, ammoHelper) {
   // TODO: use a texture for the ground.
   const plane = new THREE.Mesh(
     new THREE.BoxGeometry(width, height, depth),
-    materials.plane
+    materials.grass
   );
   plane.receiveShadow = true;
   plane.position.set(0, -height / 2, 0);

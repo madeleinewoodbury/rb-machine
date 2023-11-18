@@ -47,20 +47,11 @@ const materials = {
     displacementScale: 0.1,
     alphaMap: textures.bricks.alpha,
   }),
-  stoneFloor: new THREE.MeshStandardMaterial({
-    map: textures.stoneFloor.color,
-    normalMap: textures.stoneFloor.normal,
-    displacementMap: textures.stoneFloor.displacement,
-    displacementScale: 0,
-    roughnessMap: textures.stoneFloor.roughness,
-    roughness: 0.1,
-    aoMap: textures.stoneFloor.ao,
-  }),
   grass: new THREE.MeshStandardMaterial({
     map: textures.grass.color,
     normalMap: textures.grass.normal,
     displacementMap: textures.grass.displacement,
-    displacementScale: 0.1,
+    displacementScale: 0.9,
     aoMap: textures.grass.ao,
   }),
   metalGrill: new THREE.MeshStandardMaterial({
