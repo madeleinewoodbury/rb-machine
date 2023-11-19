@@ -11,7 +11,7 @@ const sounds = {
   },
 
   playLaserSound: function() {
-    this.laserSound.volume = 0.5;
+    this.laserSound.volume = 0.25;
     this.laserSound.currentTime = 0;
     this.laserSound.play();
   },

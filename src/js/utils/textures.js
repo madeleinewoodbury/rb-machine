@@ -108,6 +108,21 @@ const metal = {
   ao: textureLoader.load('/textures/metal/ambientOcclusion.jpg'),
 }
 
+const foodContainer = {
+  sides: textureLoader.load('/textures/fiskemat2.png'),
+  top: textureLoader.load('/textures/food.png'),
+  alpha: textureLoader.load('/textures/food-alpha.png'),
+}
+
+foodContainer.sides.colorSpace = THREE.SRGBColorSpace
+foodContainer.top.colorSpace = THREE.SRGBColorSpace
+foodContainer.sides.wrapS = THREE.RepeatWrapping
+foodContainer.sides.wrapT = THREE.RepeatWrapping
+foodContainer.top.wrapS = THREE.RepeatWrapping
+foodContainer.top.wrapT = THREE.RepeatWrapping
+foodContainer.alpha.wrapS = THREE.RepeatWrapping
+foodContainer.alpha.wrapT = THREE.RepeatWrapping
+
 // Water texture
 const waterTexture = textureLoader.load('/textures/water.jpg')
 waterTexture.wrapS = THREE.RepeatWrapping
@@ -136,6 +151,7 @@ const textures = {
   sciFiWall,
   stoneWall,
   metal,
+  foodContainer
 }
 
 export default textures

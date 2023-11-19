@@ -83,7 +83,16 @@ class RenderInfo {
     this.cameras.push(camera6);
     this.scene.add(camera6);
 
-    this.activeCamera = this.cameras[0];
+    const testCamera = new THREE.PerspectiveCamera(65, aspectRatio, 0.1, 1000);
+    testCamera.position.set(-35, 50, 65);
+    testCamera.target = new THREE.Vector3(-10, 20, 0);
+    testCamera.lookAt(testCamera.target);
+    testCamera.name = "testCamera";
+
+    this.cameras.push(testCamera);
+    this.scene.add(testCamera);
+
+    this.activeCamera = this.cameras[6];
   }
 
   /**

@@ -104,10 +104,10 @@ class Environment {
       //   matcap: matcapTexture,
       // })
       const text = new THREE.Mesh(textGeometry, materials.yellow);
-      text.position.set(60, 4, -65)
-      text.rotation.set(0, Math.PI / 2.75, 0)
+      text.position.set(60, 4, -65);
+      text.rotation.set(0, Math.PI / 2.75, 0);
 
-      this.renderInfo.scene.add(text)
+      this.renderInfo.scene.add(text);
     });
   }
 
@@ -225,11 +225,13 @@ class Environment {
     const button = this.renderInfo.scene.getObjectByName("laserButton");
     const foodContainer =
       this.renderInfo.scene.getObjectByName("foodContainer");
+    const foodContainerTop =
+      this.renderInfo.scene.getObjectByName("foodContainerTop");
 
     this.handleElevatorEvent(elevator, ball);
     this.handleCamerasEvent(ball, hangingBall);
     this.handleLaserEvent(laser, button, hangingBall);
-    this.handleDominosEvent(foodContainer);
+    this.handleDominosEvent(foodContainer, foodContainerTop);
   }
 
   handleElevatorEvent(elevator, ball) {
@@ -287,7 +289,7 @@ class Environment {
     }
   }
 
-  handleDominosEvent(foodContainer) {
+  handleDominosEvent(foodContainer, foodContainerTop) {
     if (this.physicsInfo.collisions["domino0-domino1"]) {
       this.sounds.playHitSound();
       this.physicsInfo.collisions["domino0-domino1"] = false;
@@ -314,6 +316,7 @@ class Environment {
       if (Math.abs(euler.z) > 0.7) {
         this.physicsInfo.collisions["foodContainer-domino4"] = false;
         this.renderInfo.feedFish = true;
+        foodContainerTop.visible = false; // Hide the top of the container
       }
     }
   }

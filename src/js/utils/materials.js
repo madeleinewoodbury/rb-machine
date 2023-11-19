@@ -3,10 +3,10 @@ import textures from './textures.js'
 
 // Define all materials here
 const materials = {
-  white: new THREE.MeshStandardMaterial({ color: 0xffffff }),
+  white: new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide }),
   black: new THREE.MeshStandardMaterial({ color: 0x000000 }),
   red: new THREE.MeshStandardMaterial({ color: 0xff0000 }),
-  blue: new THREE.MeshStandardMaterial({ color: 0x0000ff }),
+  blue: new THREE.MeshStandardMaterial({ color: 0x0000ff}),
   yellow: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
   grey: new THREE.MeshStandardMaterial({ color: 0xc2c2c2 }),
 
@@ -51,7 +51,7 @@ const materials = {
     map: textures.grass.color,
     normalMap: textures.grass.normal,
     displacementMap: textures.grass.displacement,
-    displacementScale: 0.9,
+    displacementScale: 0.2,
     aoMap: textures.grass.ao,
   }),
   metalGrill: new THREE.MeshStandardMaterial({
@@ -104,6 +104,19 @@ const materials = {
     roughnessMap: textures.metal.roughness,
     roughness: 0.9,
     aoMap: textures.metal.ao,
+  }),
+  foodContainer: new THREE.MeshStandardMaterial({
+    map: textures.foodContainer.sides,
+    side: THREE.DoubleSide,
+  }),
+  foodContainerTop1: new THREE.MeshStandardMaterial({
+    map: textures.foodContainer.top,
+  }),
+  foodContainerTop2: new THREE.MeshStandardMaterial({
+    map: textures.foodContainer.top,
+    alphaMap: textures.foodContainer.alpha,
+    transparent: true,
+    // opacity: 0.7,
   }),
 }
 
