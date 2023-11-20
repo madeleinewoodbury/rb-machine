@@ -3,7 +3,6 @@ import materials from "../utils/materials.js";
 import Pillar from "../sceneObjects/Pillar.js";
 import Cylinder from "../sceneObjects/Cylinder.js";
 import Box from "../sceneObjects/Box.js";
-import FoodContainer from "../sceneObjects/FoodContainer.js";
 
 // Add the pillar scene with a pillar, a food container, dominos and fish food.
 function addPillarScene(renderInfo, physicsInfo, ammoHelper) {
@@ -101,7 +100,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
 
   const top = new THREE.Mesh(
     new THREE.CircleGeometry(size.radius, 32),
-    materials.foodContainerTop1
+    materials.foodContainerTop
   );
   top.name = "foodContainerTop";
   top.position.set(position.x, position.y + size.height / 2 + 0.01, position.z);
@@ -115,7 +114,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
 // domino, the particles become visible.
 function addFishFood(renderInfo) {
   const particleGeometry = new THREE.BufferGeometry();
-  const particleCount = 200;
+  const particleCount = 300;
 
   const positions = new Float32Array(particleCount * 3);
 
@@ -123,7 +122,7 @@ function addFishFood(renderInfo) {
   for (let i = 0; i < positions.length; i += 3) {
     positions[i] = (Math.random() - 0.5) * 5;
     positions[i + 1] = (Math.random() - 0.5) * 10;
-    positions[i + 2] = (Math.random() - 0.5) * 10;
+    positions[i + 2] = (Math.random() - 0.5) * 2.5;
   }
 
   particleGeometry.setAttribute(
@@ -132,7 +131,7 @@ function addFishFood(renderInfo) {
   );
 
   const particles = new THREE.Points(particleGeometry, materials.fishFood);
-  particles.position.set(-30, 30, 25);
+  particles.position.set(-30, 26, 25);
   particles.name = "fishFood";
 
   renderInfo.scene.add(particles);

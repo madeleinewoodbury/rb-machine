@@ -13,17 +13,19 @@ body {
 
 .start-message {
   position: absolute;
-  top: calc(50% - 150px);
+  top: calc(25% - 150px);
   left: calc(50% - 300px);
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, .4);
+  background-color: rgba(0, 0, 1, 0.75);
   color: #fff;
   padding: 2rem;
   border-radius: 8px;
   width: 600px;
+  font-size: 1.2rem;
+  text-align: center;
 }
 
 .start-message h1 {
@@ -44,4 +46,13 @@ body {
   border-radius: 5px;
   border: none;
   padding: 0.5rem 1rem;
+  background-color: rgb(255, 196, 0);
+  color: black;
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.btn-container button:hover {
+  background-color: rgb(255, 230, 0);
 }

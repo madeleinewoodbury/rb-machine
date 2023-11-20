@@ -53,6 +53,7 @@ function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
 
   // The board with an edge for the ball to rest on
   const boardGroup = new THREE.Group()
+  boardGroup.name = 'balancingBoard'
   const compoundShape = new Ammo.btCompoundShape()
 
   const board = new Box(20, 0.5, 3, lightWoodMaterial)
@@ -72,13 +73,15 @@ function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
 
   ammoHelper.setTransform(boardEdge.mesh)
   compoundShape.addChildShape(ammoHelper.transform, boardEdge.shape)
-
   boardGroup.position.set(position.x, position.y, position.z)
 
   const boardBody = ammoHelper.createRigidBody(compoundShape, boardGroup, 2)
+  boardBody.setCollisionGroup = physicsInfo.collisionGroup.board
+  boardBody.setCollisionMask = physicsInfo.collisionGroup.ball
   physicsInfo.addRigidBody(boardBody, boardGroup)
   boardGroup.userData.rigidBody = boardBody
   renderInfo.scene.add(boardGroup)
+  boardBody.threeMesh = boardGroup
 
   // Add a point to point constraint between the board and the cylinder base
   const pivotA = new Ammo.btVector3(0, 0, 0)
@@ -133,12 +136,15 @@ function createRope(ropeLength) {
 function addBall(renderInfo, physicsInfo, ammoHelper, position, mass, name) {
   const radius = 1.5
 
-  const ball = new Sphere(radius, materials.red)
+  const ball = new Sphere(radius, materials.ballRed)
   ball.mesh.name = name
   ball.mesh.position.set(position.x, position.y, position.z)
   ball.mesh.mass = mass
 
   const rigidBody = ammoHelper.createRigidBody(ball.shape, ball.mesh, mass)
+  rigidBody.setCollisionGroup = physicsInfo.collisionGroup.ball
+  rigidBody.setCollisionMask = physicsInfo.collisionGroup.board || physicsInfo.collisionGroup.aquarium || physicsInfo.collisionGroup.domino
+
   ball.setFriction(rigidBody)
   ball.setRestituition(rigidBody)
   ball.setRollingFriction(rigidBody)

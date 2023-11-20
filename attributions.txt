@@ -4,3 +4,12 @@ Fish byQuaternius
 Button Switch by Zoe XR [CC-BY] via Poly Pizza
 
 Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=38520">Pixabay</a>
+
+// rattling sound (tube)
+Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=68435">Pixabay</a>
+
+boing sound
+Sound Effect from <a href="https://pixabay.com/sound-effects/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6222">Pixabay</a>
+
+success
+Sound Effect from <a href="https://pixabay.com/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=6185">Pixabay</a>

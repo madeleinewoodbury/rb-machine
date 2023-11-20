@@ -30,7 +30,7 @@ function addSkyBox(renderInfo) {
     );
 
   // Set the cube to cover the scene entirely
-  let cubeSize = 200;
+  let cubeSize = 250;
   let boxGeometry = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize);
   const boxMesh = new THREE.Mesh(boxGeometry, materialArray);
   boxMesh.name = "skyBoxMesh";
@@ -43,12 +43,11 @@ function addSkyBox(renderInfo) {
 
 // Add the ground to the scene. The ground is made of a box geometry.
 function addGround(renderInfo, physicsInfo, ammoHelper) {
-  const width = 200;
+  const width = 250;
   const height = 0.01;
-  const depth = 200;
+  const depth = 250;
   const mass = 0;
 
-  // TODO: use a texture for the ground.
   const plane = new THREE.Mesh(
     new THREE.BoxGeometry(width, height, depth),
     materials.grass
@@ -63,7 +62,7 @@ function addGround(renderInfo, physicsInfo, ammoHelper) {
   shape.setMargin(0.05);
 
   const rigidBody = ammoHelper.createRigidBody(shape, plane, mass);
-  rigidBody.setFriction(0.8);
+  rigidBody.setFriction(1);
   rigidBody.setRestitution(0.7);
 
   physicsInfo.addRigidBody(rigidBody, plane);

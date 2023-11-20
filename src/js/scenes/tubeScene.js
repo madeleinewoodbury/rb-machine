@@ -27,12 +27,17 @@ function addBridge(renderInfo, physicsInfo, ammoHelper) {
   const mass = 0
   const bridge = new Box(48, 1, 6, materials.wood)
   bridge.mesh.position.set(28, 52.5, -52.5)
+  bridge.mesh.name = 'bridge'
+  bridge.mesh.castShadow = true
 
   const rigidBody = ammoHelper.createRigidBody(
     bridge.shape,
     bridge.mesh,
     mass
   )
+  rigidBody.setCollisionGroup = physicsInfo.collisionGroup.bridge
+  rigidBody.setCollisionMask = 0
+
   rigidBody.setFriction(0.8)
   physicsInfo.addRigidBody(rigidBody, bridge.mesh)
   renderInfo.scene.add(bridge.mesh)

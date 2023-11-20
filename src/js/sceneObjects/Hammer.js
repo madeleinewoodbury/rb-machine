@@ -33,6 +33,7 @@ class Hammer {
       this.height,
       materials.hammerHandle
     );
+    this.handle.mesh.castShadow = true;
     this.group.add(this.handle.mesh);
   }
 
@@ -45,6 +46,7 @@ class Hammer {
       this.malletWidth,
       materials.black
     );
+    this.mallet.mesh.castShadow = true;
     this.mallet.mesh.position.set(0, this.height, 0);
     this.mallet.mesh.rotation.set(0, 0, Math.PI / 2);
     this.group.add(this.mallet.mesh);

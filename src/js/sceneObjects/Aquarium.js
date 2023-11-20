@@ -31,12 +31,14 @@ class Aquarium {
       materials.stoneWall
     );
     this.side1.position.set(0, this.height/2, -this.depth/2 - 0.1);
+    this.side1.castShadow = true;
     
     this.side2 = this.side1.clone();
     this.side2.position.z = this.depth/2;
 
     this.side3 = new THREE.Mesh(new THREE.BoxGeometry(this.edgeWith, this.height, this.depth), materials.stoneWall);
     this.side3.position.set(this.width/2, this.height/2, 0);
+    this.side3.castShadow = true;
 
     this.side4 = this.side3.clone();
     this.side4.position.x = -this.width/2;

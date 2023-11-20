@@ -22,6 +22,18 @@ class RenderInfo {
     this.setupRenderer();
   }
 
+  reset() {
+    this.scene = new THREE.Scene();
+    this.clock = new THREE.Clock();
+    this.cameras = [];
+    this.feedFish = false;
+
+    this.setupCameras();
+    this.setupControls();
+    this.setupRenderer();
+  }
+
+
   /**
    * Sets up the cameras. Creates 6 cameras and adds them to the scene.
    * The first camera is the active camera.
@@ -166,6 +178,7 @@ class RenderInfo {
 
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
+
 
   /**
    * Animate the scene objects.

@@ -50,6 +50,7 @@ function addLaserStand(renderInfo, physicsInfo, ammoHelper) {
   stand.mesh.position.x = -66;
   stand.mesh.position.z = -52.5;
   stand.mesh.name = "stand";
+  stand.mesh.castShadow = true;
 
   const rigidBody = ammoHelper.createRigidBody(stand.shape, stand.mesh, 0);
   physicsInfo.addRigidBody(rigidBody, stand.mesh);

@@ -7,8 +7,11 @@ const materials = {
   black: new THREE.MeshStandardMaterial({ color: 0x000000 }),
   red: new THREE.MeshStandardMaterial({ color: 0xff0000 }),
   blue: new THREE.MeshStandardMaterial({ color: 0x0000ff}),
-  yellow: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
+  yellow1: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
+  yellow2: new THREE.MeshStandardMaterial({ color: 0xdbbe00 }),
   grey: new THREE.MeshStandardMaterial({ color: 0xc2c2c2 }),
+  ballYellow: new THREE.MeshStandardMaterial({ color: 0xfbfb00, metalness: 0.5, roughness: 0.1 }),
+  ballRed: new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.4, roughness: 0.2 }),
 
   plane: new THREE.MeshStandardMaterial({ color: 0x158000 }),
   tube: new THREE.MeshStandardMaterial({
@@ -29,7 +32,7 @@ const materials = {
     opacity: 0.4,
   }),
   fishFood: new THREE.PointsMaterial({
-    size: 0.5,
+    size: 0.2,
     sizeAttenuation: true,
     color: 0xffff00,
     transparent: true,
@@ -109,15 +112,11 @@ const materials = {
     map: textures.foodContainer.sides,
     side: THREE.DoubleSide,
   }),
-  foodContainerTop1: new THREE.MeshStandardMaterial({
+  foodContainerTop: new THREE.MeshStandardMaterial({
     map: textures.foodContainer.top,
-  }),
-  foodContainerTop2: new THREE.MeshStandardMaterial({
-    map: textures.foodContainer.top,
-    alphaMap: textures.foodContainer.alpha,
     transparent: true,
-    // opacity: 0.7,
   }),
+
 }
 
 export default materials

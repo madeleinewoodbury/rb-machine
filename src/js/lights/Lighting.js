@@ -97,12 +97,12 @@ class Lighting {
     directionalLight.light.castShadow = true;
     directionalLight.light.shadow.mapSize.width = 1024;
     directionalLight.light.shadow.mapSize.height = 1024;
-    directionalLight.light.shadow.camera.top = 100;
-    directionalLight.light.shadow.camera.right = 100;
-    directionalLight.light.shadow.camera.bottom = -100;
-    directionalLight.light.shadow.camera.left = -100;
-    directionalLight.light.shadow.camera.near = 50;
-    directionalLight.light.shadow.camera.far = 200;
+    directionalLight.light.shadow.camera.top = 200;
+    directionalLight.light.shadow.camera.right = 200;
+    directionalLight.light.shadow.camera.bottom = -200;
+    directionalLight.light.shadow.camera.left = -200;
+    directionalLight.light.shadow.camera.near = 100;
+    directionalLight.light.shadow.camera.far = 300;
     directionalLight.light.name = name;
     directionalLight.addGUIFolder(folder);
     directionalLight.addHelper(1, folder);

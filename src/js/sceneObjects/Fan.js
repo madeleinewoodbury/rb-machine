@@ -54,6 +54,7 @@ class Fan {
       materials.white
     );
     base.position.set(0, this.baseHeight / 2, 0);
+    base.castShadow = true;
     this.group.add(base);
   }
 
@@ -72,6 +73,7 @@ class Fan {
     );
     capsule.rotateX(Math.PI / 2);
     capsule.position.set(0, this.baseHeight + this.topRadius / 2, 1);
+    capsule.castShadow = true;
     this.group.add(capsule);
   }
 
@@ -91,6 +93,7 @@ class Fan {
       this.baseHeight + this.topRadius / 2,
       this.topLength / 2
     );
+    blade1.castShadow = true;
 
     const blade2 = blade1.clone();
     blade2.rotationAngle = Math.PI / 2;

@@ -38,6 +38,17 @@ class Environment {
     this.addEventListeners();
   }
 
+  reset() {
+    window.location.reload();
+    // this.interactive = false;
+    // this.physicsInfo.reset();
+    // this.renderInfo.reset();
+    // this.currentIntersect = null;
+    // this.cameraSequence = [1, 2, 3, 4, 0];
+
+    // this.start();
+  }
+
   /**
    * Initializes the environment. It sets up the physics, renderer, and
    * scene objects. It also adds the GUI controls and stats.
@@ -85,7 +96,7 @@ class Environment {
   addText() {
     const fontLoader = new FontLoader();
     fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-      const textGeometry = new TextGeometry("Hit up button", {
+      const textGeometry = new TextGeometry("Trykk opp", {
         font: font,
         size: 2,
         height: 0.5,
@@ -99,11 +110,7 @@ class Environment {
 
       textGeometry.center();
 
-      const material = new THREE.MeshBasicMaterial({ wireframe: true });
-      // const material = new THREE.MeshMatcapMaterial({
-      //   matcap: matcapTexture,
-      // })
-      const text = new THREE.Mesh(textGeometry, materials.yellow);
+      const text = new THREE.Mesh(textGeometry, materials.yellow2);
       text.position.set(60, 4, -65);
       text.rotation.set(0, Math.PI / 2.75, 0);
 
@@ -143,6 +150,7 @@ class Environment {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === "button") {
         this.sounds.playDing();
+        this.sounds.playElevator();
         const elevator = this.renderInfo.scene.getObjectByName("elevator");
         elevator.start = true;
       }
@@ -175,6 +183,10 @@ class Environment {
         // Camera 5
         this.renderInfo.switchCamera(4);
         break;
+        case "Digit6":
+          // Camera 5
+          this.renderInfo.switchCamera(5);
+          break;
     }
   }
 
@@ -211,8 +223,11 @@ class Environment {
 
     if (intersects.length) {
       this.currentIntersect = intersects[0];
+      button.material.color.setHex(0x0fff00);
+      console.log(this.currentIntersect.object.name)
     } else {
       this.currentIntersect = null;
+      button.material.color.setHex(0xffff00);
     }
   }
 
@@ -232,6 +247,27 @@ class Environment {
     this.handleCamerasEvent(ball, hangingBall);
     this.handleLaserEvent(laser, button, hangingBall);
     this.handleDominosEvent(foodContainer, foodContainerTop);
+
+    // Sound effects
+    if (this.physicsInfo.collisions["ball-bridge"]) {
+      this.physicsInfo.collisions["ball-bridge"] = false;
+      this.sounds.playRollingBall();
+    }
+
+    if (this.physicsInfo.collisions["ball-tube"]) {
+      this.physicsInfo.collisions["ball-tube"] = false;
+      this.sounds.playTube();
+    }
+
+    if (this.physicsInfo.collisions["hammer-ball"]) {
+      this.physicsInfo.collisions["hammer-ball"] = false;
+      this.sounds.playHit();
+    }
+
+    if (this.physicsInfo.collisions["balancingBoard-hangingBall"]) {
+      this.physicsInfo.collisions["balancingBoard-hangingBall"] = false;
+      this.sounds.playBoing();
+    }
   }
 
   handleElevatorEvent(elevator, ball) {
@@ -239,7 +275,9 @@ class Environment {
       if (elevator.position.y < 53) {
         this.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
 
-        if (elevator.position.y > 52.5) {
+        if (elevator.position.y > 45 && elevator.position.y < 50) {
+          this.sounds.playWind();
+        } else if (elevator.position.y > 52.5) {
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
           this.physicsInfo.applyForce(ball, force, relPos);
@@ -281,42 +319,64 @@ class Environment {
       );
       this.physicsInfo.world.removeRigidBody(rigidBall);
       this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall);
+      updatedRigidbody.setCollisionGroup = this.physicsInfo.collisionGroup.ball;
+      updatedRigidbody.setCollisionMask =
+        this.physicsInfo.collisionGroup.board ||
+        this.physicsInfo.collisionGroup.aquarium;
+
       hangingBall.userData.rigidBody = updatedRigidbody;
+      updatedRigidbody.threeMesh = hangingBall;
       hangingBall.mass = 35;
 
-      this.sounds.playLaserSound();
+      this.sounds.playLaser();
       button.children[1].position.y = 1.5;
     }
   }
 
   handleDominosEvent(foodContainer, foodContainerTop) {
     if (this.physicsInfo.collisions["domino0-domino1"]) {
-      this.sounds.playHitSound();
+      this.sounds.playHit();
       this.physicsInfo.collisions["domino0-domino1"] = false;
     }
 
     if (this.physicsInfo.collisions["domino1-domino2"]) {
-      this.sounds.playHitSound();
+      this.sounds.playHit();
       this.physicsInfo.collisions["domino1-domino2"] = false;
     }
 
     if (this.physicsInfo.collisions["domino2-domino3"]) {
-      this.sounds.playHitSound();
+      this.sounds.playHit();
       this.physicsInfo.collisions["domino2-domino3"] = false;
     }
 
     if (this.physicsInfo.collisions["domino3-domino4"]) {
-      this.sounds.playHitSound();
+      this.sounds.playHit();
       this.physicsInfo.collisions["domino3-domino4"] = false;
     }
 
     if (this.physicsInfo.collisions["foodContainer-domino4"]) {
+      if (foodContainerTop.material.opacity > 0) {
+        foodContainerTop.material.opacity -= 0.2;
+      }
       // The cylinder will rotate around the z-axis
       const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody);
       if (Math.abs(euler.z) > 0.7) {
         this.physicsInfo.collisions["foodContainer-domino4"] = false;
+        this.sounds.playHit();
         this.renderInfo.feedFish = true;
         foodContainerTop.visible = false; // Hide the top of the container
+        this.sounds.playSuccess();
+
+        setTimeout(() => {
+          const startMessage = document.querySelector(".start-message");
+          const title = startMessage.querySelector("h1");
+          const text = startMessage.querySelector("p");
+          const button = startMessage.querySelector("button");
+          title.innerHTML = "Nam nam!";
+          text.innerHTML = "Fisken ble matet<br>Du kan styre kameraene med talltastene 1-6 og seg deg rundt ved å bruke musa ";
+          button.innerHTML = "Start på nytt";
+          startMessage.style.display = "flex";
+        }, 2000);
       }
     }
   }

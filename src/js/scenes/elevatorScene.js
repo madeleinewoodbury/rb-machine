@@ -66,11 +66,14 @@ function addBall(renderInfo, physicsInfo, ammoHelper, position) {
   const radius = 1.5
   const mass = 8
 
-  const ball = new Sphere(radius, materials.red)
+  const ball = new Sphere(radius, materials.ballYellow)
   ball.mesh.position.set(position.x, position.y + 2, position.z + 2.75)
   ball.mesh.name = 'ball'
 
   const rigidBody = ammoHelper.createRigidBody(ball.shape, ball.mesh, mass)
+  rigidBody.setCollisionGroup = physicsInfo.collisionGroup.ball
+  rigidBody.setCollisionMask = physicsInfo.collisionGroup.bridge
+
   ball.setFriction(rigidBody)
   ball.setRestituition(rigidBody)
   ball.setRollingFriction(rigidBody)
@@ -78,6 +81,7 @@ function addBall(renderInfo, physicsInfo, ammoHelper, position) {
   physicsInfo.addRigidBody(rigidBody, ball.mesh)
   renderInfo.scene.add(ball.mesh)
   ball.mesh.userData.rigidBody = rigidBody
+  rigidBody.threeMesh = ball.mesh
 }
 
 export default addElevatorScene

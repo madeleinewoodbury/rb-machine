@@ -32,6 +32,7 @@ class ElevatorShaft {
 
     this.side1.position.set(-this.depth / 2 - 0.26, this.height / 2, 0)
     this.side1.rotateY(Math.PI / 2)
+    this.side1.castShadow = true
 
     this.side2 = this.side1.clone()
     this.side2.position.x = 5 + this.depth / 2 - 0.25
@@ -43,13 +44,14 @@ class ElevatorShaft {
     this.top.wireframe = false
     this.top.name = 'top'
     this.top.position.set(2.25, this.height + 0.25, 0)
+    this.top.castShadow = true
 
     this.mesh.add(this.side1, this.side2, this.top)
     this.mesh.rotateY(Math.PI / 2)
 
     this.button = new THREE.Mesh(
       new THREE.ConeGeometry(0.25, 0.75, 2),
-      materials.yellow
+      materials.yellow1
     )
     this.button.name = 'button'
     this.button.rotateY(Math.PI / 2)

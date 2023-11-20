@@ -23,9 +23,20 @@ class PhysicsInfo {
       pillar: 5,
       aquarium: 6,
       ball: 7,
+      bridge: 8,
+      board: 9
     };
 
     this.collisions = {};
+  }
+
+  reset() {
+    this.world = undefined;
+    this.rigidBodies = [];
+    this.tmpTrans = undefined;
+    this.collisions = {};
+
+    this.setup();
   }
 
   /**
