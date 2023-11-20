@@ -1,6 +1,4 @@
 import * as THREE from "three";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
 import GUI from "lil-gui";
 import Stats from "stats.js";
 import RenderInfo from "./RenderInfo.js";
@@ -18,8 +16,21 @@ import addHammerScene from "./scenes/hammerScene.js";
 import addFishScene from "./scenes/fishScene.js";
 import addLaserGunScene from "./scenes/laserGunScene.js";
 
-import materials from "./utils/materials.js";
-
+/**
+ * The environment class. It contains the canvas, physics info, render info,
+ * stats, ammo helper, mouse, raycaster, current intersect, gui, interactive
+ * flag, camera sequence, and sounds. It also contains the methods to
+ * initialize and start the environment, add the scene objects, add event
+ * listeners, handle mousemove, click, and keydown events, move rigid bodies,
+ * handle intersects, handle events, and animate.
+ * @example
+ * // Create a new environment
+ * const environment = new Environment();
+ * // Initialize the environment
+ * environment.initialize();
+ * // Start the environment
+ * environment.start();
+ */
 class Environment {
   constructor() {
     this.canvas = document.getElementById("canvas");
@@ -36,17 +47,6 @@ class Environment {
     this.sounds = sounds;
 
     this.addEventListeners();
-  }
-
-  reset() {
-    window.location.reload();
-    // this.interactive = false;
-    // this.physicsInfo.reset();
-    // this.renderInfo.reset();
-    // this.currentIntersect = null;
-    // this.cameraSequence = [1, 2, 3, 4, 0];
-
-    // this.start();
   }
 
   /**
@@ -88,34 +88,6 @@ class Environment {
     addHammerScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addWindScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
     addLaserGunScene(this.renderInfo, this.physicsInfo, this.ammoHelper);
-
-    // this.renderInfo.scene.add(getText())
-    this.addText();
-  }
-
-  addText() {
-    const fontLoader = new FontLoader();
-    fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-      const textGeometry = new TextGeometry("Trykk opp", {
-        font: font,
-        size: 2,
-        height: 0.5,
-        curveSegments: 5,
-        bevelEnabled: true,
-        bevelThickness: 0.03,
-        bevelSize: 0.02,
-        bevelOffset: 0,
-        bevelSegments: 4,
-      });
-
-      textGeometry.center();
-
-      const text = new THREE.Mesh(textGeometry, materials.yellow2);
-      text.position.set(60, 4, -65);
-      text.rotation.set(0, Math.PI / 2.75, 0);
-
-      this.renderInfo.scene.add(text);
-    });
   }
 
   /**
@@ -183,10 +155,10 @@ class Environment {
         // Camera 5
         this.renderInfo.switchCamera(4);
         break;
-        case "Digit6":
-          // Camera 5
-          this.renderInfo.switchCamera(5);
-          break;
+      case "Digit6":
+        // Camera 5
+        this.renderInfo.switchCamera(5);
+        break;
     }
   }
 
@@ -224,13 +196,16 @@ class Environment {
     if (intersects.length) {
       this.currentIntersect = intersects[0];
       button.material.color.setHex(0x0fff00);
-      console.log(this.currentIntersect.object.name)
     } else {
       this.currentIntersect = null;
       button.material.color.setHex(0xffff00);
     }
   }
 
+  /**
+   * Handles the events. It moves the elevator, switches the camera, and
+   * plays the sound effects for collisions events.
+   */
   handleEvents() {
     // Move elevator
     const elevator = this.renderInfo.scene.getObjectByName("elevator");
@@ -270,6 +245,12 @@ class Environment {
     }
   }
 
+  /**
+   * Handles the elevator event. It moves the elevator, plays the wind sound
+   * effect, switches the camera, and moves the ball.
+   * @param {THREE.Mesh} elevator - The elevator mesh.
+   * @param {THREE.Mesh} ball - The ball mesh.
+   */
   handleElevatorEvent(elevator, ball) {
     if (elevator.start) {
       if (elevator.position.y < 53) {
@@ -278,6 +259,7 @@ class Environment {
         if (elevator.position.y > 45 && elevator.position.y < 50) {
           this.sounds.playWind();
         } else if (elevator.position.y > 52.5) {
+          // Move ball by applying force from the direction of the wind particles
           const force = new Ammo.btVector3(-500, 0, 0);
           const relPos = new Ammo.btVector3(1, 0, 0);
           this.physicsInfo.applyForce(ball, force, relPos);
@@ -294,6 +276,12 @@ class Environment {
     }
   }
 
+  /**
+   * Handles the camera event. It switches the camera based on the ball
+   * or hangingBall position.
+   * @param {THREE.Mesh} ball - The ball mesh.
+   * @param {THREE.Mesh} hangingBall - The hanging ball mesh.
+   */
   handleCamerasEvent(ball, hangingBall) {
     if (this.cameraSequence.length === 3 && ball.position.x < 30) {
       this.renderInfo.switchCamera(this.cameraSequence.shift());
@@ -306,6 +294,13 @@ class Environment {
     }
   }
 
+  /**
+   * Handles the laser event. It plays the laser sound effect, moves the
+   * button down, and increases the mass of the hanging ball.
+   * @param {THREE.Mesh} laser - The laser mesh.
+   * @param {THREE.Mesh} button - The button mesh.
+   * @param {THREE.Mesh} hangingBall - The hanging ball mesh.
+   */
   handleLaserEvent(laser, button, hangingBall) {
     if (this.physicsInfo.collisions["hammer-laserButton"]) {
       this.physicsInfo.collisions["hammer-laserButton"] = false;
@@ -319,6 +314,7 @@ class Environment {
       );
       this.physicsInfo.world.removeRigidBody(rigidBall);
       this.physicsInfo.addRigidBody(updatedRigidbody, hangingBall);
+      // Set the collision group and mask for the updated rigid body
       updatedRigidbody.setCollisionGroup = this.physicsInfo.collisionGroup.ball;
       updatedRigidbody.setCollisionMask =
         this.physicsInfo.collisionGroup.board ||
@@ -326,13 +322,22 @@ class Environment {
 
       hangingBall.userData.rigidBody = updatedRigidbody;
       updatedRigidbody.threeMesh = hangingBall;
+      // Increase the mass of the hanging ball so it starts falling
       hangingBall.mass = 35;
 
       this.sounds.playLaser();
+      // Move the button down to indicate that it has been pressed
       button.children[1].position.y = 1.5;
     }
   }
 
+  /**
+   * Handles the dominos event. It plays the hit sound effect when the dominos
+   * fall over and the success sound effect when the fish is fed. It also displays
+   * the fish food when the container has fallen over and the start message again.
+   * @param {THREE.Mesh} foodContainer - The food container mesh.
+   * @param {THREE.Mesh} foodContainerTop - The food container top mesh.
+   */
   handleDominosEvent(foodContainer, foodContainerTop) {
     if (this.physicsInfo.collisions["domino0-domino1"]) {
       this.sounds.playHit();
@@ -356,24 +361,28 @@ class Environment {
 
     if (this.physicsInfo.collisions["foodContainer-domino4"]) {
       if (foodContainerTop.material.opacity > 0) {
+        // Make the top of the container transparent
         foodContainerTop.material.opacity -= 0.2;
       }
       // The cylinder will rotate around the z-axis
       const euler = this.ammoHelper.getEuler(foodContainer.userData.rigidBody);
       if (Math.abs(euler.z) > 0.7) {
+        // The cylinder has fallen over and the fish can be fed
         this.physicsInfo.collisions["foodContainer-domino4"] = false;
         this.sounds.playHit();
         this.renderInfo.feedFish = true;
         foodContainerTop.visible = false; // Hide the top of the container
         this.sounds.playSuccess();
 
+        // Show the start message after 2 seconds
         setTimeout(() => {
           const startMessage = document.querySelector(".start-message");
           const title = startMessage.querySelector("h1");
           const text = startMessage.querySelector("p");
           const button = startMessage.querySelector("button");
           title.innerHTML = "Nam nam!";
-          text.innerHTML = "Fisken ble matet<br>Du kan styre kameraene med talltastene 1-6 og seg deg rundt ved å bruke musa ";
+          text.innerHTML =
+            "Fisken ble matet<br>Du kan styre kameraene med talltastene 1-6 og seg deg rundt ved å bruke musa ";
           button.innerHTML = "Start på nytt";
           startMessage.style.display = "flex";
         }, 2000);
@@ -381,15 +390,23 @@ class Environment {
     }
   }
 
+  /**
+   * Animates the environment. It calculates the delta time and elapsed time,
+   * handles intersects, handles events, updates the render info, and sets the
+   * water material's time uniform.
+   * @param {number} currentTime - The current time in milliseconds.
+   */
   animate(currentTime) {
     const deltaTime = this.renderInfo.clock.getDelta();
     const elapsedTime = this.renderInfo.clock.getElapsedTime();
     const water = this.renderInfo.scene.getObjectByName("water");
 
     this.stats.begin();
+    // check for mouse intersections
     this.interactive && this.handleIntersects();
     this.handleEvents();
     this.physicsInfo.update(deltaTime);
+    // update the water material's time uniform
     water.material.uniforms.time.value = elapsedTime;
     this.renderInfo.update(deltaTime);
     this.stats.end();

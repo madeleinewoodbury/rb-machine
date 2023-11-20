@@ -1,27 +1,12 @@
+// -------------------------------------------------------------------------------
+// Water texture og cloud texture er fra kodeeskempel fra modul 8/shaderMaterial4
+// -------------------------------------------------------------------------------
+
 import * as THREE from 'three'
 const textureLoader = new THREE.TextureLoader()
 
-// Brick texture
-const bricks = {
-  color: textureLoader.load('/textures/bricks/bricks2.jpg'),
-  normal: textureLoader.load('/textures/bricks/bricks2_normalmap.jpg'),
-  displacement: textureLoader.load(
-    '/textures/bricks/bricks2_displacementmap.jpg'
-  ),
-  alpha: textureLoader.load('/textures/bricks/bricks2_alphamap.jpg'),
-}
 
-bricks.color.colorSpace = THREE.SRGBColorSpace
-bricks.color.wrapS = THREE.RepeatWrapping
-bricks.color.wrapT = THREE.RepeatWrapping
-bricks.normal.wrapS = THREE.RepeatWrapping
-bricks.normal.wrapT = THREE.RepeatWrapping
-bricks.displacement.wrapS = THREE.RepeatWrapping
-bricks.displacement.wrapT = THREE.RepeatWrapping
-bricks.alpha.wrapS = THREE.RepeatWrapping
-bricks.alpha.wrapT = THREE.RepeatWrapping
-
-// Grass texture
+// Grass texture from https://3dtextures.me
 const grass = {
   color: textureLoader.load('/textures/grass/grass_color.jpg'),
   normal: textureLoader.load('/textures/grass/grass_normal.jpg'),
@@ -43,7 +28,7 @@ grass.normal.wrapT = THREE.RepeatWrapping
 grass.displacement.wrapS = THREE.RepeatWrapping
 grass.displacement.wrapT = THREE.RepeatWrapping
 
-// Metal grill texture
+// Metal grill texture from https://3dtextures.me
 const metalGrill = {
   alpha: textureLoader.load('/textures/metalGrill/Metal_Grill_alpha.jpg'),
   ao: textureLoader.load('/textures/metalGrill/Metal_Grill_ao.jpg'),
@@ -58,7 +43,7 @@ const metalGrill = {
 
 metalGrill.color.colorSpace = THREE.SRGBColorSpace
 
-// Wood texture
+// Wood texture from https://3dtextures.me
 const wood = {
   color: textureLoader.load('/textures/wood/Wood_Pattern_color.jpg'),
   normal: textureLoader.load('/textures/wood/Wood_Pattern_normal.jpg'),
@@ -69,7 +54,7 @@ const wood = {
 
 wood.color.colorSpace = THREE.SRGBColorSpace
 
-// Scifi wall
+// Scifi wall from https://3dtextures.me
 const sciFiWall = {
   color: textureLoader.load(
     '/textures/scifiWall/Stylized_Sci-fi_Wall_color.jpg'
@@ -91,6 +76,7 @@ const sciFiWall = {
 
 sciFiWall.color.colorSpace = THREE.SRGBColorSpace
 
+// Stone wall texture from https://3dtextures.me
 const stoneWall = {
   color: textureLoader.load('/textures/stoneWall/Substance_graph_colors.jpg'),
   normal: textureLoader.load('/textures/stoneWall/Substance_normal.jpg'),
@@ -101,6 +87,7 @@ const stoneWall = {
 
 stoneWall.color.colorSpace = THREE.SRGBColorSpace
 
+// Metal texture from https://3dtextures.me
 const metal = {
   color: textureLoader.load('/textures/metal/basecolor.jpg'),
   normal: textureLoader.load('/textures/metal/normal.jpg'),
@@ -109,9 +96,8 @@ const metal = {
 }
 
 const foodContainer = {
-  sides: textureLoader.load('/textures/fiskemat2.png'),
-  top: textureLoader.load('/textures/food.png'),
-  alpha: textureLoader.load('/textures/food-alpha.png'),
+  sides: textureLoader.load('/textures/fishFood/fiskemat.png'),
+  top: textureLoader.load('/textures/fishFood/food.png'),
 }
 
 foodContainer.sides.colorSpace = THREE.SRGBColorSpace
@@ -120,8 +106,6 @@ foodContainer.sides.wrapS = THREE.RepeatWrapping
 foodContainer.sides.wrapT = THREE.RepeatWrapping
 foodContainer.top.wrapS = THREE.RepeatWrapping
 foodContainer.top.wrapT = THREE.RepeatWrapping
-foodContainer.alpha.wrapS = THREE.RepeatWrapping
-foodContainer.alpha.wrapT = THREE.RepeatWrapping
 
 // Water texture
 const waterTexture = textureLoader.load('/textures/water.jpg')
@@ -143,7 +127,6 @@ const waterUniforms = {
 }
 
 const textures = {
-  bricks,
   grass,
   waterUniforms,
   metalGrill,

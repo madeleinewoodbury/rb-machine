@@ -13,6 +13,7 @@ function addLaserGunScene(renderInfo, physicsInfo, ammoHelper) {
 // Add the laser gun model to the scene.
 function addLaserGun(renderInfo) {
   const loader = new GLTFLoader();
+  // Robot Enemy Legs Gun byQuaternius
   loader.load("./models/LaserGun.glb", (gltf) => {
     const laserGun = gltf.scene;
     laserGun.position.set(-66, 41, -52.5);

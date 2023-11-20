@@ -22,18 +22,6 @@ class RenderInfo {
     this.setupRenderer();
   }
 
-  reset() {
-    this.scene = new THREE.Scene();
-    this.clock = new THREE.Clock();
-    this.cameras = [];
-    this.feedFish = false;
-
-    this.setupCameras();
-    this.setupControls();
-    this.setupRenderer();
-  }
-
-
   /**
    * Sets up the cameras. Creates 6 cameras and adds them to the scene.
    * The first camera is the active camera.
@@ -86,25 +74,17 @@ class RenderInfo {
     this.cameras.push(camera5);
     this.scene.add(camera5);
 
-    const camera6 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000);
-    camera6.position.set(32, 45, 45);
-    camera6.target = new THREE.Vector3(-50, 30, -55);
+    const camera6 = new THREE.PerspectiveCamera(65, aspectRatio, 0.1, 1000);
+    camera6.position.set(-35, 50, 65);
+    camera6.target = new THREE.Vector3(-10, 20, 0);
     camera6.lookAt(camera6.target);
     camera6.name = "camera6";
 
     this.cameras.push(camera6);
     this.scene.add(camera6);
 
-    const testCamera = new THREE.PerspectiveCamera(65, aspectRatio, 0.1, 1000);
-    testCamera.position.set(-35, 50, 65);
-    testCamera.target = new THREE.Vector3(-10, 20, 0);
-    testCamera.lookAt(testCamera.target);
-    testCamera.name = "testCamera";
-
-    this.cameras.push(testCamera);
-    this.scene.add(testCamera);
-
-    this.activeCamera = this.cameras[6];
+    // Set the active camera
+    this.activeCamera = this.cameras[5];
   }
 
   /**
@@ -145,6 +125,8 @@ class RenderInfo {
     if (this.activeCamera === this.cameras[cameraIndex]) {
       return;
     }
+    const cameraInfo = document.querySelector(".camera-info");
+    cameraInfo.innerHTML = `Kamera ${cameraIndex + 1}`;
 
     this.activeCamera = this.cameras[cameraIndex];
     this.controls.object = this.activeCamera;
@@ -179,7 +161,6 @@ class RenderInfo {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
   }
 
-
   /**
    * Animate the scene objects.
    * @param {number} deltaTime - The time in seconds since the last frame.
@@ -196,7 +177,7 @@ class RenderInfo {
   /**
    * Animate the windmill. Rotates the blades.
    * @param {number} deltaTime - The time in seconds since the last frame.
-   */ 
+   */
   animateWindMill(deltaTime) {
     const rotationSpeed = Math.PI / 2;
     const blade1 = this.scene.getObjectByName("blade1");
@@ -212,7 +193,7 @@ class RenderInfo {
   /**
    * Animate the wind particles. Moves the particles and changes the opacity.
    * @param {number} deltaTime - The time in seconds since the last frame.
-   */ 
+   */
   animateParticles(deltaTime) {
     const windParticles = this.scene.getObjectByName("windParticles");
     const speed = 3;
@@ -233,7 +214,7 @@ class RenderInfo {
 
   /**
    * Animate the fish food. Moves the fish food and changes the opacity.
-   */ 
+   */
   animateFishFood() {
     const fishFood = this.scene.getObjectByName("fishFood");
 

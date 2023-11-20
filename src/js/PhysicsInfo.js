@@ -27,22 +27,13 @@ class PhysicsInfo {
       board: 9
     };
 
+    // Object for storing collisions between objects
     this.collisions = {};
-  }
-
-  reset() {
-    this.world = undefined;
-    this.rigidBodies = [];
-    this.tmpTrans = undefined;
-    this.collisions = {};
-
-    this.setup();
   }
 
   /**
    * @description Sets up the physics world by setting up the collision configuration,
    * dispatcher, broadphase, and solver. It also sets the gravity of the world.
-   * @returns {void}
    */
   setup() {
     this.tmpTrans = new Ammo.btTransform();
@@ -65,7 +56,6 @@ class PhysicsInfo {
    * Add rigid body to the physics world and add the mesh to the rigid bodies array
    * @param {Ammo.btRigidBody} body - The rigid body to add to the physics world.
    * @param {THREE.Mesh} mesh - The mesh to add to the rigid bodies array.
-   * @returns {void}
    */
   addRigidBody(body, mesh) {
     this.world.addRigidBody(body);
@@ -78,7 +68,6 @@ class PhysicsInfo {
    * @param {Ammo.btRigidBody} bodyB - The second body.
    * @param {Ammo.btVector3} pivotA - The pivot point on the first body.
    * @param {Ammo.btVector3} pivotB - The pivot point on the second body.
-   * @returns {void}
    */
   addP2PConstraint(bodyA, bodyB, pivotA, pivotB) {
     const p2p = new Ammo.btPoint2PointConstraint(bodyA, bodyB, pivotA, pivotB);
@@ -93,7 +82,6 @@ class PhysicsInfo {
    * @param {Ammo.btVector3} pivotB - The pivot point on the second body.
    * @param {Ammo.btVector3} axisA - The axis of rotation on the first body.
    * @param {Ammo.btVector3} axisB - The axis of rotation on the second body.
-   * @returns {void}
    */ 
   addHingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB) {
     const hingeConstraint = new Ammo.btHingeConstraint(
@@ -115,7 +103,6 @@ class PhysicsInfo {
    * @param {THREE.Mesh} mesh - The mesh to apply the force to.
    * @param {Ammo.btVector3} force - The force to apply.
    * @param {Ammo.btVector3} relPos - The relative position to apply the force to.
-   * @returns {void}
    */ 
   applyForce(mesh, force, relPos) {
     if (!mesh.userData.rigidBody) return;
@@ -128,7 +115,6 @@ class PhysicsInfo {
   /**
    * Update the physics world. This method should be called every frame. 
    * @param {number} deltaTime - The time since the last frame.
-   * @returns {void}
    */ 
   update(deltaTime) {
     // Step world
@@ -155,7 +141,6 @@ class PhysicsInfo {
 
   /**
    * Check if there are any new collisions. If there are, add them to the collisions object. 
-   * @returns {void}
    */
   checkCollisions() {
     // Find all possible contact points (broadsphase)

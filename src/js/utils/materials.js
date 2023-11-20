@@ -1,25 +1,22 @@
 import * as THREE from 'three'
 import textures from './textures.js'
 
-// Define all materials here
 const materials = {
-  white: new THREE.MeshStandardMaterial({ color: 0xffffff, side: THREE.DoubleSide }),
+  white: new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.2 }),
   black: new THREE.MeshStandardMaterial({ color: 0x000000 }),
-  red: new THREE.MeshStandardMaterial({ color: 0xff0000 }),
-  blue: new THREE.MeshStandardMaterial({ color: 0x0000ff}),
-  yellow1: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
-  yellow2: new THREE.MeshStandardMaterial({ color: 0xdbbe00 }),
+  red: new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.3, roughness: 0.3}),
+  elevatorButton: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
+  text: new THREE.MeshStandardMaterial({ color: 0xdbbe00 }),
   grey: new THREE.MeshStandardMaterial({ color: 0xc2c2c2 }),
   ballYellow: new THREE.MeshStandardMaterial({ color: 0xfbfb00, metalness: 0.5, roughness: 0.1 }),
   ballRed: new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.4, roughness: 0.2 }),
 
-  plane: new THREE.MeshStandardMaterial({ color: 0x158000 }),
-  tube: new THREE.MeshStandardMaterial({
+  elevatorShaft: new THREE.MeshStandardMaterial({
     color: 0x00ffff,
     wireframe: false,
     transparent: true,
     opacity: 0.5,
-  }), // cyan
+  }), // 
   wind: new THREE.PointsMaterial({
     size: 0.25,
     sizeAttenuation: true,
@@ -42,13 +39,6 @@ const materials = {
     uniforms: textures.waterUniforms,
     vertexShader: document.getElementById('vertexShader').textContent,
     fragmentShader: document.getElementById('fragmentShader').textContent,
-  }),
-  bricks: new THREE.MeshStandardMaterial({
-    map: textures.bricks.color,
-    normalMap: textures.bricks.normal,
-    displacementMap: textures.bricks.displacement,
-    displacementScale: 0.1,
-    alphaMap: textures.bricks.alpha,
   }),
   grass: new THREE.MeshStandardMaterial({
     map: textures.grass.color,
@@ -94,8 +84,6 @@ const materials = {
   stoneWall: new THREE.MeshStandardMaterial({
     map: textures.stoneWall.color,
     normalMap: textures.stoneWall.normal,
-    // displacementMap: textures.stoneWall.displacement,
-    // displacementScale: 0.01,
     roughnessMap: textures.stoneWall.roughness,
     roughness: 0.9,
     aoMap: textures.stoneWall.ao,

@@ -1,3 +1,4 @@
+// sound effects from https://pixabay.com
 const sounds = {
   hit: new Audio("/sounds/hit.mp3"),
   ding: new Audio("/sounds/ding.mp3"),
@@ -10,7 +11,7 @@ const sounds = {
   success: new Audio("/sounds/success.mp3"),
 
   playDing: function() {
-    this.ding.volume = .8
+    this.ding.volume = .75
     this.ding.currentTime = 0;
     this.ding.play();
   },
@@ -45,19 +46,19 @@ const sounds = {
   },
   playTube: function() {
     if(!this.tube.paused) return;
-    this.tube.volume = .2;
+    this.tube.volume = .15;
     this.tube.currentTime = 0;
     this.tube.play();
   },
   playBoing: function() {
     if(!this.boing.paused) return;
-    this.boing.volume = .7;
+    this.boing.volume = .6;
     this.boing.currentTime = 0;
     this.boing.play();
   },
   playSuccess: function() {
     if(!this.success.paused) return;
-    this.success.volume = 0.75;
+    this.success.volume = 0.7;
     this.success.currentTime = 0;
     this.success.play();
   }

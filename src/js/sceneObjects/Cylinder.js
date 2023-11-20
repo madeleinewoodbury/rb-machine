@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from "three";
 
 /**
  * Cylinder class. The cylinder is made of a mesh and a shape.
@@ -16,14 +16,14 @@ class Cylinder {
     radialSegments = 24,
     heightSegments = 1
   ) {
-    this.radius = radius
-    this.height = height
-    this.material = material
+    this.radius = radius;
+    this.height = height;
+    this.material = material;
 
-    this.radialSegments = radialSegments
-    this.heightSegments = heightSegments
+    this.radialSegments = radialSegments;
+    this.heightSegments = heightSegments;
 
-    this.generate()
+    this.generate();
   }
 
   /**
@@ -39,15 +39,15 @@ class Cylinder {
         this.heightSegments
       ),
       this.material
-    )
+    );
 
-    this.mesh.position.set(0, this.height / 2, 0)
+    this.mesh.position.set(0, this.height / 2, 0);
 
     this.shape = new Ammo.btCylinderShape(
       new Ammo.btVector3(this.radius, this.height / 2, this.radius)
-    )
-    this.shape.setMargin(0.05)
+    );
+    this.shape.setMargin(0.05);
   }
 }
 
-export default Cylinder
+export default Cylinder;

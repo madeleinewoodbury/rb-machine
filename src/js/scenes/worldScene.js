@@ -17,8 +17,7 @@ function addSkyBox(renderInfo) {
   let materialArray = [];
 
   // Load the images for the skybox.
-  // The images are from https://opengameart.org/content/skybox-pack-1.
-  // TODO: verify that the images are from the above source.
+  // The images are from polyhaven.com 
   for (let i = 0; i < 6; i++)
     materialArray.push(
       new THREE.MeshBasicMaterial({

@@ -76,9 +76,9 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
     materials.foodContainer
   );
   foodContainer.mesh.position.set(position.x, position.y, position.z);
-  foodContainer.mesh.rotateY(1.2)
+  foodContainer.mesh.rotateY(1.2);
   foodContainer.mesh.name = "foodContainer";
-  
+
   const rigidBody = ammoHelper.createRigidBody(
     foodContainer.shape,
     foodContainer.mesh,
@@ -106,8 +106,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   top.position.set(position.x, position.y + size.height / 2 + 0.01, position.z);
   top.rotateX(-Math.PI / 2);
   renderInfo.scene.add(top);
-
-  }
+}
 
 // Add the fish food to the scene. The fish food is made of particles. The
 // particles are initially transparent. When the food container is hit by a

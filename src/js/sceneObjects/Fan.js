@@ -39,9 +39,9 @@ class Fan {
     this.addBlades();
   }
 
-  /** 
+  /**
    * Add the base of the fan. The base is made up of a cylinder geometry
-   */ 
+   */
   addBase() {
     const base = new THREE.Mesh(
       new THREE.CylinderGeometry(
@@ -60,7 +60,7 @@ class Fan {
 
   /**
    * Add the top. The top is made up of a cylinder geometry.
-   */ 
+   */
   addTop() {
     const capsule = new THREE.Mesh(
       new THREE.CapsuleGeometry(

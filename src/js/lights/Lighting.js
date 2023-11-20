@@ -3,7 +3,6 @@
 // Nytt, lagt til DirectionalLight.js
 // --------------------------------------------------
 
-
 import * as THREE from "three";
 import AmbientLight from "./AmbientLight.js";
 import DirectionalLight from "./DirectionalLight.js";
@@ -15,7 +14,6 @@ import PointLight from "./PointLight.js";
  * const lighting = new Lighting()
  * lighting.addLights(gui)
  * scene.add(lighting.group)
- * @return {void}
  */
 class Lighting {
   constructor() {
@@ -33,29 +31,28 @@ class Lighting {
     };
 
     this.pointLight1 = {
-      name: 'Point Light 1',
-      color: '#ffffff',
+      name: "Point Light 1",
+      color: "#ffffff",
       intensity: 70,
       distance: 50,
       position: { x: -24, y: 13, z: 25 },
       castShadow: true,
       shadowMapSize: 1024,
-    }
+    };
     this.pointLight2 = {
-      name: 'Point Light 2',
-      color: '#ffffff',
+      name: "Point Light 2",
+      color: "#ffffff",
       intensity: 10,
       distance: 3,
       position: { x: 58, y: 6, z: -56 },
       castShadow: false,
-    }
+    };
   }
 
   /**
    * Adds GUI controls for the lighting group.
    * @method addGUIFolder
    * @param {dat.GUI} gui - The GUI to add the light controls to.
-   * @return {void}
    */
   addLights(gui) {
     this.addAmbientLight(gui, this.amibientLight);
@@ -69,7 +66,6 @@ class Lighting {
    * @method addAmbientLight
    * @param {dat.GUI} gui - The GUI to add the light controls to.
    * @param {object} light - The light to add.
-   * @return {void}
    */
   addAmbientLight(gui, light) {
     const { name, color, intensity } = light;
@@ -87,7 +83,6 @@ class Lighting {
    * @method addDirectionalLight
    * @param {dat.GUI} gui - The GUI to add the light controls to.
    * @param {object} light - The light to add.
-   * @return {void}
    */
   addDirectionalLight(gui, light) {
     const { name, color, intensity, position } = light;
@@ -115,35 +110,34 @@ class Lighting {
     );
   }
 
-    /**
+  /**
    * Adds a point light to the lighting group.
    * @method addPointLight
    * @param {dat.GUI} gui - The GUI to add the light controls to.
    * @param {object} light - The light to add.
-   * @return {void}
    */
-    addPointLight(gui, light) {
-      const {
-        name,
-        color,
-        intensity,
-        distance,
-        position,
-        castShadow,
-        shadowMapSize,
-      } = light
-  
-      const folder = gui.addFolder(name)
-      const pointLight = new PointLight(color, intensity, distance, position)
-  
-      pointLight.light.name = light.name
-      pointLight.light.castShadow = castShadow
-      pointLight.light.shadow.mapSize.width = shadowMapSize
-      pointLight.addGUIFolder(folder)
-      pointLight.addHelper(1, folder)
-  
-      this.group.add(pointLight.light, pointLight.helper)
-    }
+  addPointLight(gui, light) {
+    const {
+      name,
+      color,
+      intensity,
+      distance,
+      position,
+      castShadow,
+      shadowMapSize,
+    } = light;
+
+    const folder = gui.addFolder(name);
+    const pointLight = new PointLight(color, intensity, distance, position);
+
+    pointLight.light.name = light.name;
+    pointLight.light.castShadow = castShadow;
+    pointLight.light.shadow.mapSize.width = shadowMapSize;
+    pointLight.addGUIFolder(folder);
+    pointLight.addHelper(1, folder);
+
+    this.group.add(pointLight.light, pointLight.helper);
+  }
 }
 
 export default Lighting;

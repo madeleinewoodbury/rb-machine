@@ -9,7 +9,7 @@ import Cylinder from "./Cylinder.js";
  * @param {number} height - The height of the handle.
  * @param {number} malletRadius - The radius of the mallet.
  * @param {number} malletWidth - The width of the mallet.
- */ 
+ */
 class Hammer {
   constructor(handleRadius, height, malletRadius, malletWidth) {
     this.handleRadius = handleRadius;
