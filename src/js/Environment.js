@@ -109,6 +109,7 @@ class Environment {
    * @param {MouseEvent} e - The mousemove event.
    */
   mouseMove(e) {
+    // calculate mouse position in normalized device coordinates (-1 to +1)
     this.mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
     this.mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
   }
@@ -162,26 +163,7 @@ class Environment {
     }
   }
 
-  /**
-   * Moves the rigid body in the given direction.
-   * @param {THREE.Mesh} mesh - The mesh to move.
-   * @param {THREE.Vector3} direction - The direction to move the mesh.
-   */
-  moveRigidBody(mesh, direction) {
-    const transform = new Ammo.btTransform();
-    const motionState = mesh.userData.rigidBody.getMotionState();
-    motionState.getWorldTransform(transform);
-
-    const position = transform.getOrigin();
-    transform.setOrigin(
-      new Ammo.btVector3(
-        position.x() + direction.x,
-        position.y() + direction.y,
-        position.z() + direction.z
-      )
-    );
-    motionState.setWorldTransform(transform);
-  }
+ 
 
   /**
    * Handles the intersects. It sets the current intersect to the first
@@ -254,7 +236,7 @@ class Environment {
   handleElevatorEvent(elevator, ball) {
     if (elevator.start) {
       if (elevator.position.y < 53) {
-        this.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
+        this.ammoHelper.moveRigidBody(elevator, { x: 0, y: 0.06, z: 0 });
 
         if (elevator.position.y > 45 && elevator.position.y < 50) {
           this.sounds.playWind();
@@ -322,8 +304,6 @@ class Environment {
 
       hangingBall.userData.rigidBody = updatedRigidbody;
       updatedRigidbody.threeMesh = hangingBall;
-      // Increase the mass of the hanging ball so it starts falling
-      hangingBall.mass = 35;
 
       this.sounds.playLaser();
       // Move the button down to indicate that it has been pressed

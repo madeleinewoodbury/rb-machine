@@ -16,8 +16,8 @@ class Elevator {
 
     this.friction = 0.3;
     this.restituition = 0.0;
-    this.collisionFlag = 2;
-    this.activatuonState = 4;
+    this.collisionFlag = 2; // 2: kinematic object
+    this.activationState = 4; // 4: never sleep
     this.material = materials.metal;
 
     this.generate();

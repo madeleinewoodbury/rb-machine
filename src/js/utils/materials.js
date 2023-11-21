@@ -3,15 +3,15 @@ import textures from './textures.js'
 
 const materials = {
   white: new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.2, roughness: 0.2 }),
-  black: new THREE.MeshStandardMaterial({ color: 0x000000 }),
+  black: new THREE.MeshPhongMaterial({ color: 0x000000 }),
   red: new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.3, roughness: 0.3}),
-  elevatorButton: new THREE.MeshStandardMaterial({ color: 0xffff00 }),
-  text: new THREE.MeshStandardMaterial({ color: 0xdbbe00 }),
-  grey: new THREE.MeshStandardMaterial({ color: 0xc2c2c2 }),
+  elevatorButton: new THREE.MeshPhongMaterial({ color: 0xffff00 }),
+  text: new THREE.MeshPhongMaterial({ color: 0xdbbe00 }),
+  grey: new THREE.MeshPhongMaterial({ color: 0xc2c2c2 }),
   ballYellow: new THREE.MeshStandardMaterial({ color: 0xfbfb00, metalness: 0.5, roughness: 0.1 }),
   ballRed: new THREE.MeshStandardMaterial({ color: 0xff0000, metalness: 0.4, roughness: 0.2 }),
 
-  elevatorShaft: new THREE.MeshStandardMaterial({
+  elevatorShaft: new THREE.MeshPhongMaterial({
     color: 0x00ffff,
     wireframe: false,
     transparent: true,
@@ -22,7 +22,7 @@ const materials = {
     sizeAttenuation: true,
     color: 0xffffff,
   }),
-  hammerHandle: new THREE.MeshStandardMaterial({ color: 0xd5a785 }),
+  hammerHandle: new THREE.MeshPhongMaterial({ color: 0xd5a785 }),
   water: new THREE.MeshStandardMaterial({
     color: 0x0000ff,
     transparent: true,
@@ -40,7 +40,7 @@ const materials = {
     vertexShader: document.getElementById('vertexShader').textContent,
     fragmentShader: document.getElementById('fragmentShader').textContent,
   }),
-  grass: new THREE.MeshStandardMaterial({
+  grass: new THREE.MeshLambertMaterial({
     map: textures.grass.color,
     normalMap: textures.grass.normal,
     displacementMap: textures.grass.displacement,
@@ -96,11 +96,11 @@ const materials = {
     roughness: 0.9,
     aoMap: textures.metal.ao,
   }),
-  foodContainer: new THREE.MeshStandardMaterial({
+  foodContainer: new THREE.MeshLambertMaterial({
     map: textures.foodContainer.sides,
     side: THREE.DoubleSide,
   }),
-  foodContainerTop: new THREE.MeshStandardMaterial({
+  foodContainerTop: new THREE.MeshLambertMaterial({
     map: textures.foodContainer.top,
     transparent: true,
   }),

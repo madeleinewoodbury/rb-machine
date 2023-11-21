@@ -4,10 +4,10 @@
 
 /**
  * Class for handling physics in the scene. It sets up the physics world and
- * updates the world every frame. It also handles collisions. 
+ * updates the world every frame. It also handles collisions.
  * @class PhysicsInfo
  * @param {number} gravity - The gravity of the physics world. Defaults to -9.82.
- */ 
+ */
 class PhysicsInfo {
   constructor(gravity = -9.82) {
     this.gravity = gravity;
@@ -18,13 +18,11 @@ class PhysicsInfo {
     this.collisionGroup = {
       domino: 1,
       foodContainer: 2,
-      hammer: 3,
-      button: 4,
-      pillar: 5,
-      aquarium: 6,
-      ball: 7,
-      bridge: 8,
-      board: 9
+      pillar: 4,
+      aquarium: 8,
+      ball: 16,
+      bridge: 32,
+      board: 64,
     };
 
     // Object for storing collisions between objects
@@ -75,35 +73,11 @@ class PhysicsInfo {
   }
 
   /**
-   * Add a hinge constraint between two bodies
-   * @param {Ammo.btRigidBody} bodyA - The first body.
-   * @param {Ammo.btRigidBody} bodyB - The second body.
-   * @param {Ammo.btVector3} pivotA - The pivot point on the first body.
-   * @param {Ammo.btVector3} pivotB - The pivot point on the second body.
-   * @param {Ammo.btVector3} axisA - The axis of rotation on the first body.
-   * @param {Ammo.btVector3} axisB - The axis of rotation on the second body.
-   */ 
-  addHingeConstraint(bodyA, bodyB, pivotA, pivotB, axisA, axisB) {
-    const hingeConstraint = new Ammo.btHingeConstraint(
-      bodyA,
-      bodyB,
-      pivotA,
-      pivotB,
-      axisA,
-      axisB,
-      true
-    );
-
-    hingeConstraint.enableAngularMotor(true, 1, 50);
-    this.world.addConstraint(hingeConstraint, false);
-  }
-
-  /**
    * Apply a force to a rigid body
    * @param {THREE.Mesh} mesh - The mesh to apply the force to.
    * @param {Ammo.btVector3} force - The force to apply.
    * @param {Ammo.btVector3} relPos - The relative position to apply the force to.
-   */ 
+   */
   applyForce(mesh, force, relPos) {
     if (!mesh.userData.rigidBody) return;
 
@@ -113,9 +87,9 @@ class PhysicsInfo {
   }
 
   /**
-   * Update the physics world. This method should be called every frame. 
+   * Update the physics world. This method should be called every frame.
    * @param {number} deltaTime - The time since the last frame.
-   */ 
+   */
   update(deltaTime) {
     // Step world
     this.world.stepSimulation(deltaTime, 10);
@@ -140,7 +114,7 @@ class PhysicsInfo {
   }
 
   /**
-   * Check if there are any new collisions. If there are, add them to the collisions object. 
+   * Check if there are any new collisions. If there are, add them to the collisions object.
    */
   checkCollisions() {
     // Find all possible contact points (broadsphase)
@@ -175,7 +149,7 @@ class PhysicsInfo {
                 // Add the collision to the newCollisions object
                 this.collisions[collisionKey] = true;
               }
-            } 
+            }
           }
         }
       }

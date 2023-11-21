@@ -30,6 +30,7 @@ class RenderInfo {
     const aspectRatio = window.innerWidth / window.innerHeight;
 
     const camera1 = new THREE.PerspectiveCamera(45, aspectRatio, 0.1, 1000);
+    camera1.maxDistance = 200;
     camera1.position.set(0, 60, 120);
     camera1.target = new THREE.Vector3(0, 20, 0);
     camera1.lookAt(camera1.target);
@@ -39,6 +40,7 @@ class RenderInfo {
     this.scene.add(camera1);
 
     const camera2 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    camera2.maxDistance = 65;
     camera2.position.set(82, 10, -54);
     camera2.target = new THREE.Vector3(70, 10, -55);
     camera2.lookAt(camera2.target);
@@ -48,6 +50,7 @@ class RenderInfo {
     this.scene.add(camera2);
 
     const camera3 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    camera3.maxDistance = 95;
     camera3.position.set(40, 60, -100);
     camera3.target = new THREE.Vector3(60, 40, -55);
     camera3.lookAt(camera3.target);
@@ -57,6 +60,7 @@ class RenderInfo {
     this.scene.add(camera3);
 
     const camera4 = new THREE.PerspectiveCamera(60, aspectRatio, 0.1, 1000);
+    camera4.maxDistance = 100;
     camera4.position.set(-50, 40, -90);
     camera4.target = new THREE.Vector3(-10, 40, -55);
     camera4.lookAt(camera4.target);
@@ -66,6 +70,7 @@ class RenderInfo {
     this.scene.add(camera4);
 
     const camera5 = new THREE.PerspectiveCamera(40, aspectRatio, 0.1, 1000);
+    camera5.maxDistance = 140;
     camera5.position.set(50, 50, 30);
     camera5.target = new THREE.Vector3(-50, 30, -55);
     camera5.lookAt(camera5.target);
@@ -75,6 +80,7 @@ class RenderInfo {
     this.scene.add(camera5);
 
     const camera6 = new THREE.PerspectiveCamera(65, aspectRatio, 0.1, 1000);
+    camera6.maxDistance = 160;
     camera6.position.set(-35, 50, 65);
     camera6.target = new THREE.Vector3(-10, 20, 0);
     camera6.lookAt(camera6.target);
@@ -84,7 +90,7 @@ class RenderInfo {
     this.scene.add(camera6);
 
     // Set the active camera
-    this.activeCamera = this.cameras[5];
+    this.activeCamera = this.cameras[6];
   }
 
   /**
@@ -95,6 +101,7 @@ class RenderInfo {
     this.controls = new OrbitControls(this.activeCamera, this.canvas);
     this.controls.enableDamping = true;
     this.controls.target = this.activeCamera.target;
+    this.controls.maxDistance = this.activeCamera.maxDistance;
   }
 
   /**
@@ -131,6 +138,7 @@ class RenderInfo {
     this.activeCamera = this.cameras[cameraIndex];
     this.controls.object = this.activeCamera;
     this.controls.target = this.activeCamera.target;
+    this.controls.maxDistance = this.activeCamera.maxDistance;
   }
 
   /**

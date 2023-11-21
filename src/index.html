@@ -1,24 +1,25 @@
 <!-- Shader script fra kodeeksempel: modul8/shaderMaterial4 -->
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>RB Maskin</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
 
-  <body>
-    <div class="camera-info">Kamera 6</div>
-      <div class="start-message">
-        <h1>Mat fisken</h1>
-        <p>Start heisen for å sette i gang</p>
-        <div class="btn-container">
-        <button id="startBtn">Gå til heisen</button>
-      </div>
-      </div>
-    <canvas id="canvas"></canvas>
-    <script type="x-shader/x-vertex" id="vertexShader">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RB Maskin</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div class="camera-info">Kamera 6</div>
+  <div class="start-message">
+    <h1>Mat fisken</h1>
+    <p>Start heisen for å sette i gang</p>
+    <div class="btn-container">
+      <button id="startBtn">Gå til heisen</button>
+    </div>
+  </div>
+  <canvas id="canvas"></canvas>
+  <script type="x-shader/x-vertex" id="vertexShader">
       varying vec2 vUv;
       void main() {
           gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
@@ -26,7 +27,7 @@
       }
     </script>
 
-    <script type="x-shader/x-fragment" id="fragmentShader">
+  <script type="x-shader/x-fragment" id="fragmentShader">
       uniform float baseSpeed;
       uniform float noiseScale;
       uniform float alpha;
@@ -47,7 +48,8 @@
           gl_FragColor = baseColor + vec4(0.0, 0.0, 1.0, 1.0);
       }
     </script>
-    <script src="../lib/ammo/ammo.js"></script>
-    <script type="module" src="./js/app.js"></script>
-  </body>
+  <script src="../lib/ammo/ammo.js"></script>
+  <script type="module" src="./js/app.js"></script>
+</body>
+
 </html>

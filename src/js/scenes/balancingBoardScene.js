@@ -73,7 +73,7 @@ function addBalancingBoard(renderInfo, physicsInfo, ammoHelper, position) {
   ammoHelper.setTransform(board.mesh);
   compoundShape.addChildShape(ammoHelper.transform, board.shape);
 
-  const boardEdge = new Box(0.5, 1.5, 3, materials);
+  const boardEdge = new Box(0.5, 1.5, 3, materials.wood);
   boardEdge.mesh.position.set(
     10 - boardEdge.width / 2,
     cylinder.height + board.height + boardEdge.height / 2,

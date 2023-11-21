@@ -78,6 +78,7 @@ function addFoodContainer(renderInfo, physicsInfo, ammoHelper, size, position) {
   foodContainer.mesh.position.set(position.x, position.y, position.z);
   foodContainer.mesh.rotateY(1.2);
   foodContainer.mesh.name = "foodContainer";
+  foodContainer.mesh.castShadow = true
 
   const rigidBody = ammoHelper.createRigidBody(
     foodContainer.shape,

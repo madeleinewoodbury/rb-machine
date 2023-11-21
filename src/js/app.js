@@ -4,10 +4,9 @@ import Environment from "./Environment.js";
 Ammo().then(async (AmmoLib) => {
   Ammo = AmmoLib;
 
-  // Initialize the environment
   const environment = new Environment();
 
-  // Start
+  // Initialize the environment
   environment.initialize();
 
   const startMessage = document.querySelector(".start-message");
@@ -30,7 +29,7 @@ Ammo().then(async (AmmoLib) => {
   }
 
   // Check if the game has been reset or if it's the first time
-  if(localStorage.getItem("reset") === "true") {
+  if (localStorage.getItem("reset") === "true") {
     localStorage.setItem("reset", "false");
     // Add the event listener for the reset button
     startBtn.addEventListener("click", () => {
