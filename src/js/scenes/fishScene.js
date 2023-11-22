@@ -5,7 +5,7 @@ import Aquarium from "../sceneObjects/Aquarium.js";
 
 // Add a fish scene with an aquarium, water, and a fish.
 function addFishScene(renderInfo, physicsInfo, ammoHelper) {
-  const aquariumSize = { width: 30, height: 10, depth: 20, edgeWith: 0.1 };
+  const aquariumSize = { width: 30, height: 10, depth: 20, edgeWith: 0.2 };
   const position = { x: -30, y: 0, z: 25 };
 
   addAquarium(renderInfo, physicsInfo, ammoHelper, aquariumSize, position);

@@ -35,7 +35,7 @@ function addElevator(renderInfo, physicsInfo, ammoHelper, position) {
   rigidBody.setFriction(elevator.friction);
   rigidBody.setRestitution(elevator.restituition);
   rigidBody.setCollisionFlags(elevator.collisionFlag);
-  rigidBody.setActivationState(elevator.activatuonState);
+  rigidBody.setActivationState(elevator.activationState);
 
   physicsInfo.addRigidBody(rigidBody, elevator.mesh);
   renderInfo.scene.add(elevator.mesh);

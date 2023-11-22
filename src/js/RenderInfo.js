@@ -90,7 +90,7 @@ class RenderInfo {
     this.scene.add(camera6);
 
     // Set the active camera
-    this.activeCamera = this.cameras[6];
+    this.activeCamera = this.cameras[5];
   }
 
   /**
