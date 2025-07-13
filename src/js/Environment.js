@@ -122,12 +122,19 @@ class Environment {
   mouseClick(e) {
     if (this.currentIntersect) {
       if (this.currentIntersect.object.name === "button") {
-        this.sounds.playDing();
-        this.sounds.playElevator();
-        const elevator = this.renderInfo.scene.getObjectByName("elevator");
-        elevator.start = true;
+        this.startElevator();
       }
     }
+  }
+
+  /**
+   * Starts the elevator by playing sounds and setting the start flag.
+   */
+  startElevator() {
+    this.sounds.playDing();
+    this.sounds.playElevator();
+    const elevator = this.renderInfo.scene.getObjectByName("elevator");
+    elevator.start = true;
   }
 
   /**
@@ -135,6 +142,7 @@ class Environment {
    * @param {string} code - The key code of the key pressed.
    */
   keyDown(code) {
+    console.log(code);
     switch (code) {
       case "Digit1":
         // Camera 1
@@ -159,6 +167,10 @@ class Environment {
       case "Digit6":
         // Camera 5
         this.renderInfo.switchCamera(5);
+        break;
+      case "ArrowUp":
+        // Start the elevator
+        this.startElevator()
         break;
     }
   }
