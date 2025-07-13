@@ -360,10 +360,10 @@ class Environment {
           const title = startMessage.querySelector("h1");
           const text = startMessage.querySelector("p");
           const button = startMessage.querySelector("button");
-          title.innerHTML = "Nam nam!";
+          title.innerHTML = "Yum yum!";
           text.innerHTML =
-            "Fisken ble matet<br>Du kan styre kameraene med talltastene 1-6 og seg deg rundt ved å bruke musa ";
-          button.innerHTML = "Start på nytt";
+            "The fish has been fed<br>You can control the cameras with number keys 1-6 and look around using the mouse ";
+          button.innerHTML = "Start again";
           startMessage.style.display = "flex";
         }, 2000);
       }

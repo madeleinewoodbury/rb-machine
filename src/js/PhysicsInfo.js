@@ -1,5 +1,5 @@
 // --------------------------------------------------
-// Metodene update og checkCollisions er basert på kodeeksempler fra modul 7 ammoCollisions
+// The update and checkCollisions methods are based on code examples from module 7 ammoCollisions
 // --------------------------------------------------
 
 /**

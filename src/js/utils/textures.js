@@ -1,5 +1,5 @@
 // -------------------------------------------------------------------------------
-// Water texture og cloud texture er fra kodeeskempel fra modul 8/shaderMaterial4
+// Water texture and cloud texture are from code example from module 8/shaderMaterial4
 // -------------------------------------------------------------------------------
 
 import * as THREE from 'three'

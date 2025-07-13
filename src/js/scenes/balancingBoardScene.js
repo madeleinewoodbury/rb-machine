@@ -1,6 +1,6 @@
 // --------------------------------------------------
-// P2P constraint i funksjonen addBalancingBoard er basert på kodeeksempel
-// point2pointConstraint.js fra modul7/ammoConstraints
+// P2P constraint in the addBalancingBoard function is based on code example
+// point2pointConstraint.js from module7/ammoConstraints
 // --------------------------------------------------
 
 import * as THREE from "three";

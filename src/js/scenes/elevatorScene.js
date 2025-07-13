@@ -92,7 +92,7 @@ function addBall(renderInfo, physicsInfo, ammoHelper, position) {
 function addText(renderInfo) {
   const fontLoader = new FontLoader();
   fontLoader.load("/fonts/helvetiker_regular.typeface.json", (font) => {
-    const textGeometry = new TextGeometry("Trykk opp", {
+    const textGeometry = new TextGeometry("Press Up", {
       font: font,
       size: 2,
       height: 0.5,

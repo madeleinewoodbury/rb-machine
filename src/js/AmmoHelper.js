@@ -1,6 +1,6 @@
 // --------------------------------------------------------------------------
-// Metodene  generateTriangleShape og traverseModel er basert på kodeeksempel
-// fra triangleMeshHelpers.js fra modul7/AmmoAdvancedShapes2triangleMesh
+// The generateTriangleShape and traverseModel methods are based on code example
+// from triangleMeshHelpers.js from module7/AmmoAdvancedShapes2triangleMesh
 // --------------------------------------------------------------------------
 import * as THREE from "three";
 

@@ -1,5 +1,5 @@
 // --------------------------------------------------
-// Light klassen er fra oblig 3: Robot Arm
+// Light class is from assignment 3: Robot Arm
 // --------------------------------------------------
 
 /**

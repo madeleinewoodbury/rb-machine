@@ -1,6 +1,6 @@
 // --------------------------------------------------
-// Light klassen er fra oblig 3: Robot Arm
-// Nytt, lagt til DirectionalLight.js
+// Light class is from assignment 3: Robot Arm
+// New, added DirectionalLight.js
 // --------------------------------------------------
 
 import * as THREE from "three";

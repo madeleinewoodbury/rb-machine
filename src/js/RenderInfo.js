@@ -133,7 +133,7 @@ class RenderInfo {
       return;
     }
     const cameraInfo = document.querySelector(".camera-info");
-    cameraInfo.innerHTML = `Kamera ${cameraIndex + 1}`;
+    cameraInfo.innerHTML = `Camera ${cameraIndex + 1}`;
 
     this.activeCamera = this.cameras[cameraIndex];
     this.controls.object = this.activeCamera;

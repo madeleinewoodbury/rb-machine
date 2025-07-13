@@ -1,5 +1,5 @@
 // --------------------------------------------------
-// PointLight klassen er fra oblig 3: Robot Arm
+// PointLight class is from assignment 3: Robot Arm
 // --------------------------------------------------
 
 import * as THREE from "three";
